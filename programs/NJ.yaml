@@ -1,0 +1,221 @@
+state: NJ
+name: New Jersey
+last_reviewed: 2026-04-23
+reviewer_notes: Initial build. NJ is in PJM (uses PJM-GATS, not NEPOOL GIS). Solar
+  carve-out evolved from SREC → TREC → SuSI. OREC program for offshore wind is a
+  state procurement, not a voluntary market. BPU is sole admin authority.
+
+admin_authority:
+  name: NJ Board of Public Utilities (BPU)
+  url: https://www.nj.gov/bpu/
+
+rec_registry:
+  name: PJM-EIS GATS (Generation Attribute Tracking System)
+  url: https://www.pjm-eis.com/program-information/new-jersey
+
+compliance_reports:
+  - label: NJ Clean Energy Program Portal
+    url: https://cleanenergy.nj.gov/
+  - label: BPU Renewable Energy Programs
+    url: https://cleanenergy.nj.gov/renewable-energy/
+  - label: BPU Offshore Wind Program
+    url: https://bpuoffshorewind.nj.gov/
+
+programs:
+
+  - id: NJ_RPS
+    name: Renewable Portfolio Standard
+    type: rps
+    administered_by: NJ Board of Public Utilities (BPU)
+    program_url: https://cleanenergy.nj.gov/renewable-energy/
+    statutory_cite: N.J.S.A. 48:3-87
+    applicable_lses: [EDC, Retail Supplier]
+    note: NJ's RPS covers Class I (new renewables) and Class II (existing resources).
+      Solar has a separate carve-out tracked as a distinct compliance obligation.
+      RPS currently targets 50% by 2030, with further increases under executive order
+      toward 100% clean electricity by 2035.
+    legislation:
+      - bill: "Electric Discount and Energy Competition Act (P.L. 1999, c. 23)"
+        enacted: 1999
+        url: https://pub.njleg.gov/bills/9899/AL99/23_.HTM
+        role: Original RPS enactment; established Societal Benefits Charge for clean energy funding
+        amendments:
+          - year: 2012
+            bill: "Solar Portfolio Standard Act (P.L. 2012, c. 24)"
+            url: https://pub.njleg.gov/bills/2012/PL12/24_.HTM
+            note: Mandated 4.1% solar by 2028; created SREC system; established Solar Alternative Compliance Payments
+          - year: 2018
+            bill: "An Act Concerning Clean Energy (P.L. 2018, c. 17)"
+            url: https://pub.njleg.gov/bills/2018/AL18/17_.HTM
+            note: Escalated RPS to 35% by 2025 and 50% by 2030; accelerated solar RPS; 600 MW storage by 2021
+          - year: 2021
+            bill: "An Act Concerning Certain Solar Energy Projects (P.L. 2021, c. 169)"
+            url: https://pub.njleg.gov/bills/2020/PL21/169_.HTM
+            note: Created SREC-II program targeting 3,750 MW by 2026; established competitive bidding for solar incentives
+    generation_requirements: null
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: true
+        condition: Solar qualifies under the RPS general Class I obligation but is
+          primarily tracked and obligated through the separate solar carve-out.
+      wind:
+        eligible: true
+      offshore_wind:
+        eligible: true
+        condition: Offshore wind qualifies for Class I RPS and also has a dedicated
+          OREC carve-out program. ORECs satisfy both obligations.
+      hydro_run_of_river:
+        eligible: true
+        condition: Run-of-river and small hydro eligible as Class I. Conventional
+          large hydro eligible as Class II.
+      hydro_large:
+        eligible: conditional
+        condition: Large conventional hydro eligible under Class II (pre-2004 vintage
+          facilities). New large hydro may qualify for Class I if meeting criteria.
+      biomass_solid:
+        eligible: conditional
+        condition: Biomass combustion eligible; must meet air quality standards and
+          fuel sourcing requirements. Co-firing limits apply.
+      biogas_lfg:
+        eligible: true
+        condition: Landfill gas, anaerobic digestion, and biogas eligible for Class I.
+      msw:
+        eligible: conditional
+        condition: MSW-to-energy facilities with Class I eligible components (biogas
+          recovery) may qualify in part. Full MSW combustion is Class II.
+      geothermal:
+        eligible: true
+      storage:
+        eligible: conditional
+        condition: Storage mandate (2,000 MW by 2030) is tracked separately from RPS.
+          Storage does not independently generate RECs but paired systems qualify.
+      nuclear:
+        eligible: false
+        condition: Nuclear is not RPS-eligible. NJ does not have a state ZEC program;
+          federal PTC applies to qualifying nuclear.
+      fuel_cell:
+        eligible: true
+        condition: Fuel cells using renewable fuel qualify. Natural gas fuel cells
+          may qualify for Class II or other incentive programs.
+
+  - id: NJ_SOLAR
+    name: Solar Carve-Out / Successor Solar Incentive (SuSI)
+    type: rps
+    administered_by: NJ Board of Public Utilities (BPU)
+    program_url: https://cleanenergy.nj.gov/renewable-energy/
+    statutory_cite: N.J.S.A. 48:3-87(d)
+    applicable_lses: [EDC, Retail Supplier]
+    note: |
+      NJ's solar program has evolved through three generations — SREC (2004–2020),
+      TREC (2020–2021), and now SuSI (2021–present). SuSI has two tracks: the
+      Administratively Determined Incentive (ADI) for smaller and community solar,
+      and the Competitive Solar Incentive (CSI) for larger projects. Target is 5.1%
+      solar by 2026 (approximately 3,750 MW). Solar RECs satisfy the solar carve-out
+      separately from the general RPS.
+    legislation:
+      - bill: "Solar Portfolio Standard Act (P.L. 2012, c. 24)"
+        enacted: 2012
+        url: https://pub.njleg.gov/bills/2012/PL12/24_.HTM
+        role: Established formal SREC solar carve-out; mandated 4.1% solar by 2028
+        amendments:
+          - year: 2018
+            bill: "An Act Concerning Clean Energy (P.L. 2018, c. 17)"
+            url: https://pub.njleg.gov/bills/2018/AL18/17_.HTM
+            note: Accelerated solar carve-out to 5.1% by 2021; created TREC as transition mechanism
+          - year: 2021
+            bill: "An Act Concerning Certain Solar Energy Projects (P.L. 2021, c. 169)"
+            url: https://pub.njleg.gov/bills/2020/PL21/169_.HTM
+            note: Created SuSI program (ADI + CSI tracks); SREC-II bridges to SuSI; 3,750 MW target by 2026
+    generation_requirements: null
+    procurement_requirements: |
+      SuSI ADI: Fixed 15-year incentive payments set administratively by BPU.
+      Targets community solar, rooftop, and small commercial projects.
+      SuSI CSI: Competitive solicitations for projects above the ADI size threshold.
+      Winning projects receive 15-year contracts at bid prices. Administered through
+      BPU competitive procurement rounds.
+    eligibility:
+      solar_pv:
+        eligible: true
+        condition: All grid-connected solar PV systems eligible. Incentive level and
+          track (ADI vs CSI) determined by project size and type.
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: false
+      hydro_run_of_river:
+        eligible: false
+      hydro_large:
+        eligible: false
+      biomass_solid:
+        eligible: false
+      biogas_lfg:
+        eligible: false
+      msw:
+        eligible: false
+      geothermal:
+        eligible: false
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false
+
+  - id: NJ_OFFSHORE_WIND
+    name: Offshore Wind — OREC Program
+    type: procurement
+    administered_by: NJ Board of Public Utilities (BPU)
+    program_url: https://bpuoffshorewind.nj.gov/
+    statutory_cite: N.J.S.A. 48:3-87.1 (Offshore Wind Economic Development Act)
+    applicable_lses: [EDC, Retail Supplier]
+    note: NJ's offshore wind program uses Offshore Renewable Energy Certificates (ORECs)
+      — a state-administered procurement, not a voluntary market. BPU selects projects
+      through competitive solicitation rounds and sets OREC prices. EDCs are required
+      to purchase ORECs from approved projects. Current goal is 11,000 MW by 2040
+      (per EO #307, 2022). ORECs qualify for the NJ RPS Class I obligation.
+    legislation:
+      - bill: "Offshore Wind Economic Development Act (P.L. 2010, c. 57)"
+        enacted: 2010
+        url: https://pub.njleg.gov/bills/2010/S2500/2036_R2.HTM
+        role: Created OREC mechanism; required minimum 1,100 MW procurement; authorized BPU implementing regulations
+        amendments:
+          - year: 2018
+            bill: "An Act Concerning Clean Energy (P.L. 2018, c. 17)"
+            url: https://pub.njleg.gov/bills/2018/AL18/17_.HTM
+            note: Increased offshore wind goal to 3,500 MW by 2030 (later further raised by executive orders)
+    procurement_requirements: |
+      BPU conducts competitive solicitation rounds. Applicants submit project proposals
+      with OREC price bids. BPU selects winners based on economic and non-economic
+      criteria including New Jersey economic benefits and supply chain commitments.
+      Selected developers enter into 20-year OREC agreements with NJ EDCs.
+      Community benefit agreements required for approved projects.
+    generation_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: false
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: true
+        condition: Federal OCS lease areas off the NJ/NY coast. Projects must be
+          approved through BPU solicitation process and receive an OREC award.
+          In-state supply chain and workforce commitments required.
+      hydro_run_of_river:
+        eligible: false
+      hydro_large:
+        eligible: false
+      biomass_solid:
+        eligible: false
+      biogas_lfg:
+        eligible: false
+      msw:
+        eligible: false
+      geothermal:
+        eligible: false
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false

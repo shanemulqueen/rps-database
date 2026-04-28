@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MD — RPS & CES Programs</title>
+  <style>
+    :root {
+      --green: #2d6a4f;
+      --green-light: #52b788;
+      --green-bg: #f0faf4;
+      --gray: #6c757d;
+      --gray-light: #f1f3f5;
+      --border: #dee2e6;
+      --text: #212529;
+      --conditional: #856404;
+      --conditional-bg: #fff3cd;
+      --false-bg: #f8f9fa;
+      --false-text: #adb5bd;
+      --link: #1a6eb5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           font-size: 14px; color: var(--text); background: #fff; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
+
+    /* Header */
+    .state-header { border-bottom: 3px solid var(--green); padding-bottom: 14px; margin-bottom: 24px; }
+    .state-header h1 { font-size: 26px; color: var(--green); }
+    .state-header .meta { font-size: 12px; color: var(--gray); margin-top: 4px; }
+    .state-meta-row { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 12px; }
+    .state-meta-block { font-size: 13px; }
+    .state-meta-block .label { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                                letter-spacing: 0.05em; color: var(--gray); margin-bottom: 3px; }
+    .report-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 3px; }
+    .report-link { font-size: 12px; padding: 2px 8px; border: 1px solid var(--border);
+                   border-radius: 4px; background: var(--gray-light); }
+
+    /* Section */
+    .section { margin-bottom: 40px; }
+    .section > h2 { font-size: 16px; font-weight: 600; color: var(--green);
+                    border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 16px; }
+
+    /* Program card */
+    .program { border: 1px solid var(--border); border-radius: 6px;
+               margin-bottom: 24px; overflow: hidden; }
+    .program-header { background: var(--green-bg); padding: 12px 16px;
+                      border-bottom: 1px solid var(--border); }
+    .program-header h3 { font-size: 15px; color: var(--green); }
+    .program-header h3 a { color: var(--green); }
+    .program-meta { font-size: 12px; color: var(--gray); margin-top: 4px;
+                    display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; }
+    .program-meta .cite { font-style: italic; }
+    .program-body { padding: 16px; display: grid; gap: 14px; }
+
+    .program-note { font-size: 13px; color: #444; padding: 10px 12px;
+                    background: #f8f9fa; border-radius: 4px;
+                    border-left: 3px solid var(--green-light); line-height: 1.6; }
+
+    /* Legislation block */
+    .legislation { font-size: 13px; }
+    .legislation h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                      letter-spacing: 0.05em; color: var(--gray); margin-bottom: 8px; }
+    .leg-item { padding: 8px 10px; border: 1px solid var(--border); border-radius: 4px;
+                margin-bottom: 6px; background: #fff; }
+    .leg-item .leg-bill { font-weight: 500; }
+    .leg-item .leg-role { color: var(--gray); font-size: 12px; margin-top: 2px; }
+    .leg-amendments { margin-top: 6px; padding-left: 16px; border-left: 2px solid var(--border); }
+    .leg-amend { font-size: 12px; color: #444; margin-top: 5px; }
+    .leg-amend .amend-year { font-weight: 600; color: var(--green); margin-right: 4px; }
+    .leg-amend .amend-note { color: var(--gray); margin-top: 1px; }
+
+    /* Req blocks */
+    .req-block h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                    letter-spacing: 0.05em; color: var(--gray); margin-bottom: 5px; }
+    .req-block p { font-size: 13px; line-height: 1.6; }
+
+    /* Eligibility table */
+    .elig-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .elig-table th { text-align: left; padding: 6px 10px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 11px;
+                     text-transform: uppercase; letter-spacing: 0.04em; }
+    .elig-table td { padding: 6px 10px; border: 1px solid var(--border); vertical-align: top; }
+    .elig-table tr.not-eligible td { color: var(--false-text); background: var(--false-bg); }
+    .elig-badge { display: inline-block; padding: 2px 7px; border-radius: 10px;
+                  font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .badge-true        { background: #d1fae5; color: #065f46; }
+    .badge-false       { background: var(--false-bg); color: var(--false-text); }
+    .badge-conditional { background: var(--conditional-bg); color: var(--conditional); }
+    .elig-condition    { font-size: 12px; color: #555; margin-top: 2px; line-height: 1.5; }
+
+    /* Numerical tables */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { text-align: right; padding: 6px 12px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 12px; }
+    .data-table th:first-child { text-align: left; }
+    .data-table td { padding: 6px 12px; border: 1px solid var(--border);
+                     text-align: right; white-space: nowrap; }
+    .data-table td:first-child { text-align: left; font-weight: 500; }
+    .data-table tr.proj td { color: var(--gray); }
+    .data-table tr.section-head td { background: #f8f9fa; font-weight: 600; font-size: 11px;
+                                      color: var(--gray); text-transform: uppercase;
+                                      letter-spacing: 0.04em; }
+    .proj-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
+    .data-table tr.grand-total td { font-weight: 700; border-top: 2px solid var(--border);
+                                     background: var(--green-bg); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- State Header -->
+  <div class="state-header">
+    <h1>Maryland (MD) — RPS & CES Programs</h1>
+    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-04-24
+      &nbsp;|&nbsp; Last reviewed 2026-04-23
+    </div>
+
+    <div class="state-meta-row">
+      
+      <div class="state-meta-block">
+        <div class="label">Administrative Authority</div>
+        <a href="https://psc.maryland.gov/">Maryland Public Service Commission (PSC)</a>
+      </div>
+      
+
+      
+      <div class="state-meta-block">
+        <div class="label">REC Registry</div>
+        <a href="https://gats.pjm-eis.com/gats2/PublicReports/RenewableGeneratorsRegisteredinGATS">PJM-EIS GATS (Generation Attribute Tracking System)</a>
+      </div>
+      
+
+      
+      <div class="state-meta-block">
+        <div class="label">Compliance Reports & Regulations</div>
+        <div class="report-links">
+          
+          <a class="report-link" href="https://psc.maryland.gov/regulated-utilities/electricity/renewable-energy/">RPS Program & Documentation (PSC)</a>
+          
+          <a class="report-link" href="https://psc.maryland.gov/regulated-utilities/electricity/renewable-energy/description-of-documents-rps/">RPS Description of Documents</a>
+          
+          <a class="report-link" href="https://energy.maryland.gov/Pages/Info/renewable/offshorewind.aspx">Offshore Wind Program (MEA)</a>
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Programs -->
+  <div class="section">
+    <h2>Programs</h2>
+
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://psc.maryland.gov/regulated-utilities/electricity/renewable-energy/">Renewable Portfolio Standard — Tier 1</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>RPS</span>
+          <span>MD Public Service Commission (PSC)</span>
+          <span class="cite">Md. Code, Public Utilities § 7-701 et seq.</span>
+          <span>Applies to: EDC, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">Tier 1 covers new renewable resources. Target is 50% by 2030 per the Clean Energy Jobs Act. Solar has a dedicated carve-out (14.5% by 2028) within the Tier 1 obligation. Offshore wind has a separate OREC carve-out (2.5%).</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://mgaleg.maryland.gov/mgawebsite/">Renewable Energy Portfolio Standard (enacted 2004)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2004</span>
+            </div>
+            <div class="leg-role">Original RPS enactment establishing Tier 1 and Tier 2 framework</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2013</span>
+                <a href="https://mgaleg.maryland.gov/mgawebsite/legislation/details/hb0226?ys=2013rs">Maryland Offshore Wind Energy Act (Chapter 3, Acts of 2013)</a>
+                
+                <div class="amend-note">Added OREC carve-out of 2.5% within Tier 1; established offshore wind procurement framework</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2019</span>
+                <a href="https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/SB0516?ys=2019rs">Clean Energy Jobs Act (Chapter 757, Acts of 2019)</a>
+                
+                <div class="amend-note">Increased RPS from 25% to 50% by 2030; raised solar carve-out from 2% to 14.5% by 2028; removed offshore wind development cap</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2021</span>
+                <a href="https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/SB0065/?ys=2021rs">RPS Amendment (Chapter 673, Acts of 2021)</a>
+                
+                <div class="amend-note">Adjusted solar carve-out schedule for 2022–2029; raised Solar ACP; removed black liquor from Tier 1 eligibility</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2022</span>
+                <a href="https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/sb0528?ys=2022RS">Climate Solutions Now Act (Chapter 38, Acts of 2022)</a>
+                
+                <div class="amend-note">Set 60% GHG reduction by 2031 and net-zero by 2045 as statutory goals; reinforced RPS trajectory</div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Qualifies under both Tier 1 general obligation and the dedicated solar carve-out. SRECs are tracked separately in PJM-GATS.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Qualifies for Tier 1 and also has a dedicated OREC carve-out (2.5%). ORECs from PSC-approved projects satisfy the OREC obligation.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Run-of-river and incremental hydro installations qualify. Conventional large hydro generally qualifies under Tier 2.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Large hydro (>30 MW) not typically eligible for Tier 1. Eligible under Tier 2 for older facilities.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Biomass combustion eligible. Black liquor (paper mill byproduct) was removed from Tier 1 eligibility in 2021. Other biomass must meet emissions and sourcing standards.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Landfill gas, biogas, and anaerobic digestion eligible for Tier 1.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">MSW combustion with energy recovery may qualify. Waste-to-energy facilities face stricter air quality requirements.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Paired storage with a qualifying renewable generator may be eligible. Standalone storage does not generate Tier 1 RECs.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Nuclear not eligible for MD RPS. MD does not have a state ZEC program.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Fuel cells using biogas or other renewable fuel qualify for Tier 1. Natural gas fuel cells do not.</div></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://psc.maryland.gov/regulated-utilities/electricity/renewable-energy/">Renewable Portfolio Standard — Tier 2</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>RPS</span>
+          <span>MD Public Service Commission (PSC)</span>
+          <span class="cite">Md. Code, Public Utilities § 7-701 et seq.</span>
+          <span>Applies to: EDC, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">Tier 2 covers existing, older clean energy resources — primarily conventional hydro and poultry litter facilities. The Tier 2 requirement is 2.5% and has remained relatively static.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://mgaleg.maryland.gov/mgawebsite/">Renewable Energy Portfolio Standard (enacted 2004)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2004</span>
+            </div>
+            <div class="leg-role">Established Tier 2 for pre-2004 clean energy resources</div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Existing run-of-river hydro facilities that predate the Tier 1 eligibility cutoff.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Conventional large hydro is the primary Tier 2 resource in Maryland. Includes Conowingo Dam and other existing facilities.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Existing biomass facilities and poultry litter combustion. Maryland has historically had poultry litter-fired generation eligible under Tier 2.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://psc.maryland.gov/regulated-utilities/electricity/renewable-energy/">Solar Carve-Out (SREC Program)</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>RPS</span>
+          <span>MD Public Service Commission (PSC)</span>
+          <span class="cite">Md. Code, Public Utilities § 7-703</span>
+          <span>Applies to: EDC, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">Maryland's solar carve-out requires a separate percentage of retail sales from solar PV. SRECs are traded in the PJM-GATS market. The Brighter Tomorrow Act (2024) enhanced the SREC multiplier and expanded access. Current target escalates to 14.5% by 2028. Retail suppliers must purchase SRECs or pay the Solar Alternative Compliance Payment (SACP).</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/SB0516?ys=2019rs">Clean Energy Jobs Act (Chapter 757, Acts of 2019)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2019</span>
+            </div>
+            <div class="leg-role">Raised solar carve-out from 2% to 5.5% rising to 14.5% by 2028; significantly expanded the SREC market</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2021</span>
+                <a href="https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/SB0065/?ys=2021rs">RPS Amendment (Chapter 673, Acts of 2021)</a>
+                
+                <div class="amend-note">Decreased solar carve-out requirements for 2022–2029; increased SACP ceiling to $60 (2023–2024) and $55 (2025)</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2024</span>
+                <a href="https://mgaleg.maryland.gov/mgawebsite/legislation/details/sb0783?ys=2024rs">Brighter Tomorrow Act (Chapter 595, Acts of 2024)</a>
+                
+                <div class="amend-note">Enhanced SREC multiplier (3 SRECs per 2 MWh = 150%); up to $7,500 per eligible household; expedited permitting via SolarApp+; raised net metering cap</div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">All grid-connected solar PV systems in Maryland eligible. Enhanced SREC multiplier (1.5 SRECs/MWh) applies to qualifying low-income and community solar projects under the Brighter Tomorrow Act (2024).</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://energy.maryland.gov/Pages/Info/renewable/offshorewind.aspx">Offshore Wind — OREC Program</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>PROCUREMENT</span>
+          <span>MD Public Service Commission (PSC) / MD Energy Administration (MEA)</span>
+          <span class="cite">Md. Code, Public Utilities § 7-704.1</span>
+          <span>Applies to: BGE, Pepco, Delmarva Power, Potomac Edison</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">Maryland's offshore wind program uses Offshore Renewable Energy Certificates (ORECs) — a state-administered procurement. PSC selects projects and approves OREC prices. EDCs are required to purchase ORECs from approved projects. ORECs qualify for the Tier 1 RPS OREC carve-out (2.5% of retail sales). Current goal is 8.5 GW by 2031 per the POWER Act (2023).</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://mgaleg.maryland.gov/mgawebsite/legislation/details/hb0226?ys=2013rs">Maryland Offshore Wind Energy Act (Chapter 3, Acts of 2013)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2013</span>
+            </div>
+            <div class="leg-role">Created OREC mechanism; set initial 2.5% carve-out (~500 MW); established application and approval process for offshore wind projects</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2019</span>
+                <a href="https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/SB0516?ys=2019rs">Clean Energy Jobs Act (Chapter 757, Acts of 2019)</a>
+                
+                <div class="amend-note">Removed 2.5% upper limit on offshore wind development; required at least 1,200 MW of Round 2 projects; established three procurement rounds</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2023</span>
+                <a href="https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/sb0781?ys=2023rs">Promoting Offshore Wind Energy Resources (POWER) Act (Chapter 95, Acts of 2023)</a>
+                
+                <div class="amend-note">Set 8.5 GW goal by 2031; required community benefit agreements; directed state facilities to procure offshore wind via PPAs</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2024</span>
+                <a href="https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb1296?ys=2024RS">Offshore Wind Projects Act Amendment (Chapter 431, Acts of 2024)</a>
+                
+                <div class="amend-note">Revised Round 2 procurement schedule; required in-state expenditure commitments; enabled OREC reallocation between projects</div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+        <div class="req-block">
+          <h4>Procurement Requirements</h4>
+          <p>PSC issues competitive solicitations for offshore wind projects. Developers
+submit OREC price applications. PSC evaluates based on economic impact, ratepayer
+cost, environmental benefit, and in-state job creation. Approved projects receive
+20-year OREC contracts. Community benefit agreements required for Round 2 projects.
+EDCs must purchase ORECs from all PSC-approved projects.</p>
+        </div>
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Projects must be located in federal OCS lease areas off the Maryland/ Delaware coast. Must apply to and receive approval from PSC through the competitive solicitation process. In-state economic investment commitments required.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+  </div>
+
+  <!-- Numerical Data -->
+  
+  <div class="section">
+    <h2>RPS & CES Targets (%)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr class="">
+          <td>Cooperatives</td><td>32.6%</td><td>34.4%</td><td>36.2%</td><td>38.0%</td><td>40.5%</td><td>44.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Geothermal Heat Pump Carve-Out</td><td>0.0%</td><td>0.1%</td><td>0.2%</td><td>0.2%</td><td>0.5%</td><td>0.7%</td>
+        </tr>
+        
+        <tr class="">
+          <td>IOUs & competitive retailers</td><td>32.6%</td><td>34.4%</td><td>36.2%</td><td>38.0%</td><td>40.5%</td><td>44.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Municipal utilities</td><td>23.2%</td><td>26.3%</td><td>28.2%</td><td>28.4%</td><td>28.9%</td><td>29.4%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Offshore Wind Carve-Out (Wtd. Avg.)</td><td>0.1%</td><td>1.7%</td><td>2.6%</td><td>12.9%</td><td>12.9%</td><td>12.9%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Solar Carve-Out (Wtd. Avg.)</td><td>6.2%</td><td>6.6%</td><td>7.5%</td><td>8.9%</td><td>10.3%</td><td>11.6%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Tier I Non-Carve-Out (Wtd. Avg.)</td><td>23.7%</td><td>23.5%</td><td>23.3%</td><td>13.3%</td><td>14.2%</td><td>16.1%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Tier II</td><td>2.5%</td><td>2.5%</td><td>2.5%</td><td>2.5%</td><td>2.5%</td><td>2.5%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS (Wtd. Avg.)</td><td>32.5%</td><td>34.3%</td><td>36.1%</td><td>37.9%</td><td>40.4%</td><td>43.9%</td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
+        
+        <tr><td>Statewide Sales</td><td>58,216</td><td>58,903</td><td>59,130</td><td>59,899</td><td>60,474</td><td>61,291</td></tr>
+        
+        <tr><td>RPS-Applicable Sales</td><td>57,034</td><td>57,706</td><td>57,929</td><td>58,683</td><td>59,246</td><td>60,047</td></tr>
+        
+        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
+        
+        <tr class="">
+          <td>Offshore Wind Carve-Out</td><td>80</td><td>958</td><td>1,511</td><td>7,581</td><td>7,654</td><td>7,757</td>
+        </tr>
+        
+        <tr class="">
+          <td>Solar Carve-Out</td><td>3,470</td><td>3,699</td><td>4,168</td><td>4,953</td><td>5,816</td><td>6,721</td>
+        </tr>
+        
+        <tr class="">
+          <td>Tier I Non-Solar/Non-Offshore Wind</td><td>15,360</td><td>15,372</td><td>15,641</td><td>10,877</td><td>10,901</td><td>14,090</td>
+        </tr>
+        
+        <tr class="">
+          <td>Tier II</td><td>1,426</td><td>1,443</td><td>1,448</td><td>1,467</td><td>1,481</td><td>1,501</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>20,336</td><td>21,472</td><td>22,768</td><td>24,878</td><td>25,852</td><td>30,070</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <p class="proj-note">* 2026+ values are LBNL projections.</p>
+  </div>
+  
+
+</div>
+</body>
+</html>

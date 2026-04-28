@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ME — RPS & CES Programs</title>
+  <style>
+    :root {
+      --green: #2d6a4f;
+      --green-light: #52b788;
+      --green-bg: #f0faf4;
+      --gray: #6c757d;
+      --gray-light: #f1f3f5;
+      --border: #dee2e6;
+      --text: #212529;
+      --conditional: #856404;
+      --conditional-bg: #fff3cd;
+      --false-bg: #f8f9fa;
+      --false-text: #adb5bd;
+      --link: #1a6eb5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           font-size: 14px; color: var(--text); background: #fff; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
+
+    /* Header */
+    .state-header { border-bottom: 3px solid var(--green); padding-bottom: 14px; margin-bottom: 24px; }
+    .state-header h1 { font-size: 26px; color: var(--green); }
+    .state-header .meta { font-size: 12px; color: var(--gray); margin-top: 4px; }
+    .state-meta-row { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 12px; }
+    .state-meta-block { font-size: 13px; }
+    .state-meta-block .label { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                                letter-spacing: 0.05em; color: var(--gray); margin-bottom: 3px; }
+    .report-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 3px; }
+    .report-link { font-size: 12px; padding: 2px 8px; border: 1px solid var(--border);
+                   border-radius: 4px; background: var(--gray-light); }
+
+    /* Section */
+    .section { margin-bottom: 40px; }
+    .section > h2 { font-size: 16px; font-weight: 600; color: var(--green);
+                    border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 16px; }
+
+    /* Program card */
+    .program { border: 1px solid var(--border); border-radius: 6px;
+               margin-bottom: 24px; overflow: hidden; }
+    .program-header { background: var(--green-bg); padding: 12px 16px;
+                      border-bottom: 1px solid var(--border); }
+    .program-header h3 { font-size: 15px; color: var(--green); }
+    .program-header h3 a { color: var(--green); }
+    .program-meta { font-size: 12px; color: var(--gray); margin-top: 4px;
+                    display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; }
+    .program-meta .cite { font-style: italic; }
+    .program-body { padding: 16px; display: grid; gap: 14px; }
+
+    .program-note { font-size: 13px; color: #444; padding: 10px 12px;
+                    background: #f8f9fa; border-radius: 4px;
+                    border-left: 3px solid var(--green-light); line-height: 1.6; }
+
+    /* Legislation block */
+    .legislation { font-size: 13px; }
+    .legislation h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                      letter-spacing: 0.05em; color: var(--gray); margin-bottom: 8px; }
+    .leg-item { padding: 8px 10px; border: 1px solid var(--border); border-radius: 4px;
+                margin-bottom: 6px; background: #fff; }
+    .leg-item .leg-bill { font-weight: 500; }
+    .leg-item .leg-role { color: var(--gray); font-size: 12px; margin-top: 2px; }
+    .leg-amendments { margin-top: 6px; padding-left: 16px; border-left: 2px solid var(--border); }
+    .leg-amend { font-size: 12px; color: #444; margin-top: 5px; }
+    .leg-amend .amend-year { font-weight: 600; color: var(--green); margin-right: 4px; }
+    .leg-amend .amend-note { color: var(--gray); margin-top: 1px; }
+
+    /* Req blocks */
+    .req-block h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                    letter-spacing: 0.05em; color: var(--gray); margin-bottom: 5px; }
+    .req-block p { font-size: 13px; line-height: 1.6; }
+
+    /* Eligibility table */
+    .elig-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .elig-table th { text-align: left; padding: 6px 10px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 11px;
+                     text-transform: uppercase; letter-spacing: 0.04em; }
+    .elig-table td { padding: 6px 10px; border: 1px solid var(--border); vertical-align: top; }
+    .elig-table tr.not-eligible td { color: var(--false-text); background: var(--false-bg); }
+    .elig-badge { display: inline-block; padding: 2px 7px; border-radius: 10px;
+                  font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .badge-true        { background: #d1fae5; color: #065f46; }
+    .badge-false       { background: var(--false-bg); color: var(--false-text); }
+    .badge-conditional { background: var(--conditional-bg); color: var(--conditional); }
+    .elig-condition    { font-size: 12px; color: #555; margin-top: 2px; line-height: 1.5; }
+
+    /* Numerical tables */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { text-align: right; padding: 6px 12px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 12px; }
+    .data-table th:first-child { text-align: left; }
+    .data-table td { padding: 6px 12px; border: 1px solid var(--border);
+                     text-align: right; white-space: nowrap; }
+    .data-table td:first-child { text-align: left; font-weight: 500; }
+    .data-table tr.proj td { color: var(--gray); }
+    .data-table tr.section-head td { background: #f8f9fa; font-weight: 600; font-size: 11px;
+                                      color: var(--gray); text-transform: uppercase;
+                                      letter-spacing: 0.04em; }
+    .proj-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
+    .data-table tr.grand-total td { font-weight: 700; border-top: 2px solid var(--border);
+                                     background: var(--green-bg); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- State Header -->
+  <div class="state-header">
+    <h1>Maine (ME) — RPS & CES Programs</h1>
+    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-04-24
+      &nbsp;|&nbsp; Last reviewed 2026-04-23
+    </div>
+
+    <div class="state-meta-row">
+      
+      <div class="state-meta-block">
+        <div class="label">Administrative Authority</div>
+        <a href="https://www.maine.gov/mpuc/regulated-utilities/electricity/renewable-programs/rps">Maine Public Utilities Commission (MPUC)</a>
+      </div>
+      
+
+      
+      <div class="state-meta-block">
+        <div class="label">REC Registry</div>
+        <a href="https://nepoolgis.com/">NEPOOL GIS (southern/central ME) / NAR (northern ME)</a>
+      </div>
+      
+
+      
+      <div class="state-meta-block">
+        <div class="label">Compliance Reports & Regulations</div>
+        <div class="report-links">
+          
+          <a class="report-link" href="https://www.maine.gov/mpuc/regulated-utilities/electricity/renewable-programs/rps">MPUC RPS Program</a>
+          
+          <a class="report-link" href="https://www.maine.gov/energy/initiatives/renewable-energy/renewable-clean-portfolio-standards">ME DOER Renewable & Clean Portfolio Standards</a>
+          
+          <a class="report-link" href="https://www.maineoffshorewind.org/procurement/">Maine Offshore Wind Initiative</a>
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Programs -->
+  <div class="section">
+    <h2>Programs</h2>
+
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://www.maine.gov/mpuc/regulated-utilities/electricity/renewable-programs/rps">Class I & Class IA RPS (New Renewables)</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>RPS</span>
+          <span>ME MPUC</span>
+          <span class="cite">35-A M.R.S. § 3210</span>
+          <span>Applies to: CMP, Versant Power, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">Maine distinguishes Class I (general new renewables) and Class IA (post-2005 new renewables, ≤100 MW except wind/solar, with fish-passage requirements for hydro). Class IA carries a separate escalating target — 11% in 2025, increasing 1% annually to 50% by 2040 per the 2025 update (LD 1868). Combined RPS target is 90% renewable electricity by 2040 plus a new 10% Clean Energy Standard (Class III) effective 2031.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://www.mainelegislature.org/legis/bills/bills_129th/chapters/PUBLIC477.asp">An Act To Reform Maine's Renewable Portfolio Standard (LD 1494, P.L. 2019, Chapter 477)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2019</span>
+            </div>
+            <div class="leg-role">Set 80% renewable target by 2030; created Class IA category; mandated thermal renewable energy credits (TRECs); required long-term contracts for Class IA resources</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2025</span>
+                <a href="https://legislature.maine.gov/legis/bills/display_ps.asp?LD=1868&snum=132">An Act To Advance A Clean Energy Economy (LD 1868, P.L. 2025, Chapter 386)</a>
+                
+                <div class="amend-note">Updated target to 90% renewable by 2040; added 10% Clean Energy Standard (Class III) by 2040; increased Class IA to 50% by 2040 via 1%/year increases</div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+        <div class="req-block">
+          <h4>Generation Requirements</h4>
+          <p>Class IA hydro must have fish passage or demonstrate no barrier to anadromous
+fish. Class IA facilities must have commenced operation or been substantially
+refurbished after September 1, 2005. Long-term contracts (20-year terms)
+required for Class IA procurement per MPUC competitive solicitations.</p>
+        </div>
+        
+
+        
+        <div class="req-block">
+          <h4>Procurement Requirements</h4>
+          <p>MPUC conducts competitive solicitations for Class IA resources (35-A M.R.S.
+§ 3210-G). Solicitations weighted 70% ratepayer benefit, 30% economic benefit.
+Winning projects receive 20-year contracts. EDCs are required to seek Class IA
+contracts in each solicitation round.</p>
+        </div>
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Eligible under both Class I and Class IA. No capacity limit for solar under Class IA.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Eligible under both Class I and Class IA. No capacity limit for wind under Class IA.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Class I and Class IA eligible. Gulf of Maine offshore wind is the primary target of ME's separate offshore wind procurement program.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Class IA requires fish passage demonstration or certification that no anadromous fish barrier exists. Post-2005 facilities ≤100 MW qualify. Pre-2006 hydro in Class I; largest hydro in Class II.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Large hydro (>100 MW) not eligible for Class IA. May qualify as Class I if post-2005 and meeting other criteria.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Biomass (wood, waste) eligible for Class IA if post-2005. Must meet MPUC fuel sourcing standards. Existing pre-2006 biomass falls in Class I.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Landfill gas and anaerobic digestion eligible. Class IA for post-2005 facilities; Class I for older facilities.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Waste with energy recovery may qualify. Class placement depends on operational date.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Paired with Class IA eligible resource. MPUC may include storage in long-term contracts for Class IA procurement.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Nuclear not eligible for Class I or IA. May qualify for the new Class III Clean Energy Standard (effective 2031) if zero-carbon.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Fuel cells using renewable fuel eligible. Must meet Class IA operational date and capacity requirements.</div></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://www.maine.gov/mpuc/regulated-utilities/electricity/renewable-programs/rps">Class II RPS (Existing Renewables)</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>RPS</span>
+          <span>ME MPUC</span>
+          <span class="cite">35-A M.R.S. § 3210</span>
+          <span>Applies to: CMP, Versant Power, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">Class II covers existing renewable resources that do not qualify for Class I or IA due to vintage or size. Primarily captures existing large hydro and older biomass. Target is 30% from Class II under the updated 90% overall standard.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://www.mainelegislature.org/legis/statutes/35-a/title35-asec3210.html">35-A M.R.S. § 3210 (established with original RPS, 1999)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 1999</span>
+            </div>
+            <div class="leg-role">Original Class II framework for existing renewable resources</div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Existing run-of-river and conventional hydro that pre-dates Class I cutoff or exceeds Class IA capacity limit.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Large conventional hydro (>100 MW, pre-2006) is the primary Class II resource in Maine. Includes major river hydro facilities.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Existing pre-2006 biomass facilities.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Pre-2006 landfill gas facilities.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://www.maineoffshorewind.org/procurement/">Offshore Wind Procurement</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>PROCUREMENT</span>
+          <span>ME DOER / ME MPUC</span>
+          <span class="cite">35-A M.R.S. § 3407–3408</span>
+          <span>Applies to: CMP, Versant Power</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">Maine's offshore wind program targets at least 3,000 MW by 2040 in the Gulf of Maine — a floating offshore wind market given water depths. The program specifically protects Lobster Management Area I. DOER (launched September 2025, replacing the Governor's Energy Office) leads solicitation; MPUC reviews contracts. Commercial solicitation originally due July 1, 2025; timeline being established.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://legislature.maine.gov/legis/bills/display_ps.asp?ld=1895&PID=1456&snum=131">An Act Regarding the Procurement of Offshore Wind Energy Resources (LD 1895, P.L. 2023, Chapter 481)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2023</span>
+            </div>
+            <div class="leg-role">Authorized procurement of at least 3,000 MW by 2040; established Gulf of Maine focus; required protection of Lobster Management Area I; created $5,000/MW contribution to Offshore Wind Research Consortium</div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+        <div class="req-block">
+          <h4>Procurement Requirements</h4>
+          <p>DOER must file a commercial solicitation with MPUC for offshore wind contracts.
+Projects must demonstrate coordination with fisheries (especially lobster).
+Diversity, equity, and inclusion requirements for coastal and disadvantaged
+communities. $5,000 per MW contribution to the Offshore Wind Research Consortium.
+EDCs are required to enter contracts approved by MPUC.</p>
+        </div>
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Gulf of Maine federal OCS lease areas. Floating offshore wind technology required given water depths (>60m). Projects must not site turbines within Lobster Management Area I. Must go through DOER solicitation and MPUC approval process.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+  </div>
+
+  <!-- Numerical Data -->
+  
+  <div class="section">
+    <h2>RPS & CES Targets (%)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr class="">
+          <td>Class I/New</td><td>10.0%</td><td>10.0%</td><td>10.0%</td><td>10.0%</td><td>10.0%</td><td>10.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class IA</td><td>15.0%</td><td>19.0%</td><td>23.0%</td><td>27.0%</td><td>31.0%</td><td>35.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Existing</td><td>30.0%</td><td>30.0%</td><td>30.0%</td><td>30.0%</td><td>30.0%</td><td>30.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Thermal</td><td>1.6%</td><td>2.0%</td><td>2.4%</td><td>2.8%</td><td>3.2%</td><td>3.6%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total CES</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>56.6%</td><td>61.0%</td><td>65.4%</td><td>69.8%</td><td>74.2%</td><td>78.6%</td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
+        
+        <tr><td>Statewide Sales</td><td>11,243</td><td>11,137</td><td>11,089</td><td>11,274</td><td>11,450</td><td>11,666</td></tr>
+        
+        <tr><td>RPS-Applicable Sales</td><td>10,941</td><td>10,838</td><td>10,792</td><td>10,971</td><td>11,143</td><td>11,353</td></tr>
+        
+        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
+        
+        <tr class="">
+          <td>CES (incremental to RPS)</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class I (New Renewables)</td><td>1,164</td><td>1,153</td><td>1,149</td><td>1,168</td><td>1,186</td><td>1,208</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class IA (New Renewables)</td><td>1,554</td><td>1,948</td><td>2,347</td><td>2,806</td><td>3,279</td><td>3,780</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class II (Existing Renewables)</td><td>3,493</td><td>3,460</td><td>3,446</td><td>3,503</td><td>3,558</td><td>3,625</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>6,212</td><td>6,561</td><td>6,941</td><td>7,477</td><td>8,023</td><td>8,613</td>
+        </tr>
+        
+        <tr class="grand-total">
+          <td>Grand Total</td><td>6,212</td><td>6,561</td><td>6,941</td><td>7,477</td><td>8,023</td><td>8,613</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <p class="proj-note">* 2026+ values are LBNL projections.</p>
+  </div>
+  
+
+</div>
+</body>
+</html>

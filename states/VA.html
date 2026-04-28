@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VA — RPS & CES Programs</title>
+  <style>
+    :root {
+      --green: #2d6a4f;
+      --green-light: #52b788;
+      --green-bg: #f0faf4;
+      --gray: #6c757d;
+      --gray-light: #f1f3f5;
+      --border: #dee2e6;
+      --text: #212529;
+      --conditional: #856404;
+      --conditional-bg: #fff3cd;
+      --false-bg: #f8f9fa;
+      --false-text: #adb5bd;
+      --link: #1a6eb5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           font-size: 14px; color: var(--text); background: #fff; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
+
+    /* Header */
+    .state-header { border-bottom: 3px solid var(--green); padding-bottom: 14px; margin-bottom: 24px; }
+    .state-header h1 { font-size: 26px; color: var(--green); }
+    .state-header .meta { font-size: 12px; color: var(--gray); margin-top: 4px; }
+    .state-meta-row { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 12px; }
+    .state-meta-block { font-size: 13px; }
+    .state-meta-block .label { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                                letter-spacing: 0.05em; color: var(--gray); margin-bottom: 3px; }
+    .report-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 3px; }
+    .report-link { font-size: 12px; padding: 2px 8px; border: 1px solid var(--border);
+                   border-radius: 4px; background: var(--gray-light); }
+
+    /* Section */
+    .section { margin-bottom: 40px; }
+    .section > h2 { font-size: 16px; font-weight: 600; color: var(--green);
+                    border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 16px; }
+
+    /* Program card */
+    .program { border: 1px solid var(--border); border-radius: 6px;
+               margin-bottom: 24px; overflow: hidden; }
+    .program-header { background: var(--green-bg); padding: 12px 16px;
+                      border-bottom: 1px solid var(--border); }
+    .program-header h3 { font-size: 15px; color: var(--green); }
+    .program-header h3 a { color: var(--green); }
+    .program-meta { font-size: 12px; color: var(--gray); margin-top: 4px;
+                    display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; }
+    .program-meta .cite { font-style: italic; }
+    .program-body { padding: 16px; display: grid; gap: 14px; }
+
+    .program-note { font-size: 13px; color: #444; padding: 10px 12px;
+                    background: #f8f9fa; border-radius: 4px;
+                    border-left: 3px solid var(--green-light); line-height: 1.6; }
+
+    /* Legislation block */
+    .legislation { font-size: 13px; }
+    .legislation h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                      letter-spacing: 0.05em; color: var(--gray); margin-bottom: 8px; }
+    .leg-item { padding: 8px 10px; border: 1px solid var(--border); border-radius: 4px;
+                margin-bottom: 6px; background: #fff; }
+    .leg-item .leg-bill { font-weight: 500; }
+    .leg-item .leg-role { color: var(--gray); font-size: 12px; margin-top: 2px; }
+    .leg-amendments { margin-top: 6px; padding-left: 16px; border-left: 2px solid var(--border); }
+    .leg-amend { font-size: 12px; color: #444; margin-top: 5px; }
+    .leg-amend .amend-year { font-weight: 600; color: var(--green); margin-right: 4px; }
+    .leg-amend .amend-note { color: var(--gray); margin-top: 1px; }
+
+    /* Req blocks */
+    .req-block h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                    letter-spacing: 0.05em; color: var(--gray); margin-bottom: 5px; }
+    .req-block p { font-size: 13px; line-height: 1.6; }
+
+    /* Eligibility table */
+    .elig-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .elig-table th { text-align: left; padding: 6px 10px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 11px;
+                     text-transform: uppercase; letter-spacing: 0.04em; }
+    .elig-table td { padding: 6px 10px; border: 1px solid var(--border); vertical-align: top; }
+    .elig-table tr.not-eligible td { color: var(--false-text); background: var(--false-bg); }
+    .elig-badge { display: inline-block; padding: 2px 7px; border-radius: 10px;
+                  font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .badge-true        { background: #d1fae5; color: #065f46; }
+    .badge-false       { background: var(--false-bg); color: var(--false-text); }
+    .badge-conditional { background: var(--conditional-bg); color: var(--conditional); }
+    .elig-condition    { font-size: 12px; color: #555; margin-top: 2px; line-height: 1.5; }
+
+    /* Numerical tables */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { text-align: right; padding: 6px 12px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 12px; }
+    .data-table th:first-child { text-align: left; }
+    .data-table td { padding: 6px 12px; border: 1px solid var(--border);
+                     text-align: right; white-space: nowrap; }
+    .data-table td:first-child { text-align: left; font-weight: 500; }
+    .data-table tr.proj td { color: var(--gray); }
+    .data-table tr.section-head td { background: #f8f9fa; font-weight: 600; font-size: 11px;
+                                      color: var(--gray); text-transform: uppercase;
+                                      letter-spacing: 0.04em; }
+    .proj-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
+    .data-table tr.grand-total td { font-weight: 700; border-top: 2px solid var(--border);
+                                     background: var(--green-bg); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- State Header -->
+  <div class="state-header">
+    <h1>Virginia (VA) — RPS & CES Programs</h1>
+    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-04-24
+      
+    </div>
+
+    <div class="state-meta-row">
+      
+
+      
+
+      
+    </div>
+  </div>
+
+  <!-- Programs -->
+  <div class="section">
+    <h2>Programs</h2>
+
+    
+  </div>
+
+  <!-- Numerical Data -->
+  
+  <div class="section">
+    <h2>RPS & CES Targets (%)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr class="">
+          <td>Appalachian Power</td><td>17.4%</td><td>21.0%</td><td>23.8%</td><td>26.4%</td><td>30.1%</td><td>32.8%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Appalachian RPS (% of non-nuclear)</td><td>9.2%</td><td>12.9%</td><td>15.6%</td><td>18.4%</td><td>22.1%</td><td>24.9%</td>
+        </tr>
+        
+        <tr class="">
+          <td>DG Carve-Out (Dominion)</td><td>0.2%</td><td>0.3%</td><td>0.3%</td><td>0.3%</td><td>0.4%</td><td>0.4%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Dominion Power</td><td>46.2%</td><td>48.1%</td><td>50.1%</td><td>52.0%</td><td>54.0%</td><td>55.8%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Dominion RPS (% of non-nuclear)</td><td>16.1%</td><td>18.2%</td><td>20.4%</td><td>22.6%</td><td>24.8%</td><td>27.1%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total CES</td><td>42.1%</td><td>44.2%</td><td>46.4%</td><td>48.4%</td><td>50.6%</td><td>52.6%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS (% of obligated LSE retail sales)</td><td>15.1%</td><td>17.5%</td><td>19.7%</td><td>22.0%</td><td>24.4%</td><td>26.8%</td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
+        
+        <tr><td>Statewide Sales</td><td>135,607</td><td>137,129</td><td>137,451</td><td>139,022</td><td>140,222</td><td>142,177</td></tr>
+        
+        <tr><td>RPS-Applicable Sales</td><td>97,860</td><td>98,958</td><td>99,191</td><td>100,324</td><td>101,190</td><td>102,601</td></tr>
+        
+        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
+        
+        <tr class="">
+          <td>CES (incremental to RPS)</td><td>26,133</td><td>26,133</td><td>26,133</td><td>26,133</td><td>26,133</td><td>26,133</td>
+        </tr>
+        
+        <tr class="">
+          <td>DG Carve-Out</td><td>133</td><td>153</td><td>171</td><td>192</td><td>212</td><td>235</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>14,562</td><td>17,063</td><td>19,271</td><td>21,762</td><td>24,362</td><td>27,081</td>
+        </tr>
+        
+        <tr class="grand-total">
+          <td>Grand Total</td><td>40,695</td><td>43,196</td><td>45,404</td><td>47,895</td><td>50,495</td><td>53,214</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <p class="proj-note">* 2026+ values are LBNL projections.</p>
+  </div>
+  
+
+</div>
+</body>
+</html>

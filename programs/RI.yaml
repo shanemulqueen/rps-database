@@ -1,0 +1,196 @@
+state: RI
+name: Rhode Island
+last_reviewed: 2026-04-23
+reviewer_notes: Initial build. RI calls its standard the "Renewable Energy Standard" (RES),
+  not RPS. Three programs captured — RES, REG (distributed tariff), and Long-Term
+  Contracting Standard. Administered by RIPUC; OER plays a supporting role.
+
+admin_authority:
+  name: RI Public Utilities Commission (RIPUC)
+  url: https://ripuc.ri.gov/
+
+secondary_authority:
+  name: RI Office of Energy Resources (OER)
+  url: https://energy.ri.gov/
+
+rec_registry:
+  name: NEPOOL GIS
+  url: https://nepoolgis.com/
+
+compliance_reports:
+  - label: RES Program (RIPUC)
+    url: https://ripuc.ri.gov/utility-information/electric/rhode-island-renewable-energy-standard-ri-res-program
+  - label: RI Energy Laws & Programs
+    url: https://energy.ri.gov/policies-programs/ri-energy-laws
+  - label: RES Official Portal
+    url: https://rhodeislandres.com/
+
+programs:
+
+  - id: RI_RES
+    name: Renewable Energy Standard (RES)
+    type: rps
+    administered_by: RI RIPUC
+    program_url: https://ripuc.ri.gov/utility-information/electric/rhode-island-renewable-energy-standard-ri-res-program
+    statutory_cite: R.I. Gen. Laws § 39-26
+    applicable_lses: [National Grid RI, Retail Supplier]
+    note: Rhode Island's standard is called the Renewable Energy Standard (RES). The
+      2022 amendment set a goal of 100% renewable electricity offset by 2033.
+      Compliance is administered by InClime, Inc. as contractor to RIPUC.
+    legislation:
+      - bill: "Renewable Energy Standard Act (P.L. 2004, Chapter 205)"
+        enacted: 2004
+        url: https://webserver.rilegislature.gov/PublicLaws/law04/law04205.htm
+        role: Original RES enactment
+        amendments:
+          - year: 2016
+            bill: "RES Extension Amendment (H 7413A / S 2185A)"
+            url: https://energy.ri.gov/heating-cooling/fossil-fuels/learn-about-natural-gas/renewable-energy-standard-2004
+            note: Extended target to 38.5% renewable energy by 2035
+          - year: 2022
+            bill: "100% Renewable Electricity Standard (HB 7277A / SB 2274Aaa)"
+            url: https://governor.ri.gov/press-releases/governor-mckee-signs-historic-legislation-requiring-100-rhode-islands-electricity-be
+            note: Required 100% renewable electricity offset by 2033; complemented by Act on Climate net-zero goal
+    generation_requirements: null
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: true
+      wind:
+        eligible: true
+      offshore_wind:
+        eligible: true
+      hydro_run_of_river:
+        eligible: true
+        condition: Incremental and run-of-river hydro eligible. Conventional large
+          hydro generally not eligible for new RES compliance.
+      hydro_large:
+        eligible: false
+      biomass_solid:
+        eligible: conditional
+        condition: Biomass must meet fuel sourcing and emissions standards.
+      biogas_lfg:
+        eligible: true
+      msw:
+        eligible: conditional
+        condition: Waste-to-energy with qualifying renewable fraction may be eligible.
+      geothermal:
+        eligible: true
+      storage:
+        eligible: conditional
+        condition: Paired storage with a qualifying renewable generator eligible.
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: conditional
+        condition: Fuel cells using renewable fuel (biogas, hydrogen) eligible.
+
+  - id: RI_LTCS
+    name: Long-Term Contracting Standard for Renewable Energy
+    type: procurement
+    administered_by: RI RIPUC / OER
+    program_url: https://energy.ri.gov/heating-cooling/fossil-fuels/learn-about-natural-gas/long-term-contracting-standard-renewable
+    statutory_cite: R.I. Gen. Laws § 39-26.1
+    applicable_lses: [National Grid RI]
+    note: Requires the electric distribution company to enter long-term contracts
+      (up to 15 years) for renewable energy. Originally targeted 90 MW of capacity.
+      Provided the contractual mechanism for the Block Island Wind Farm (America's
+      first offshore wind farm, commissioned 2016) and subsequent offshore wind procurements.
+    legislation:
+      - bill: "Long-Term Contracting Standard for Renewable Energy (enacted 2009)"
+        enacted: 2009
+        url: https://law.justia.com/codes/rhode-island/title-39/chapter-39-26-1/
+        role: Established long-term contracting obligation; 90 MW capacity target;
+          specific provisions for offshore wind in federal waters
+    procurement_requirements: |
+      National Grid RI (the distribution company) issues competitive solicitations
+      for renewable energy contracts of up to 15 years. Contracts subject to RIPUC
+      review and approval. Capacity adjusted by technology-specific capacity factors.
+      Block Island Wind Farm (30 MW, 2016) and subsequent solicitations fulfilled
+      under this authority.
+    generation_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: true
+      wind:
+        eligible: true
+      offshore_wind:
+        eligible: true
+        condition: Offshore wind is the primary intended technology. Block Island Wind
+          Farm was the first project contracted under this standard.
+      hydro_run_of_river:
+        eligible: true
+      hydro_large:
+        eligible: false
+      biomass_solid:
+        eligible: conditional
+      biogas_lfg:
+        eligible: true
+      msw:
+        eligible: false
+      geothermal:
+        eligible: true
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false
+
+  - id: RI_REG
+    name: Renewable Energy Growth (REG) Program
+    type: procurement
+    administered_by: RI RIPUC / National Grid RI
+    program_url: https://energy.ri.gov/renewable-energy/wind/renewable-energy-growth-program-reg-program
+    statutory_cite: R.I. Gen. Laws § 39-26.6
+    applicable_lses: [National Grid RI]
+    note: A tariff-based incentive program for distributed renewable generation —
+      RI's equivalent of a feed-in tariff. Generators receive long-term fixed-price
+      tariff agreements rather than selling RECs into the market. Original target was
+      160 MW (2015–2019). Program continues under RIPUC oversight.
+    legislation:
+      - bill: "Distributed Generation Growth Act (P.L. 2014, Chapters 200 & 216)"
+        enacted: 2014
+        url: https://webserver.rilegislature.gov/Statutes/TITLE39/39-26.6/INDEX.htm
+        role: Created REG program as a tariff-based distributed generation incentive;
+          160 MW initial target 2015–2019
+        amendments:
+          - year: 2023
+            bill: "Net Metering Amendment (Chapter 300, S 0684 A)"
+            url: https://ripuc.ri.gov/utility-information/electric
+            note: Updated net metering provisions affecting REG program administration
+    procurement_requirements: |
+      Generators enter long-term fixed-price tariff agreements with National Grid RI.
+      Pricing set through RIPUC proceedings. Annual solicitation cycles.
+      Projects must be grid-interconnected distributed generation.
+    generation_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: true
+        condition: Primary technology in the REG program. Both behind-the-meter
+          and front-of-meter solar eligible.
+      wind:
+        eligible: true
+        condition: Small wind systems eligible. Most REG capacity has been solar.
+      offshore_wind:
+        eligible: false
+      hydro_run_of_river:
+        eligible: true
+        condition: Small-scale hydropower eligible.
+      hydro_large:
+        eligible: false
+      biomass_solid:
+        eligible: false
+      biogas_lfg:
+        eligible: true
+        condition: Anaerobic digestion and biogas systems eligible.
+      msw:
+        eligible: false
+      geothermal:
+        eligible: false
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false

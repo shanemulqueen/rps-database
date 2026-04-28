@@ -1,0 +1,219 @@
+state: ME
+name: Maine
+last_reviewed: 2026-04-23
+reviewer_notes: Initial build. ME has an accelerating Class IA new-renewables standard
+  reaching 50% by 2040 plus a 90% overall target (updated LD 1868, 2025). Offshore
+  wind procurement (LD 1895, 2023) targets 3,000 MW by 2040 in the Gulf of Maine.
+  Northern Maine (Aroostook/Washington counties) uses NAR registry instead of NEPOOL GIS.
+  New ME DOER launched September 2025.
+
+admin_authority:
+  name: Maine Public Utilities Commission (MPUC)
+  url: https://www.maine.gov/mpuc/regulated-utilities/electricity/renewable-programs/rps
+
+secondary_authority:
+  name: Maine Department of Energy Resources (DOER)
+  url: https://www.maine.gov/energy/initiatives/renewable-energy/renewable-clean-portfolio-standards
+
+rec_registry:
+  name: NEPOOL GIS (southern/central ME) / NAR (northern ME)
+  url: https://nepoolgis.com/
+
+compliance_reports:
+  - label: MPUC RPS Program
+    url: https://www.maine.gov/mpuc/regulated-utilities/electricity/renewable-programs/rps
+  - label: ME DOER Renewable & Clean Portfolio Standards
+    url: https://www.maine.gov/energy/initiatives/renewable-energy/renewable-clean-portfolio-standards
+  - label: Maine Offshore Wind Initiative
+    url: https://www.maineoffshorewind.org/procurement/
+
+programs:
+
+  - id: ME_RPS_CLASS1
+    name: Class I & Class IA RPS (New Renewables)
+    type: rps
+    administered_by: ME MPUC
+    program_url: https://www.maine.gov/mpuc/regulated-utilities/electricity/renewable-programs/rps
+    statutory_cite: 35-A M.R.S. § 3210
+    applicable_lses: [CMP, Versant Power, Retail Supplier]
+    note: Maine distinguishes Class I (general new renewables) and Class IA (post-2005
+      new renewables, ≤100 MW except wind/solar, with fish-passage requirements for
+      hydro). Class IA carries a separate escalating target — 11% in 2025, increasing
+      1% annually to 50% by 2040 per the 2025 update (LD 1868). Combined RPS target
+      is 90% renewable electricity by 2040 plus a new 10% Clean Energy Standard
+      (Class III) effective 2031.
+    legislation:
+      - bill: "An Act To Reform Maine's Renewable Portfolio Standard (LD 1494, P.L. 2019, Chapter 477)"
+        enacted: 2019
+        url: https://www.mainelegislature.org/legis/bills/bills_129th/chapters/PUBLIC477.asp
+        role: Set 80% renewable target by 2030; created Class IA category; mandated
+          thermal renewable energy credits (TRECs); required long-term contracts for
+          Class IA resources
+        amendments:
+          - year: 2025
+            bill: "An Act To Advance A Clean Energy Economy (LD 1868, P.L. 2025, Chapter 386)"
+            url: https://legislature.maine.gov/legis/bills/display_ps.asp?LD=1868&snum=132
+            note: Updated target to 90% renewable by 2040; added 10% Clean Energy Standard (Class III) by 2040; increased Class IA to 50% by 2040 via 1%/year increases
+    generation_requirements: |
+      Class IA hydro must have fish passage or demonstrate no barrier to anadromous
+      fish. Class IA facilities must have commenced operation or been substantially
+      refurbished after September 1, 2005. Long-term contracts (20-year terms)
+      required for Class IA procurement per MPUC competitive solicitations.
+    procurement_requirements: |
+      MPUC conducts competitive solicitations for Class IA resources (35-A M.R.S.
+      § 3210-G). Solicitations weighted 70% ratepayer benefit, 30% economic benefit.
+      Winning projects receive 20-year contracts. EDCs are required to seek Class IA
+      contracts in each solicitation round.
+    eligibility:
+      solar_pv:
+        eligible: true
+        condition: Eligible under both Class I and Class IA. No capacity limit for
+          solar under Class IA.
+      wind:
+        eligible: true
+        condition: Eligible under both Class I and Class IA. No capacity limit for
+          wind under Class IA.
+      offshore_wind:
+        eligible: true
+        condition: Class I and Class IA eligible. Gulf of Maine offshore wind is
+          the primary target of ME's separate offshore wind procurement program.
+      hydro_run_of_river:
+        eligible: true
+        condition: Class IA requires fish passage demonstration or certification
+          that no anadromous fish barrier exists. Post-2005 facilities ≤100 MW qualify.
+          Pre-2006 hydro in Class I; largest hydro in Class II.
+      hydro_large:
+        eligible: conditional
+        condition: Large hydro (>100 MW) not eligible for Class IA. May qualify
+          as Class I if post-2005 and meeting other criteria.
+      biomass_solid:
+        eligible: true
+        condition: Biomass (wood, waste) eligible for Class IA if post-2005. Must
+          meet MPUC fuel sourcing standards. Existing pre-2006 biomass falls in Class I.
+      biogas_lfg:
+        eligible: true
+        condition: Landfill gas and anaerobic digestion eligible. Class IA for post-2005
+          facilities; Class I for older facilities.
+      msw:
+        eligible: conditional
+        condition: Waste with energy recovery may qualify. Class placement depends
+          on operational date.
+      geothermal:
+        eligible: true
+      storage:
+        eligible: conditional
+        condition: Paired with Class IA eligible resource. MPUC may include storage
+          in long-term contracts for Class IA procurement.
+      nuclear:
+        eligible: false
+        condition: Nuclear not eligible for Class I or IA. May qualify for the new
+          Class III Clean Energy Standard (effective 2031) if zero-carbon.
+      fuel_cell:
+        eligible: true
+        condition: Fuel cells using renewable fuel eligible. Must meet Class IA
+          operational date and capacity requirements.
+
+  - id: ME_RPS_CLASS2
+    name: Class II RPS (Existing Renewables)
+    type: rps
+    administered_by: ME MPUC
+    program_url: https://www.maine.gov/mpuc/regulated-utilities/electricity/renewable-programs/rps
+    statutory_cite: 35-A M.R.S. § 3210
+    applicable_lses: [CMP, Versant Power, Retail Supplier]
+    note: Class II covers existing renewable resources that do not qualify for Class I
+      or IA due to vintage or size. Primarily captures existing large hydro and older
+      biomass. Target is 30% from Class II under the updated 90% overall standard.
+    legislation:
+      - bill: "35-A M.R.S. § 3210 (established with original RPS, 1999)"
+        enacted: 1999
+        url: https://www.mainelegislature.org/legis/statutes/35-a/title35-asec3210.html
+        role: Original Class II framework for existing renewable resources
+    generation_requirements: null
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: false
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: false
+      hydro_run_of_river:
+        eligible: true
+        condition: Existing run-of-river and conventional hydro that pre-dates Class I
+          cutoff or exceeds Class IA capacity limit.
+      hydro_large:
+        eligible: true
+        condition: Large conventional hydro (>100 MW, pre-2006) is the primary Class II
+          resource in Maine. Includes major river hydro facilities.
+      biomass_solid:
+        eligible: true
+        condition: Existing pre-2006 biomass facilities.
+      biogas_lfg:
+        eligible: true
+        condition: Pre-2006 landfill gas facilities.
+      msw:
+        eligible: true
+      geothermal:
+        eligible: false
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false
+
+  - id: ME_OFFSHORE_WIND
+    name: Offshore Wind Procurement
+    type: procurement
+    administered_by: ME DOER / ME MPUC
+    program_url: https://www.maineoffshorewind.org/procurement/
+    statutory_cite: 35-A M.R.S. § 3407–3408
+    applicable_lses: [CMP, Versant Power]
+    note: Maine's offshore wind program targets at least 3,000 MW by 2040 in the Gulf
+      of Maine — a floating offshore wind market given water depths. The program
+      specifically protects Lobster Management Area I. DOER (launched September 2025,
+      replacing the Governor's Energy Office) leads solicitation; MPUC reviews contracts.
+      Commercial solicitation originally due July 1, 2025; timeline being established.
+    legislation:
+      - bill: "An Act Regarding the Procurement of Offshore Wind Energy Resources (LD 1895, P.L. 2023, Chapter 481)"
+        enacted: 2023
+        url: https://legislature.maine.gov/legis/bills/display_ps.asp?ld=1895&PID=1456&snum=131
+        role: Authorized procurement of at least 3,000 MW by 2040; established Gulf of
+          Maine focus; required protection of Lobster Management Area I; created
+          $5,000/MW contribution to Offshore Wind Research Consortium
+    procurement_requirements: |
+      DOER must file a commercial solicitation with MPUC for offshore wind contracts.
+      Projects must demonstrate coordination with fisheries (especially lobster).
+      Diversity, equity, and inclusion requirements for coastal and disadvantaged
+      communities. $5,000 per MW contribution to the Offshore Wind Research Consortium.
+      EDCs are required to enter contracts approved by MPUC.
+    generation_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: false
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: true
+        condition: Gulf of Maine federal OCS lease areas. Floating offshore wind
+          technology required given water depths (>60m). Projects must not site
+          turbines within Lobster Management Area I. Must go through DOER solicitation
+          and MPUC approval process.
+      hydro_run_of_river:
+        eligible: false
+      hydro_large:
+        eligible: false
+      biomass_solid:
+        eligible: false
+      biogas_lfg:
+        eligible: false
+      msw:
+        eligible: false
+      geothermal:
+        eligible: false
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false

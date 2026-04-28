@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NJ — RPS & CES Programs</title>
+  <style>
+    :root {
+      --green: #2d6a4f;
+      --green-light: #52b788;
+      --green-bg: #f0faf4;
+      --gray: #6c757d;
+      --gray-light: #f1f3f5;
+      --border: #dee2e6;
+      --text: #212529;
+      --conditional: #856404;
+      --conditional-bg: #fff3cd;
+      --false-bg: #f8f9fa;
+      --false-text: #adb5bd;
+      --link: #1a6eb5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           font-size: 14px; color: var(--text); background: #fff; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
+
+    /* Header */
+    .state-header { border-bottom: 3px solid var(--green); padding-bottom: 14px; margin-bottom: 24px; }
+    .state-header h1 { font-size: 26px; color: var(--green); }
+    .state-header .meta { font-size: 12px; color: var(--gray); margin-top: 4px; }
+    .state-meta-row { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 12px; }
+    .state-meta-block { font-size: 13px; }
+    .state-meta-block .label { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                                letter-spacing: 0.05em; color: var(--gray); margin-bottom: 3px; }
+    .report-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 3px; }
+    .report-link { font-size: 12px; padding: 2px 8px; border: 1px solid var(--border);
+                   border-radius: 4px; background: var(--gray-light); }
+
+    /* Section */
+    .section { margin-bottom: 40px; }
+    .section > h2 { font-size: 16px; font-weight: 600; color: var(--green);
+                    border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 16px; }
+
+    /* Program card */
+    .program { border: 1px solid var(--border); border-radius: 6px;
+               margin-bottom: 24px; overflow: hidden; }
+    .program-header { background: var(--green-bg); padding: 12px 16px;
+                      border-bottom: 1px solid var(--border); }
+    .program-header h3 { font-size: 15px; color: var(--green); }
+    .program-header h3 a { color: var(--green); }
+    .program-meta { font-size: 12px; color: var(--gray); margin-top: 4px;
+                    display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; }
+    .program-meta .cite { font-style: italic; }
+    .program-body { padding: 16px; display: grid; gap: 14px; }
+
+    .program-note { font-size: 13px; color: #444; padding: 10px 12px;
+                    background: #f8f9fa; border-radius: 4px;
+                    border-left: 3px solid var(--green-light); line-height: 1.6; }
+
+    /* Legislation block */
+    .legislation { font-size: 13px; }
+    .legislation h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                      letter-spacing: 0.05em; color: var(--gray); margin-bottom: 8px; }
+    .leg-item { padding: 8px 10px; border: 1px solid var(--border); border-radius: 4px;
+                margin-bottom: 6px; background: #fff; }
+    .leg-item .leg-bill { font-weight: 500; }
+    .leg-item .leg-role { color: var(--gray); font-size: 12px; margin-top: 2px; }
+    .leg-amendments { margin-top: 6px; padding-left: 16px; border-left: 2px solid var(--border); }
+    .leg-amend { font-size: 12px; color: #444; margin-top: 5px; }
+    .leg-amend .amend-year { font-weight: 600; color: var(--green); margin-right: 4px; }
+    .leg-amend .amend-note { color: var(--gray); margin-top: 1px; }
+
+    /* Req blocks */
+    .req-block h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                    letter-spacing: 0.05em; color: var(--gray); margin-bottom: 5px; }
+    .req-block p { font-size: 13px; line-height: 1.6; }
+
+    /* Eligibility table */
+    .elig-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .elig-table th { text-align: left; padding: 6px 10px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 11px;
+                     text-transform: uppercase; letter-spacing: 0.04em; }
+    .elig-table td { padding: 6px 10px; border: 1px solid var(--border); vertical-align: top; }
+    .elig-table tr.not-eligible td { color: var(--false-text); background: var(--false-bg); }
+    .elig-badge { display: inline-block; padding: 2px 7px; border-radius: 10px;
+                  font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .badge-true        { background: #d1fae5; color: #065f46; }
+    .badge-false       { background: var(--false-bg); color: var(--false-text); }
+    .badge-conditional { background: var(--conditional-bg); color: var(--conditional); }
+    .elig-condition    { font-size: 12px; color: #555; margin-top: 2px; line-height: 1.5; }
+
+    /* Numerical tables */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { text-align: right; padding: 6px 12px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 12px; }
+    .data-table th:first-child { text-align: left; }
+    .data-table td { padding: 6px 12px; border: 1px solid var(--border);
+                     text-align: right; white-space: nowrap; }
+    .data-table td:first-child { text-align: left; font-weight: 500; }
+    .data-table tr.proj td { color: var(--gray); }
+    .data-table tr.section-head td { background: #f8f9fa; font-weight: 600; font-size: 11px;
+                                      color: var(--gray); text-transform: uppercase;
+                                      letter-spacing: 0.04em; }
+    .proj-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
+    .data-table tr.grand-total td { font-weight: 700; border-top: 2px solid var(--border);
+                                     background: var(--green-bg); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- State Header -->
+  <div class="state-header">
+    <h1>New Jersey (NJ) — RPS & CES Programs</h1>
+    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-04-24
+      &nbsp;|&nbsp; Last reviewed 2026-04-23
+    </div>
+
+    <div class="state-meta-row">
+      
+      <div class="state-meta-block">
+        <div class="label">Administrative Authority</div>
+        <a href="https://www.nj.gov/bpu/">NJ Board of Public Utilities (BPU)</a>
+      </div>
+      
+
+      
+      <div class="state-meta-block">
+        <div class="label">REC Registry</div>
+        <a href="https://www.pjm-eis.com/program-information/new-jersey">PJM-EIS GATS (Generation Attribute Tracking System)</a>
+      </div>
+      
+
+      
+      <div class="state-meta-block">
+        <div class="label">Compliance Reports & Regulations</div>
+        <div class="report-links">
+          
+          <a class="report-link" href="https://cleanenergy.nj.gov/">NJ Clean Energy Program Portal</a>
+          
+          <a class="report-link" href="https://cleanenergy.nj.gov/renewable-energy/">BPU Renewable Energy Programs</a>
+          
+          <a class="report-link" href="https://bpuoffshorewind.nj.gov/">BPU Offshore Wind Program</a>
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Programs -->
+  <div class="section">
+    <h2>Programs</h2>
+
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://cleanenergy.nj.gov/renewable-energy/">Renewable Portfolio Standard</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>RPS</span>
+          <span>NJ Board of Public Utilities (BPU)</span>
+          <span class="cite">N.J.S.A. 48:3-87</span>
+          <span>Applies to: EDC, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">NJ's RPS covers Class I (new renewables) and Class II (existing resources). Solar has a separate carve-out tracked as a distinct compliance obligation. RPS currently targets 50% by 2030, with further increases under executive order toward 100% clean electricity by 2035.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://pub.njleg.gov/bills/9899/AL99/23_.HTM">Electric Discount and Energy Competition Act (P.L. 1999, c. 23)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 1999</span>
+            </div>
+            <div class="leg-role">Original RPS enactment; established Societal Benefits Charge for clean energy funding</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2012</span>
+                <a href="https://pub.njleg.gov/bills/2012/PL12/24_.HTM">Solar Portfolio Standard Act (P.L. 2012, c. 24)</a>
+                
+                <div class="amend-note">Mandated 4.1% solar by 2028; created SREC system; established Solar Alternative Compliance Payments</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2018</span>
+                <a href="https://pub.njleg.gov/bills/2018/AL18/17_.HTM">An Act Concerning Clean Energy (P.L. 2018, c. 17)</a>
+                
+                <div class="amend-note">Escalated RPS to 35% by 2025 and 50% by 2030; accelerated solar RPS; 600 MW storage by 2021</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2021</span>
+                <a href="https://pub.njleg.gov/bills/2020/PL21/169_.HTM">An Act Concerning Certain Solar Energy Projects (P.L. 2021, c. 169)</a>
+                
+                <div class="amend-note">Created SREC-II program targeting 3,750 MW by 2026; established competitive bidding for solar incentives</div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Solar qualifies under the RPS general Class I obligation but is primarily tracked and obligated through the separate solar carve-out.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Offshore wind qualifies for Class I RPS and also has a dedicated OREC carve-out program. ORECs satisfy both obligations.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Run-of-river and small hydro eligible as Class I. Conventional large hydro eligible as Class II.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Large conventional hydro eligible under Class II (pre-2004 vintage facilities). New large hydro may qualify for Class I if meeting criteria.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Biomass combustion eligible; must meet air quality standards and fuel sourcing requirements. Co-firing limits apply.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Landfill gas, anaerobic digestion, and biogas eligible for Class I.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">MSW-to-energy facilities with Class I eligible components (biogas recovery) may qualify in part. Full MSW combustion is Class II.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Storage mandate (2,000 MW by 2030) is tracked separately from RPS. Storage does not independently generate RECs but paired systems qualify.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Nuclear is not RPS-eligible. NJ does not have a state ZEC program; federal PTC applies to qualifying nuclear.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Fuel cells using renewable fuel qualify. Natural gas fuel cells may qualify for Class II or other incentive programs.</div></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://cleanenergy.nj.gov/renewable-energy/">Solar Carve-Out / Successor Solar Incentive (SuSI)</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>RPS</span>
+          <span>NJ Board of Public Utilities (BPU)</span>
+          <span class="cite">N.J.S.A. 48:3-87(d)</span>
+          <span>Applies to: EDC, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">NJ's solar program has evolved through three generations — SREC (2004–2020),
+TREC (2020–2021), and now SuSI (2021–present). SuSI has two tracks: the
+Administratively Determined Incentive (ADI) for smaller and community solar,
+and the Competitive Solar Incentive (CSI) for larger projects. Target is 5.1%
+solar by 2026 (approximately 3,750 MW). Solar RECs satisfy the solar carve-out
+separately from the general RPS.
+</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://pub.njleg.gov/bills/2012/PL12/24_.HTM">Solar Portfolio Standard Act (P.L. 2012, c. 24)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2012</span>
+            </div>
+            <div class="leg-role">Established formal SREC solar carve-out; mandated 4.1% solar by 2028</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2018</span>
+                <a href="https://pub.njleg.gov/bills/2018/AL18/17_.HTM">An Act Concerning Clean Energy (P.L. 2018, c. 17)</a>
+                
+                <div class="amend-note">Accelerated solar carve-out to 5.1% by 2021; created TREC as transition mechanism</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2021</span>
+                <a href="https://pub.njleg.gov/bills/2020/PL21/169_.HTM">An Act Concerning Certain Solar Energy Projects (P.L. 2021, c. 169)</a>
+                
+                <div class="amend-note">Created SuSI program (ADI + CSI tracks); SREC-II bridges to SuSI; 3,750 MW target by 2026</div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+        <div class="req-block">
+          <h4>Procurement Requirements</h4>
+          <p>SuSI ADI: Fixed 15-year incentive payments set administratively by BPU.
+Targets community solar, rooftop, and small commercial projects.
+SuSI CSI: Competitive solicitations for projects above the ADI size threshold.
+Winning projects receive 15-year contracts at bid prices. Administered through
+BPU competitive procurement rounds.</p>
+        </div>
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">All grid-connected solar PV systems eligible. Incentive level and track (ADI vs CSI) determined by project size and type.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://bpuoffshorewind.nj.gov/">Offshore Wind — OREC Program</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>PROCUREMENT</span>
+          <span>NJ Board of Public Utilities (BPU)</span>
+          <span class="cite">N.J.S.A. 48:3-87.1 (Offshore Wind Economic Development Act)</span>
+          <span>Applies to: EDC, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">NJ's offshore wind program uses Offshore Renewable Energy Certificates (ORECs) — a state-administered procurement, not a voluntary market. BPU selects projects through competitive solicitation rounds and sets OREC prices. EDCs are required to purchase ORECs from approved projects. Current goal is 11,000 MW by 2040 (per EO</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://pub.njleg.gov/bills/2010/S2500/2036_R2.HTM">Offshore Wind Economic Development Act (P.L. 2010, c. 57)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2010</span>
+            </div>
+            <div class="leg-role">Created OREC mechanism; required minimum 1,100 MW procurement; authorized BPU implementing regulations</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2018</span>
+                <a href="https://pub.njleg.gov/bills/2018/AL18/17_.HTM">An Act Concerning Clean Energy (P.L. 2018, c. 17)</a>
+                
+                <div class="amend-note">Increased offshore wind goal to 3,500 MW by 2030 (later further raised by executive orders)</div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+        <div class="req-block">
+          <h4>Procurement Requirements</h4>
+          <p>BPU conducts competitive solicitation rounds. Applicants submit project proposals
+with OREC price bids. BPU selects winners based on economic and non-economic
+criteria including New Jersey economic benefits and supply chain commitments.
+Selected developers enter into 20-year OREC agreements with NJ EDCs.
+Community benefit agreements required for approved projects.</p>
+        </div>
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Federal OCS lease areas off the NJ/NY coast. Projects must be approved through BPU solicitation process and receive an OREC award. In-state supply chain and workforce commitments required.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+  </div>
+
+  <!-- Numerical Data -->
+  
+  <div class="section">
+    <h2>RPS & CES Targets (%)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr class="">
+          <td>Class I Non-Solar</td><td>22.1%</td><td>30.2%</td><td>30.5%</td><td>30.6%</td><td>31.3%</td><td>31.9%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class II</td><td>2.5%</td><td>2.5%</td><td>2.5%</td><td>2.5%</td><td>2.5%</td><td>2.5%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Solar Carve-Out</td><td>4.9%</td><td>4.8%</td><td>4.5%</td><td>4.3%</td><td>3.7%</td><td>3.1%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>29.5%</td><td>37.5%</td><td>37.5%</td><td>37.5%</td><td>37.5%</td><td>37.5%</td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
+        
+        <tr><td>Statewide Sales</td><td>72,131</td><td>72,981</td><td>73,263</td><td>74,216</td><td>74,929</td><td>75,941</td></tr>
+        
+        <tr><td>RPS-Applicable Sales</td><td>71,443</td><td>72,286</td><td>72,564</td><td>73,508</td><td>74,214</td><td>75,217</td></tr>
+        
+        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
+        
+        <tr class="">
+          <td>Class I Non-Solar (see note)</td><td>15,367</td><td>21,576</td><td>22,047</td><td>22,241</td><td>22,979</td><td>23,697</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class II</td><td>1,738</td><td>1,786</td><td>1,807</td><td>1,814</td><td>1,838</td><td>1,855</td>
+        </tr>
+        
+        <tr class="">
+          <td>Solar Carve-Out (see note)</td><td>3,407</td><td>3,429</td><td>3,253</td><td>3,157</td><td>2,749</td><td>2,278</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>20,512</td><td>26,791</td><td>27,107</td><td>27,212</td><td>27,566</td><td>27,830</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <p class="proj-note">* 2026+ values are LBNL projections.</p>
+  </div>
+  
+
+</div>
+</body>
+</html>

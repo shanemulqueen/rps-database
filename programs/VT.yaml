@@ -1,0 +1,268 @@
+state: VT
+name: Vermont
+last_reviewed: 2026-04-23
+reviewer_notes: Initial build. Vermont's program is the Renewable Energy Standard (RES),
+  not an RPS — structured as five tiers after Act 179 (2024), not program classes.
+  Tier III covers energy transformation (electrification, efficiency, fuel switching)
+  rather than generation, which is unique. Act 179 (2024) was passed over a governor
+  veto. Standard Offer program is a separate feed-in tariff for small renewables (≤2.2 MW).
+
+admin_authority:
+  name: VT Public Utility Commission (PUC)
+  url: https://puc.vermont.gov/electric/renewable-energy-standard
+
+secondary_authority:
+  name: VT Department of Public Service (DPS)
+  url: https://publicservice.vermont.gov/renewables/renewable-energy-standard
+
+rec_registry:
+  name: NEPOOL GIS
+  url: https://nepoolgis.com/
+
+compliance_reports:
+  - label: RES Annual Reports (DPS)
+    url: https://publicservice.vermont.gov/about-us/plans-and-reports/renewable-energy-standard-reports
+  - label: RES Rules (PUC Rule 4.400)
+    url: https://puc.vermont.gov/about-us/statutes-and-rules/current-rules-and-general-orders
+  - label: Tier III Energy Transformation (DPS)
+    url: https://publicservice.vermont.gov/efficiency/tier-iii-renewable-energy-standard
+
+programs:
+
+  - id: VT_RES
+    name: Renewable Energy Standard (RES) — Tiers I, II, IV & V
+    type: rps
+    administered_by: VT PUC / VT DPS
+    program_url: https://puc.vermont.gov/electric/renewable-energy-standard
+    statutory_cite: 30 V.S.A. § 8002–8005
+    applicable_lses: [Green Mountain Power, Burlington Electric, other Vermont utilities]
+    note: Vermont's RES is structured in five tiers (post-Act 179, 2024), not program
+      classes. Tier I is the general renewable energy requirement; Tier II is distributed
+      generation (≤5 MW, post-June 2015); Tier IV (new in 2024) is new regional
+      renewables such as offshore wind; Tier V applies to already-100%-renewable
+      utilities for load growth. Tier III (energy transformation) is a separate
+      program below. The 100% renewable electricity target was accelerated to 2030–2035
+      by Act 179 (2024), passed over the governor's veto.
+    legislation:
+      - bill: "An Act Relating to Establishing a Renewable Energy Standard (Act 56 of 2015)"
+        enacted: 2015
+        url: https://legislature.vermont.gov/bill/status/2016/h.40
+        role: Original RES enactment; created three-tier framework (Tier I general,
+          Tier II distributed, Tier III transformation); Tier I at 55% rising to 75%
+          by 2032; effective January 1, 2017
+        amendments:
+          - year: 2024
+            bill: "An Act Relating to the Renewable Energy Standard (Act 179 of 2024 / H.289)"
+            url: https://legislature.vermont.gov/bill/status/2024/H.289
+            note: Accelerated Tier I to 63% by 2025 rising to 100% by 2030–2035; accelerated Tier II to 5.8% by 2025; added Tier IV (new regional renewables) and Tier V (load growth for 100%-renewable utilities); new biomass/hydro restrictions; passed over governor's veto
+    generation_requirements: |
+      Tier II resources must be ≤5 MW nameplate and commissioned after June 30, 2015,
+      located in Vermont or a utility's service territory, and directly interconnected.
+      Tier IV resources must be new (post-2010) regional renewables outside Vermont
+      (e.g., offshore wind, out-of-state solar) delivered to Vermont load.
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: true
+        condition: Eligible for Tier I (any scale) and Tier II (≤5 MW, post-June 2015,
+          located in Vermont). Tier II is the primary vehicle for distributed solar.
+      wind:
+        eligible: true
+        condition: Tier I eligible. New Act 179 restrictions on large biomass may
+          not affect wind. Vermont-sited wind qualifies for Tier I; regional wind
+          for Tier IV.
+      offshore_wind:
+        eligible: true
+        condition: Tier IV (new regional renewables, post-2010) is the primary tier
+          for offshore wind certificates from Gulf of Maine or other New England
+          offshore projects.
+      hydro_run_of_river:
+        eligible: true
+        condition: Run-of-river hydro eligible for Tier I. Act 179 restricts new large
+          hydro (>200 MW) from qualifying as "new renewables." Smaller run-of-river
+          unaffected.
+      hydro_large:
+        eligible: conditional
+        condition: New or expanded large hydro >200 MW excluded from qualifying as
+          new renewables under Act 179 (2024). Existing long-term contracts with
+          HydroQuébec may continue qualifying under existing terms.
+      biomass_solid:
+        eligible: conditional
+        condition: Act 179 (2024) imposed new efficiency and emissions standards that
+          effectively eliminate most new solid biomass facilities from Tier I compliance.
+          Existing biomass facilities with pre-existing contracts may continue.
+      biogas_lfg:
+        eligible: true
+        condition: Farm methane and landfill gas eligible for Tier I. Also eligible
+          for Tier III as energy transformation if used for heating/transportation.
+      msw:
+        eligible: conditional
+        condition: Waste-to-energy with qualifying renewable fraction may be eligible.
+          Subject to emissions and efficiency standards.
+      geothermal:
+        eligible: true
+        condition: Electric geothermal eligible for Tier I. Ground-source heat pumps
+          may qualify under Tier III (energy transformation).
+      storage:
+        eligible: conditional
+        condition: Paired with a Tier I renewable generator. Standalone storage
+          qualifies under Tier III (energy transformation) for load-shifting of
+          renewable energy.
+      nuclear:
+        eligible: false
+        condition: Vermont Yankee retired 2014. No active nuclear in Vermont.
+          No nuclear eligibility under VT RES.
+      fuel_cell:
+        eligible: conditional
+        condition: Fuel cells using biogas or renewable hydrogen eligible for Tier I.
+          Natural gas fuel cells may qualify under Tier III only.
+
+  - id: VT_RES_TIER3
+    name: Renewable Energy Standard — Tier III (Energy Transformation)
+    type: rps
+    administered_by: VT DPS / VT PUC
+    program_url: https://publicservice.vermont.gov/efficiency/tier-iii-renewable-energy-standard
+    statutory_cite: 30 V.S.A. § 8004
+    applicable_lses: [Green Mountain Power, Burlington Electric, other Vermont utilities]
+    note: Tier III is a unique obligation requiring utilities to demonstrate that their
+      customers are reducing fossil fuel use through electrification and efficiency
+      measures — not just procuring renewable generation. It covers EVs, heat pumps,
+      weatherization, fuel-switching, and other demand-side measures. 7.33% of retail
+      sales equivalent by 2025. This is Vermont's primary mechanism for decarbonizing
+      heat and transportation alongside the electric sector.
+    legislation:
+      - bill: "An Act Relating to Establishing a Renewable Energy Standard (Act 56 of 2015)"
+        enacted: 2015
+        url: https://legislature.vermont.gov/bill/status/2016/h.40
+        role: Created Tier III as the energy transformation obligation; 2% starting
+          2017, rising to 12% by 2032
+        amendments:
+          - year: 2024
+            bill: "An Act Relating to the Renewable Energy Standard (Act 179 of 2024 / H.289)"
+            url: https://legislature.vermont.gov/bill/status/2024/H.289
+            note: Accelerated Tier III to 7.33% by 2025; maintained 12% target by 2032
+    generation_requirements: |
+      Tier III credits are not RECs — they represent verified fossil fuel savings from
+      customer-side measures. Utilities earn Tier III credit by deploying or financing:
+      electric vehicles and charging infrastructure, heat pumps (air-source and ground-source),
+      weatherization and building efficiency, fuel-switching from oil/propane to electricity,
+      biofuels for thermal use, and demand response with renewable integration.
+      Savings are measured and verified per DPS protocols.
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: false
+        condition: Solar generation itself does not qualify for Tier III. Solar-paired
+          storage used for fossil fuel displacement may have partial applicability.
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: false
+      hydro_run_of_river:
+        eligible: false
+      hydro_large:
+        eligible: false
+      biomass_solid:
+        eligible: false
+      biogas_lfg:
+        eligible: conditional
+        condition: Biogas used for thermal energy or transportation fuel (e.g., renewable
+          natural gas displacing propane) qualifies under Tier III energy transformation.
+      msw:
+        eligible: false
+      geothermal:
+        eligible: true
+        condition: Ground-source heat pumps displacing fossil fuel heating qualify
+          for Tier III fossil fuel savings credit.
+      storage:
+        eligible: conditional
+        condition: Battery storage enabling renewable load-shifting and fossil fuel
+          displacement qualifies. EV batteries through vehicle-to-grid applications
+          may qualify.
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: conditional
+        condition: Fuel cells using renewable hydrogen displacing fossil fuels qualify
+          under Tier III energy transformation.
+    tier3_specific_eligibility:
+      electric_vehicles:
+        eligible: true
+        condition: EV deployments by or through utilities; EV charging infrastructure
+          installation; fleet electrification programs. Credit based on verified
+          fossil fuel displacement.
+      heat_pumps:
+        eligible: true
+        condition: Air-source and ground-source heat pumps replacing oil, propane,
+          or natural gas heating. Savings verified against baseline fossil fuel consumption.
+      weatherization:
+        eligible: true
+        condition: Building efficiency measures that reduce overall energy consumption,
+          particularly in homes heated with fossil fuels. Must be utility-sponsored
+          or utility-financed programs.
+      demand_response:
+        eligible: true
+        condition: Demand response programs that enable higher renewable integration
+          and reduce fossil-fuel peaker plant use. Verified through ISO-NE settlement data.
+
+  - id: VT_STANDARD_OFFER
+    name: Standard Offer Program
+    type: procurement
+    administered_by: VT PUC / VT DPS
+    program_url: https://publicservice.vermont.gov/renewables/standard-offer
+    statutory_cite: 30 V.S.A. § 8005a
+    applicable_lses: [Green Mountain Power, Burlington Electric]
+    note: Vermont's Standard Offer is a feed-in tariff for small renewable generators
+      (≤2.2 MW). Generators receive long-term fixed-price contracts instead of selling
+      into the wholesale market or REC markets. Projects commissioned after September 30,
+      2009, are eligible. Annual RFP capacity tranches set by PUC (10 MW/year in
+      recent rounds). Administered by VEPP Inc. as program manager.
+    legislation:
+      - bill: "Act 45 of 2009 (original SPEED program framework)"
+        enacted: 2009
+        url: https://legislature.vermont.gov/statutes/fullchapter/30/089
+        role: Created Standard Offer/SPEED framework for small renewable feed-in tariffs
+        amendments:
+          - year: 2012
+            bill: "Vermont Energy Act of 2012 (Act 170)"
+            url: https://legislature.vermont.gov/statutes/fullchapter/30/089
+            note: Expanded capacity from 50 MW to 127.5 MW total; introduced market-based pricing mechanism
+    procurement_requirements: |
+      Annual competitive solicitations (RFP released April 1st each year).
+      Projects ≤2.2 MW, commissioned after September 30, 2009.
+      Winning projects receive 25-year fixed-price contracts with Green Mountain Power
+      or Burlington Electric. Pricing set through PUC competitive procurement process.
+    generation_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: true
+        condition: Primary technology in the Standard Offer. Both rooftop and ground-mount
+          solar ≤2.2 MW eligible.
+      wind:
+        eligible: true
+        condition: Small wind ≤2.2 MW eligible.
+      offshore_wind:
+        eligible: false
+      hydro_run_of_river:
+        eligible: true
+        condition: Small hydro ≤2.2 MW eligible. Fish passage requirements apply.
+      hydro_large:
+        eligible: false
+        condition: Capacity limit of 2.2 MW excludes any large hydro.
+      biomass_solid:
+        eligible: true
+        condition: Small biomass ≤2.2 MW eligible. Must meet emissions standards.
+      biogas_lfg:
+        eligible: true
+        condition: Farm methane (anaerobic digestion) and landfill gas ≤2.2 MW eligible.
+          Vermont has active farm biogas projects under Standard Offer.
+      msw:
+        eligible: false
+      geothermal:
+        eligible: false
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false

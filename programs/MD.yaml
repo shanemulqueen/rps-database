@@ -1,0 +1,282 @@
+state: MD
+name: Maryland
+last_reviewed: 2026-04-23
+reviewer_notes: Initial build. MD uses PJM-GATS (not NEPOOL GIS). OREC program for
+  offshore wind is a state procurement distinct from the voluntary REC market. PSC
+  administers RPS compliance; MEA administers offshore wind and clean energy programs.
+  Rapid legislative evolution 2019–2024.
+
+admin_authority:
+  name: Maryland Public Service Commission (PSC)
+  url: https://psc.maryland.gov/
+
+secondary_authority:
+  name: Maryland Energy Administration (MEA)
+  url: https://energy.maryland.gov/
+
+rec_registry:
+  name: PJM-EIS GATS (Generation Attribute Tracking System)
+  url: https://gats.pjm-eis.com/gats2/PublicReports/RenewableGeneratorsRegisteredinGATS
+
+compliance_reports:
+  - label: RPS Program & Documentation (PSC)
+    url: https://psc.maryland.gov/regulated-utilities/electricity/renewable-energy/
+  - label: RPS Description of Documents
+    url: https://psc.maryland.gov/regulated-utilities/electricity/renewable-energy/description-of-documents-rps/
+  - label: Offshore Wind Program (MEA)
+    url: https://energy.maryland.gov/Pages/Info/renewable/offshorewind.aspx
+
+programs:
+
+  - id: MD_RPS_TIER1
+    name: Renewable Portfolio Standard — Tier 1
+    type: rps
+    administered_by: MD Public Service Commission (PSC)
+    program_url: https://psc.maryland.gov/regulated-utilities/electricity/renewable-energy/
+    statutory_cite: Md. Code, Public Utilities § 7-701 et seq.
+    applicable_lses: [EDC, Retail Supplier]
+    note: Tier 1 covers new renewable resources. Target is 50% by 2030 per the Clean
+      Energy Jobs Act. Solar has a dedicated carve-out (14.5% by 2028) within the
+      Tier 1 obligation. Offshore wind has a separate OREC carve-out (2.5%).
+    legislation:
+      - bill: "Renewable Energy Portfolio Standard (enacted 2004)"
+        enacted: 2004
+        url: https://mgaleg.maryland.gov/mgawebsite/
+        role: Original RPS enactment establishing Tier 1 and Tier 2 framework
+        amendments:
+          - year: 2013
+            bill: "Maryland Offshore Wind Energy Act (Chapter 3, Acts of 2013)"
+            url: https://mgaleg.maryland.gov/mgawebsite/legislation/details/hb0226?ys=2013rs
+            note: Added OREC carve-out of 2.5% within Tier 1; established offshore wind procurement framework
+          - year: 2019
+            bill: "Clean Energy Jobs Act (Chapter 757, Acts of 2019)"
+            url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/SB0516?ys=2019rs
+            note: Increased RPS from 25% to 50% by 2030; raised solar carve-out from 2% to 14.5% by 2028; removed offshore wind development cap
+          - year: 2021
+            bill: "RPS Amendment (Chapter 673, Acts of 2021)"
+            url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/SB0065/?ys=2021rs
+            note: Adjusted solar carve-out schedule for 2022–2029; raised Solar ACP; removed black liquor from Tier 1 eligibility
+          - year: 2022
+            bill: "Climate Solutions Now Act (Chapter 38, Acts of 2022)"
+            url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/sb0528?ys=2022RS
+            note: Set 60% GHG reduction by 2031 and net-zero by 2045 as statutory goals; reinforced RPS trajectory
+    generation_requirements: null
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: true
+        condition: Qualifies under both Tier 1 general obligation and the dedicated
+          solar carve-out. SRECs are tracked separately in PJM-GATS.
+      wind:
+        eligible: true
+      offshore_wind:
+        eligible: true
+        condition: Qualifies for Tier 1 and also has a dedicated OREC carve-out (2.5%).
+          ORECs from PSC-approved projects satisfy the OREC obligation.
+      hydro_run_of_river:
+        eligible: true
+        condition: Run-of-river and incremental hydro installations qualify.
+          Conventional large hydro generally qualifies under Tier 2.
+      hydro_large:
+        eligible: conditional
+        condition: Large hydro (>30 MW) not typically eligible for Tier 1. Eligible
+          under Tier 2 for older facilities.
+      biomass_solid:
+        eligible: conditional
+        condition: Biomass combustion eligible. Black liquor (paper mill byproduct)
+          was removed from Tier 1 eligibility in 2021. Other biomass must meet
+          emissions and sourcing standards.
+      biogas_lfg:
+        eligible: true
+        condition: Landfill gas, biogas, and anaerobic digestion eligible for Tier 1.
+      msw:
+        eligible: conditional
+        condition: MSW combustion with energy recovery may qualify. Waste-to-energy
+          facilities face stricter air quality requirements.
+      geothermal:
+        eligible: true
+      storage:
+        eligible: conditional
+        condition: Paired storage with a qualifying renewable generator may be eligible.
+          Standalone storage does not generate Tier 1 RECs.
+      nuclear:
+        eligible: false
+        condition: Nuclear not eligible for MD RPS. MD does not have a state ZEC program.
+      fuel_cell:
+        eligible: conditional
+        condition: Fuel cells using biogas or other renewable fuel qualify for Tier 1.
+          Natural gas fuel cells do not.
+
+  - id: MD_RPS_TIER2
+    name: Renewable Portfolio Standard — Tier 2
+    type: rps
+    administered_by: MD Public Service Commission (PSC)
+    program_url: https://psc.maryland.gov/regulated-utilities/electricity/renewable-energy/
+    statutory_cite: Md. Code, Public Utilities § 7-701 et seq.
+    applicable_lses: [EDC, Retail Supplier]
+    note: Tier 2 covers existing, older clean energy resources — primarily conventional
+      hydro and poultry litter facilities. The Tier 2 requirement is 2.5% and has
+      remained relatively static.
+    legislation:
+      - bill: "Renewable Energy Portfolio Standard (enacted 2004)"
+        enacted: 2004
+        url: https://mgaleg.maryland.gov/mgawebsite/
+        role: Established Tier 2 for pre-2004 clean energy resources
+    generation_requirements: null
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: false
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: false
+      hydro_run_of_river:
+        eligible: true
+        condition: Existing run-of-river hydro facilities that predate the Tier 1
+          eligibility cutoff.
+      hydro_large:
+        eligible: true
+        condition: Conventional large hydro is the primary Tier 2 resource in Maryland.
+          Includes Conowingo Dam and other existing facilities.
+      biomass_solid:
+        eligible: true
+        condition: Existing biomass facilities and poultry litter combustion. Maryland
+          has historically had poultry litter-fired generation eligible under Tier 2.
+      biogas_lfg:
+        eligible: true
+      msw:
+        eligible: true
+      geothermal:
+        eligible: false
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false
+
+  - id: MD_SOLAR
+    name: Solar Carve-Out (SREC Program)
+    type: rps
+    administered_by: MD Public Service Commission (PSC)
+    program_url: https://psc.maryland.gov/regulated-utilities/electricity/renewable-energy/
+    statutory_cite: Md. Code, Public Utilities § 7-703
+    applicable_lses: [EDC, Retail Supplier]
+    note: Maryland's solar carve-out requires a separate percentage of retail sales
+      from solar PV. SRECs are traded in the PJM-GATS market. The Brighter Tomorrow
+      Act (2024) enhanced the SREC multiplier and expanded access. Current target
+      escalates to 14.5% by 2028. Retail suppliers must purchase SRECs or pay the
+      Solar Alternative Compliance Payment (SACP).
+    legislation:
+      - bill: "Clean Energy Jobs Act (Chapter 757, Acts of 2019)"
+        enacted: 2019
+        url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/SB0516?ys=2019rs
+        role: Raised solar carve-out from 2% to 5.5% rising to 14.5% by 2028; significantly
+          expanded the SREC market
+        amendments:
+          - year: 2021
+            bill: "RPS Amendment (Chapter 673, Acts of 2021)"
+            url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/SB0065/?ys=2021rs
+            note: Decreased solar carve-out requirements for 2022–2029; increased SACP ceiling to $60 (2023–2024) and $55 (2025)
+          - year: 2024
+            bill: "Brighter Tomorrow Act (Chapter 595, Acts of 2024)"
+            url: https://mgaleg.maryland.gov/mgawebsite/legislation/details/sb0783?ys=2024rs
+            note: Enhanced SREC multiplier (3 SRECs per 2 MWh = 150%); up to $7,500 per eligible household; expedited permitting via SolarApp+; raised net metering cap
+    generation_requirements: null
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: true
+        condition: All grid-connected solar PV systems in Maryland eligible. Enhanced
+          SREC multiplier (1.5 SRECs/MWh) applies to qualifying low-income and
+          community solar projects under the Brighter Tomorrow Act (2024).
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: false
+      hydro_run_of_river:
+        eligible: false
+      hydro_large:
+        eligible: false
+      biomass_solid:
+        eligible: false
+      biogas_lfg:
+        eligible: false
+      msw:
+        eligible: false
+      geothermal:
+        eligible: false
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false
+
+  - id: MD_OFFSHORE_WIND
+    name: Offshore Wind — OREC Program
+    type: procurement
+    administered_by: MD Public Service Commission (PSC) / MD Energy Administration (MEA)
+    program_url: https://energy.maryland.gov/Pages/Info/renewable/offshorewind.aspx
+    statutory_cite: Md. Code, Public Utilities § 7-704.1
+    applicable_lses: [BGE, Pepco, Delmarva Power, Potomac Edison]
+    note: Maryland's offshore wind program uses Offshore Renewable Energy Certificates
+      (ORECs) — a state-administered procurement. PSC selects projects and approves
+      OREC prices. EDCs are required to purchase ORECs from approved projects. ORECs
+      qualify for the Tier 1 RPS OREC carve-out (2.5% of retail sales). Current goal
+      is 8.5 GW by 2031 per the POWER Act (2023).
+    legislation:
+      - bill: "Maryland Offshore Wind Energy Act (Chapter 3, Acts of 2013)"
+        enacted: 2013
+        url: https://mgaleg.maryland.gov/mgawebsite/legislation/details/hb0226?ys=2013rs
+        role: Created OREC mechanism; set initial 2.5% carve-out (~500 MW); established
+          application and approval process for offshore wind projects
+        amendments:
+          - year: 2019
+            bill: "Clean Energy Jobs Act (Chapter 757, Acts of 2019)"
+            url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/SB0516?ys=2019rs
+            note: Removed 2.5% upper limit on offshore wind development; required at least 1,200 MW of Round 2 projects; established three procurement rounds
+          - year: 2023
+            bill: "Promoting Offshore Wind Energy Resources (POWER) Act (Chapter 95, Acts of 2023)"
+            url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/sb0781?ys=2023rs
+            note: Set 8.5 GW goal by 2031; required community benefit agreements; directed state facilities to procure offshore wind via PPAs
+          - year: 2024
+            bill: "Offshore Wind Projects Act Amendment (Chapter 431, Acts of 2024)"
+            url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb1296?ys=2024RS
+            note: Revised Round 2 procurement schedule; required in-state expenditure commitments; enabled OREC reallocation between projects
+    procurement_requirements: |
+      PSC issues competitive solicitations for offshore wind projects. Developers
+      submit OREC price applications. PSC evaluates based on economic impact, ratepayer
+      cost, environmental benefit, and in-state job creation. Approved projects receive
+      20-year OREC contracts. Community benefit agreements required for Round 2 projects.
+      EDCs must purchase ORECs from all PSC-approved projects.
+    generation_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: false
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: true
+        condition: Projects must be located in federal OCS lease areas off the Maryland/
+          Delaware coast. Must apply to and receive approval from PSC through the
+          competitive solicitation process. In-state economic investment commitments required.
+      hydro_run_of_river:
+        eligible: false
+      hydro_large:
+        eligible: false
+      biomass_solid:
+        eligible: false
+      biogas_lfg:
+        eligible: false
+      msw:
+        eligible: false
+      geothermal:
+        eligible: false
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false

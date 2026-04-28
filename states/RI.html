@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RI — RPS & CES Programs</title>
+  <style>
+    :root {
+      --green: #2d6a4f;
+      --green-light: #52b788;
+      --green-bg: #f0faf4;
+      --gray: #6c757d;
+      --gray-light: #f1f3f5;
+      --border: #dee2e6;
+      --text: #212529;
+      --conditional: #856404;
+      --conditional-bg: #fff3cd;
+      --false-bg: #f8f9fa;
+      --false-text: #adb5bd;
+      --link: #1a6eb5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           font-size: 14px; color: var(--text); background: #fff; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
+
+    /* Header */
+    .state-header { border-bottom: 3px solid var(--green); padding-bottom: 14px; margin-bottom: 24px; }
+    .state-header h1 { font-size: 26px; color: var(--green); }
+    .state-header .meta { font-size: 12px; color: var(--gray); margin-top: 4px; }
+    .state-meta-row { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 12px; }
+    .state-meta-block { font-size: 13px; }
+    .state-meta-block .label { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                                letter-spacing: 0.05em; color: var(--gray); margin-bottom: 3px; }
+    .report-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 3px; }
+    .report-link { font-size: 12px; padding: 2px 8px; border: 1px solid var(--border);
+                   border-radius: 4px; background: var(--gray-light); }
+
+    /* Section */
+    .section { margin-bottom: 40px; }
+    .section > h2 { font-size: 16px; font-weight: 600; color: var(--green);
+                    border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 16px; }
+
+    /* Program card */
+    .program { border: 1px solid var(--border); border-radius: 6px;
+               margin-bottom: 24px; overflow: hidden; }
+    .program-header { background: var(--green-bg); padding: 12px 16px;
+                      border-bottom: 1px solid var(--border); }
+    .program-header h3 { font-size: 15px; color: var(--green); }
+    .program-header h3 a { color: var(--green); }
+    .program-meta { font-size: 12px; color: var(--gray); margin-top: 4px;
+                    display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; }
+    .program-meta .cite { font-style: italic; }
+    .program-body { padding: 16px; display: grid; gap: 14px; }
+
+    .program-note { font-size: 13px; color: #444; padding: 10px 12px;
+                    background: #f8f9fa; border-radius: 4px;
+                    border-left: 3px solid var(--green-light); line-height: 1.6; }
+
+    /* Legislation block */
+    .legislation { font-size: 13px; }
+    .legislation h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                      letter-spacing: 0.05em; color: var(--gray); margin-bottom: 8px; }
+    .leg-item { padding: 8px 10px; border: 1px solid var(--border); border-radius: 4px;
+                margin-bottom: 6px; background: #fff; }
+    .leg-item .leg-bill { font-weight: 500; }
+    .leg-item .leg-role { color: var(--gray); font-size: 12px; margin-top: 2px; }
+    .leg-amendments { margin-top: 6px; padding-left: 16px; border-left: 2px solid var(--border); }
+    .leg-amend { font-size: 12px; color: #444; margin-top: 5px; }
+    .leg-amend .amend-year { font-weight: 600; color: var(--green); margin-right: 4px; }
+    .leg-amend .amend-note { color: var(--gray); margin-top: 1px; }
+
+    /* Req blocks */
+    .req-block h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                    letter-spacing: 0.05em; color: var(--gray); margin-bottom: 5px; }
+    .req-block p { font-size: 13px; line-height: 1.6; }
+
+    /* Eligibility table */
+    .elig-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .elig-table th { text-align: left; padding: 6px 10px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 11px;
+                     text-transform: uppercase; letter-spacing: 0.04em; }
+    .elig-table td { padding: 6px 10px; border: 1px solid var(--border); vertical-align: top; }
+    .elig-table tr.not-eligible td { color: var(--false-text); background: var(--false-bg); }
+    .elig-badge { display: inline-block; padding: 2px 7px; border-radius: 10px;
+                  font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .badge-true        { background: #d1fae5; color: #065f46; }
+    .badge-false       { background: var(--false-bg); color: var(--false-text); }
+    .badge-conditional { background: var(--conditional-bg); color: var(--conditional); }
+    .elig-condition    { font-size: 12px; color: #555; margin-top: 2px; line-height: 1.5; }
+
+    /* Numerical tables */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { text-align: right; padding: 6px 12px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 12px; }
+    .data-table th:first-child { text-align: left; }
+    .data-table td { padding: 6px 12px; border: 1px solid var(--border);
+                     text-align: right; white-space: nowrap; }
+    .data-table td:first-child { text-align: left; font-weight: 500; }
+    .data-table tr.proj td { color: var(--gray); }
+    .data-table tr.section-head td { background: #f8f9fa; font-weight: 600; font-size: 11px;
+                                      color: var(--gray); text-transform: uppercase;
+                                      letter-spacing: 0.04em; }
+    .proj-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
+    .data-table tr.grand-total td { font-weight: 700; border-top: 2px solid var(--border);
+                                     background: var(--green-bg); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- State Header -->
+  <div class="state-header">
+    <h1>Rhode Island (RI) — RPS & CES Programs</h1>
+    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-04-24
+      &nbsp;|&nbsp; Last reviewed 2026-04-23
+    </div>
+
+    <div class="state-meta-row">
+      
+      <div class="state-meta-block">
+        <div class="label">Administrative Authority</div>
+        <a href="https://ripuc.ri.gov/">RI Public Utilities Commission (RIPUC)</a>
+      </div>
+      
+
+      
+      <div class="state-meta-block">
+        <div class="label">REC Registry</div>
+        <a href="https://nepoolgis.com/">NEPOOL GIS</a>
+      </div>
+      
+
+      
+      <div class="state-meta-block">
+        <div class="label">Compliance Reports & Regulations</div>
+        <div class="report-links">
+          
+          <a class="report-link" href="https://ripuc.ri.gov/utility-information/electric/rhode-island-renewable-energy-standard-ri-res-program">RES Program (RIPUC)</a>
+          
+          <a class="report-link" href="https://energy.ri.gov/policies-programs/ri-energy-laws">RI Energy Laws & Programs</a>
+          
+          <a class="report-link" href="https://rhodeislandres.com/">RES Official Portal</a>
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Programs -->
+  <div class="section">
+    <h2>Programs</h2>
+
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://ripuc.ri.gov/utility-information/electric/rhode-island-renewable-energy-standard-ri-res-program">Renewable Energy Standard (RES)</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>RPS</span>
+          <span>RI RIPUC</span>
+          <span class="cite">R.I. Gen. Laws § 39-26</span>
+          <span>Applies to: National Grid RI, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">Rhode Island's standard is called the Renewable Energy Standard (RES). The 2022 amendment set a goal of 100% renewable electricity offset by 2033. Compliance is administered by InClime, Inc. as contractor to RIPUC.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://webserver.rilegislature.gov/PublicLaws/law04/law04205.htm">Renewable Energy Standard Act (P.L. 2004, Chapter 205)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2004</span>
+            </div>
+            <div class="leg-role">Original RES enactment</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2016</span>
+                <a href="https://energy.ri.gov/heating-cooling/fossil-fuels/learn-about-natural-gas/renewable-energy-standard-2004">RES Extension Amendment (H 7413A / S 2185A)</a>
+                
+                <div class="amend-note">Extended target to 38.5% renewable energy by 2035</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2022</span>
+                <a href="https://governor.ri.gov/press-releases/governor-mckee-signs-historic-legislation-requiring-100-rhode-islands-electricity-be">100% Renewable Electricity Standard (HB 7277A / SB 2274Aaa)</a>
+                
+                <div class="amend-note">Required 100% renewable electricity offset by 2033; complemented by Act on Climate net-zero goal</div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Incremental and run-of-river hydro eligible. Conventional large hydro generally not eligible for new RES compliance.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Biomass must meet fuel sourcing and emissions standards.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Waste-to-energy with qualifying renewable fraction may be eligible.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Paired storage with a qualifying renewable generator eligible.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Fuel cells using renewable fuel (biogas, hydrogen) eligible.</div></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://energy.ri.gov/heating-cooling/fossil-fuels/learn-about-natural-gas/long-term-contracting-standard-renewable">Long-Term Contracting Standard for Renewable Energy</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>PROCUREMENT</span>
+          <span>RI RIPUC / OER</span>
+          <span class="cite">R.I. Gen. Laws § 39-26.1</span>
+          <span>Applies to: National Grid RI</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">Requires the electric distribution company to enter long-term contracts (up to 15 years) for renewable energy. Originally targeted 90 MW of capacity. Provided the contractual mechanism for the Block Island Wind Farm (America's first offshore wind farm, commissioned 2016) and subsequent offshore wind procurements.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://law.justia.com/codes/rhode-island/title-39/chapter-39-26-1/">Long-Term Contracting Standard for Renewable Energy (enacted 2009)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2009</span>
+            </div>
+            <div class="leg-role">Established long-term contracting obligation; 90 MW capacity target; specific provisions for offshore wind in federal waters</div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+        <div class="req-block">
+          <h4>Procurement Requirements</h4>
+          <p>National Grid RI (the distribution company) issues competitive solicitations
+for renewable energy contracts of up to 15 years. Contracts subject to RIPUC
+review and approval. Capacity adjusted by technology-specific capacity factors.
+Block Island Wind Farm (30 MW, 2016) and subsequent solicitations fulfilled
+under this authority.</p>
+        </div>
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Offshore wind is the primary intended technology. Block Island Wind Farm was the first project contracted under this standard.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://energy.ri.gov/renewable-energy/wind/renewable-energy-growth-program-reg-program">Renewable Energy Growth (REG) Program</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>PROCUREMENT</span>
+          <span>RI RIPUC / National Grid RI</span>
+          <span class="cite">R.I. Gen. Laws § 39-26.6</span>
+          <span>Applies to: National Grid RI</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">A tariff-based incentive program for distributed renewable generation — RI's equivalent of a feed-in tariff. Generators receive long-term fixed-price tariff agreements rather than selling RECs into the market. Original target was 160 MW (2015–2019). Program continues under RIPUC oversight.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://webserver.rilegislature.gov/Statutes/TITLE39/39-26.6/INDEX.htm">Distributed Generation Growth Act (P.L. 2014, Chapters 200 & 216)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2014</span>
+            </div>
+            <div class="leg-role">Created REG program as a tariff-based distributed generation incentive; 160 MW initial target 2015–2019</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2023</span>
+                <a href="https://ripuc.ri.gov/utility-information/electric">Net Metering Amendment (Chapter 300, S 0684 A)</a>
+                
+                <div class="amend-note">Updated net metering provisions affecting REG program administration</div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+        <div class="req-block">
+          <h4>Procurement Requirements</h4>
+          <p>Generators enter long-term fixed-price tariff agreements with National Grid RI.
+Pricing set through RIPUC proceedings. Annual solicitation cycles.
+Projects must be grid-interconnected distributed generation.</p>
+        </div>
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Primary technology in the REG program. Both behind-the-meter and front-of-meter solar eligible.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Small wind systems eligible. Most REG capacity has been solar.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Small-scale hydropower eligible.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Anaerobic digestion and biogas systems eligible.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+  </div>
+
+  <!-- Numerical Data -->
+  
+  <div class="section">
+    <h2>RPS & CES Targets (%)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr class="">
+          <td>Existing</td><td>2.0%</td><td>2.0%</td><td>2.0%</td><td>2.0%</td><td>2.0%</td><td>2.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>New</td><td>26.0%</td><td>32.0%</td><td>39.0%</td><td>46.0%</td><td>53.5%</td><td>61.5%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>28.0%</td><td>34.0%</td><td>41.0%</td><td>48.0%</td><td>55.5%</td><td>63.5%</td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
+        
+        <tr><td>Statewide Sales</td><td>7,370</td><td>7,301</td><td>7,270</td><td>7,391</td><td>7,507</td><td>7,648</td></tr>
+        
+        <tr><td>RPS-Applicable Sales</td><td>7,301</td><td>7,232</td><td>7,201</td><td>7,321</td><td>7,436</td><td>7,576</td></tr>
+        
+        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
+        
+        <tr class="">
+          <td>Existing</td><td>146</td><td>145</td><td>144</td><td>146</td><td>149</td><td>152</td>
+        </tr>
+        
+        <tr class="">
+          <td>New</td><td>1,898</td><td>2,314</td><td>2,809</td><td>3,368</td><td>3,978</td><td>4,659</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>2,044</td><td>2,459</td><td>2,953</td><td>3,514</td><td>4,127</td><td>4,811</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <p class="proj-note">* 2026+ values are LBNL projections.</p>
+  </div>
+  
+
+</div>
+</body>
+</html>

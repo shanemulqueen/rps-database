@@ -1,0 +1,349 @@
+state: MA
+name: Massachusetts
+last_reviewed: 2026-04-23
+reviewer_notes: Initial build. APS added beyond LBNL. Legislative history researched from malegislature.gov and mass.gov.
+
+admin_authority:
+  name: MA Department of Energy Resources (DOER)
+  url: https://www.mass.gov/orgs/department-of-energy-resources
+
+rec_registry:
+  name: NEPOOL GIS
+  url: https://nepoolgis.com/
+
+compliance_reports:
+  - label: Annual RPS/APS Compliance Reports
+    url: https://www.mass.gov/info-details/annual-compliance-reports-and-other-publications
+  - label: Statutes, Regulations & Guidelines
+    url: https://www.mass.gov/info-details/statutes-regulations-and-guidelines
+  - label: 2022 RPS Class I & II Rulemaking
+    url: https://www.mass.gov/info-details/2022-rps-class-i-ii-rulemaking
+
+supplemental_data:
+  targets:
+    - tier: "APS (Total)"
+      source: "225 CMR 16.07"
+      note: "+0.25%/yr indefinitely after 2020; 2026+ are regulatory projections"
+      values:
+        2020: 0.0500
+        2021: 0.0525
+        2022: 0.0550
+        2023: 0.0575
+        2024: 0.0600
+        2025: 0.0625
+        2026: 0.0650
+        2027: 0.0675
+        2028: 0.0700
+        2029: 0.0725
+        2030: 0.0750
+
+programs:
+
+  - id: MA_RPS_CLASS1
+    name: Class I RPS
+    type: rps
+    administered_by: MA DOER
+    program_url: https://www.mass.gov/renewable-energy-portfolio-standard
+    statutory_cite: M.G.L. c. 25A § 11F
+    applicable_lses: [IOU, CCA, Retail Supplier]
+    note: Municipal utilities are exempt from RPS and CES obligations. Class I solar
+      carve-out is served by SREC I (retired), SREC II (transitioning), and SMART (current).
+      Solar targets are denominated in MW and translated to equivalent % of retail sales.
+    legislation:
+      - bill: "An Act Relative to Restructuring the Electric Utility Industry (Chapter 164, Acts of 1997)"
+        enacted: 1997
+        url: https://malegislature.gov/laws/sessionlaws/acts/1997/chapter164
+        role: Original RPS enactment
+      - bill: "An Act Relative to Green Communities (Chapter 169, Acts of 2008)"
+        enacted: 2008
+        url: https://malegislature.gov/laws/sessionlaws/acts/2008/chapter169
+        role: Established separate Class I and Class II tiers; replaced unified RPS framework
+        amendments:
+          - year: 2018
+            bill: "An Act to Advance Clean Energy (Chapter 227, Acts of 2018)"
+            url: https://malegislature.gov/Laws/SessionLaws/Acts/2018/Chapter227
+            note: Increased Class I annual growth rate from 1% to 2%; targeted 35% by 2030
+          - year: 2021
+            bill: "An Act Creating a Next-Generation Roadmap for Massachusetts Climate Policy (Chapter 8, Acts of 2021)"
+            url: https://malegislature.gov/Laws/SessionLaws/Acts/2021/Chapter8
+            note: Further increased RPS to 40% by 2030; Section 32 amendment to c. 25A § 11F
+    generation_requirements: |
+      Hourly matching required starting 2025 for new contracts. RECs must be generated
+      in the same clock hour as the load they serve. Pre-2025 contracts may continue
+      under legacy annual matching through contract expiration.
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: true
+      wind:
+        eligible: true
+      offshore_wind:
+        eligible: true
+      hydro_run_of_river:
+        eligible: true
+        condition: Incremental capacity additions or efficiency improvements at existing
+          facilities qualify; baseline generation does not.
+      hydro_large:
+        eligible: false
+        condition: Facilities above 30 MW nameplate not eligible unless generation is
+          incremental to a pre-existing baseline.
+      biomass_solid:
+        eligible: conditional
+        condition: Must meet 50% net lifecycle GHG reduction standard per 225 CMR 14.
+          Dedicated biomass facilities must also meet efficiency thresholds.
+      biogas_lfg:
+        eligible: true
+        condition: Landfill gas and anaerobic digestion gas eligible. Must meet fuel
+          pathway requirements under DOER regulations.
+      msw:
+        eligible: false
+        condition: MSW combustion not eligible for Class I; eligible under Class II only.
+      geothermal:
+        eligible: true
+      storage:
+        eligible: conditional
+        condition: Storage qualifies when charged exclusively from a Class I eligible
+          source. RECs are issued based on discharge, not charge. Co-located and
+          standalone systems both eligible.
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: conditional
+        condition: Fuel cells using biogas or other Class I eligible fuel qualify.
+          Natural gas fuel cells not eligible.
+
+  - id: MA_RPS_CLASS2
+    name: Class II RPS
+    type: rps
+    administered_by: MA DOER
+    program_url: https://www.mass.gov/renewable-energy-portfolio-standard
+    statutory_cite: M.G.L. c. 25A § 11F
+    applicable_lses: [IOU, CCA, Retail Supplier]
+    note: Class II covers existing (pre-1998) renewable generation and MSW facilities.
+      Targets are set annually by DOER based on historical output.
+    legislation:
+      - bill: "An Act Relative to Green Communities (Chapter 169, Acts of 2008)"
+        enacted: 2008
+        url: https://malegislature.gov/laws/sessionlaws/acts/2008/chapter169
+        role: Established Class II tier for pre-1998 renewables and MSW
+    generation_requirements: null
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: false
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: false
+      hydro_run_of_river:
+        eligible: true
+        condition: Existing facilities that do not qualify for Class I due to vintage
+          or size. Must have operated prior to 1998.
+      hydro_large:
+        eligible: true
+        condition: Existing large hydro eligible under Class II Existing RE tier.
+      biomass_solid:
+        eligible: true
+        condition: Existing biomass facilities operating before 1998.
+      biogas_lfg:
+        eligible: true
+      msw:
+        eligible: true
+        condition: Municipal solid waste combustion facilities. Eligible under dedicated
+          MSW sub-tier with separate annual target.
+      geothermal:
+        eligible: true
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false
+
+  - id: MA_CES
+    name: Clean Energy Standard — New (CES)
+    type: ces
+    administered_by: MA DOER / MassDEP
+    program_url: https://www.mass.gov/guides/clean-energy-standard-310-cmr-775
+    statutory_cite: M.G.L. c. 21N (Global Warming Solutions Act); 310 CMR 7.75
+    applicable_lses: [IOU, CCA, Retail Supplier]
+    note: Requires retail suppliers to procure a percentage of sales from new (post-2018)
+      clean energy resources, including nuclear and large hydro not eligible under RPS.
+      CES obligation is incremental to the RPS. Administered under the Global Warming
+      Solutions Act, not the RPS statute.
+    legislation:
+      - bill: "An Act Establishing the Global Warming Solutions Act (Chapter 298, Acts of 2008)"
+        enacted: 2008
+        url: https://malegislature.gov/Laws/SessionLaws/Acts/2008/Chapter298
+        role: Statutory authority for CES; established GHG reduction mandates
+      - bill: "310 CMR 7.75 — Clean Energy Standard (regulatory promulgation)"
+        enacted: 2017
+        url: https://www.mass.gov/guides/clean-energy-standard-310-cmr-775
+        role: Regulation adopted August 2017 establishing CES requirements; 16% in 2018
+          rising 2% annually to 80% in 2050
+        amendments:
+          - year: 2021
+            bill: "An Act Creating a Next-Generation Roadmap for Massachusetts Climate Policy (Chapter 8, Acts of 2021)"
+            url: https://malegislature.gov/Laws/SessionLaws/Acts/2021/Chapter8
+            note: Section 34 codified CES reference; increased offshore wind procurement to 5,600 MW
+    procurement_requirements: |
+      Clean Energy Certificates (CECs) must be sourced from generators that began
+      commercial operation after January 1, 2018. Long-term contracts (10–20 years)
+      encouraged but not required.
+    generation_requirements: |
+      Hourly matching applies to CES certificates on the same schedule as Class I RPS.
+      Imported clean energy (e.g., from Quebec hydro) eligible if delivered over
+      a dedicated transmission line or accompanied by a long-term contract with
+      delivery verification.
+    eligibility:
+      solar_pv:
+        eligible: true
+      wind:
+        eligible: true
+      offshore_wind:
+        eligible: true
+      hydro_run_of_river:
+        eligible: true
+      hydro_large:
+        eligible: true
+        condition: Large hydro eligible under CES regardless of size, provided facility
+          began operation or signed a qualifying contract after January 1, 2018. Primary
+          mechanism for qualifying Quebec imports.
+      biomass_solid:
+        eligible: conditional
+        condition: Must meet same GHG and efficiency standards as Class I RPS.
+      biogas_lfg:
+        eligible: true
+      msw:
+        eligible: false
+      geothermal:
+        eligible: true
+      storage:
+        eligible: conditional
+        condition: Same conditions as Class I RPS storage eligibility.
+      nuclear:
+        eligible: true
+        condition: New nuclear or nuclear with a qualifying post-2018 contract eligible.
+          No existing in-state nuclear currently qualifies.
+      fuel_cell:
+        eligible: conditional
+        condition: Clean hydrogen fuel cells eligible. Must demonstrate low-carbon
+          fuel supply chain.
+
+  - id: MA_CES_E
+    name: Clean Energy Standard — Existing (CES-E)
+    type: ces
+    administered_by: MA DOER / MassDEP
+    program_url: https://www.mass.gov/guides/clean-energy-standard-310-cmr-775
+    statutory_cite: M.G.L. c. 21N; 310 CMR 7.75
+    applicable_lses: [IOU, CCA, Retail Supplier]
+    note: CES-E covers existing (pre-2018) clean energy resources, primarily existing
+      nuclear and large hydro. Targets are set to phase down as new CES resources ramp up.
+    legislation:
+      - bill: "310 CMR 7.75 — Clean Energy Standard (regulatory promulgation)"
+        enacted: 2017
+        url: https://www.mass.gov/guides/clean-energy-standard-310-cmr-775
+        role: Created CES-E tier alongside CES for existing clean energy resources
+    generation_requirements: null
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: false
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: false
+      hydro_run_of_river:
+        eligible: false
+      hydro_large:
+        eligible: true
+        condition: Existing large hydro facilities with commercial operation date before
+          2018. Primarily captures existing Quebec and Canadian imports.
+      biomass_solid:
+        eligible: false
+      biogas_lfg:
+        eligible: false
+      msw:
+        eligible: false
+      geothermal:
+        eligible: false
+      storage:
+        eligible: false
+      nuclear:
+        eligible: true
+        condition: Existing nuclear facilities. Pilgrim (retired 2019) was eligible
+          through its closure. No active in-state nuclear currently qualifies;
+          provision exists for future nuclear.
+      fuel_cell:
+        eligible: false
+
+  - id: MA_APS
+    name: Alternative Portfolio Standard (APS)
+    type: aps
+    administered_by: MA DOER
+    program_url: https://www.mass.gov/alternative-energy-portfolio-standard
+    statutory_cite: M.G.L. c. 25A § 11F½
+    applicable_lses: [IOU, CCA, Retail Supplier]
+    note: The APS is a parallel standard to the RPS requiring retail suppliers to
+      source a percentage of sales from alternative energy resources — primarily
+      combined heat and power (CHP), flywheel storage, and demand response. Not
+      tracked in LBNL RPS data. Targets are set separately from the RPS.
+    legislation:
+      - bill: "An Act Relative to Green Communities (Chapter 169, Acts of 2008)"
+        enacted: 2008
+        url: https://malegislature.gov/laws/sessionlaws/acts/2008/chapter169
+        role: Created APS as a parallel standard to the RPS; effective January 1, 2009
+        amendments:
+          - year: 2014
+            bill: "Chapter 251, Acts of 2014"
+            url: https://malegislature.gov/laws/sessionlaws/acts/2014/chapter251
+            note: Added renewable thermal technologies to APS eligibility
+          - year: 2016
+            bill: "An Act to Promote Energy Diversity (Chapter 188, Acts of 2016)"
+            url: https://malegislature.gov/laws/sessionlaws/acts/2016/chapter188
+            note: Further expanded APS eligibility; added energy storage authorization
+    generation_requirements: |
+      Alternative Energy Credits (AECs) are issued by NEPOOL GIS. CHP systems must
+      meet minimum efficiency thresholds (42.5% for natural gas). Demand response
+      resources must be registered with ISO-NE.
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: false
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: false
+      hydro_run_of_river:
+        eligible: false
+      hydro_large:
+        eligible: false
+      biomass_solid:
+        eligible: false
+      biogas_lfg:
+        eligible: false
+      msw:
+        eligible: false
+      geothermal:
+        eligible: false
+      storage:
+        eligible: conditional
+        condition: Flywheel energy storage systems qualify. Battery storage not currently
+          eligible under APS.
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: conditional
+        condition: CHP fuel cells meeting efficiency threshold qualify. Stand-alone
+          fuel cells do not.
+    aps_specific_eligibility:
+      chp:
+        eligible: true
+        condition: Combined heat and power systems with minimum 42.5% efficiency
+          (natural gas) or 40% (other fuels). Both electric and thermal output credited.
+      demand_response:
+        eligible: true
+        condition: ISO-NE registered demand response resources. Credits issued based
+          on verified load reduction.
+      flywheel_storage:
+        eligible: true

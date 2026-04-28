@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NH — RPS & CES Programs</title>
+  <style>
+    :root {
+      --green: #2d6a4f;
+      --green-light: #52b788;
+      --green-bg: #f0faf4;
+      --gray: #6c757d;
+      --gray-light: #f1f3f5;
+      --border: #dee2e6;
+      --text: #212529;
+      --conditional: #856404;
+      --conditional-bg: #fff3cd;
+      --false-bg: #f8f9fa;
+      --false-text: #adb5bd;
+      --link: #1a6eb5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           font-size: 14px; color: var(--text); background: #fff; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
+
+    /* Header */
+    .state-header { border-bottom: 3px solid var(--green); padding-bottom: 14px; margin-bottom: 24px; }
+    .state-header h1 { font-size: 26px; color: var(--green); }
+    .state-header .meta { font-size: 12px; color: var(--gray); margin-top: 4px; }
+    .state-meta-row { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 12px; }
+    .state-meta-block { font-size: 13px; }
+    .state-meta-block .label { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                                letter-spacing: 0.05em; color: var(--gray); margin-bottom: 3px; }
+    .report-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 3px; }
+    .report-link { font-size: 12px; padding: 2px 8px; border: 1px solid var(--border);
+                   border-radius: 4px; background: var(--gray-light); }
+
+    /* Section */
+    .section { margin-bottom: 40px; }
+    .section > h2 { font-size: 16px; font-weight: 600; color: var(--green);
+                    border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 16px; }
+
+    /* Program card */
+    .program { border: 1px solid var(--border); border-radius: 6px;
+               margin-bottom: 24px; overflow: hidden; }
+    .program-header { background: var(--green-bg); padding: 12px 16px;
+                      border-bottom: 1px solid var(--border); }
+    .program-header h3 { font-size: 15px; color: var(--green); }
+    .program-header h3 a { color: var(--green); }
+    .program-meta { font-size: 12px; color: var(--gray); margin-top: 4px;
+                    display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; }
+    .program-meta .cite { font-style: italic; }
+    .program-body { padding: 16px; display: grid; gap: 14px; }
+
+    .program-note { font-size: 13px; color: #444; padding: 10px 12px;
+                    background: #f8f9fa; border-radius: 4px;
+                    border-left: 3px solid var(--green-light); line-height: 1.6; }
+
+    /* Legislation block */
+    .legislation { font-size: 13px; }
+    .legislation h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                      letter-spacing: 0.05em; color: var(--gray); margin-bottom: 8px; }
+    .leg-item { padding: 8px 10px; border: 1px solid var(--border); border-radius: 4px;
+                margin-bottom: 6px; background: #fff; }
+    .leg-item .leg-bill { font-weight: 500; }
+    .leg-item .leg-role { color: var(--gray); font-size: 12px; margin-top: 2px; }
+    .leg-amendments { margin-top: 6px; padding-left: 16px; border-left: 2px solid var(--border); }
+    .leg-amend { font-size: 12px; color: #444; margin-top: 5px; }
+    .leg-amend .amend-year { font-weight: 600; color: var(--green); margin-right: 4px; }
+    .leg-amend .amend-note { color: var(--gray); margin-top: 1px; }
+
+    /* Req blocks */
+    .req-block h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                    letter-spacing: 0.05em; color: var(--gray); margin-bottom: 5px; }
+    .req-block p { font-size: 13px; line-height: 1.6; }
+
+    /* Eligibility table */
+    .elig-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .elig-table th { text-align: left; padding: 6px 10px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 11px;
+                     text-transform: uppercase; letter-spacing: 0.04em; }
+    .elig-table td { padding: 6px 10px; border: 1px solid var(--border); vertical-align: top; }
+    .elig-table tr.not-eligible td { color: var(--false-text); background: var(--false-bg); }
+    .elig-badge { display: inline-block; padding: 2px 7px; border-radius: 10px;
+                  font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .badge-true        { background: #d1fae5; color: #065f46; }
+    .badge-false       { background: var(--false-bg); color: var(--false-text); }
+    .badge-conditional { background: var(--conditional-bg); color: var(--conditional); }
+    .elig-condition    { font-size: 12px; color: #555; margin-top: 2px; line-height: 1.5; }
+
+    /* Numerical tables */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { text-align: right; padding: 6px 12px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 12px; }
+    .data-table th:first-child { text-align: left; }
+    .data-table td { padding: 6px 12px; border: 1px solid var(--border);
+                     text-align: right; white-space: nowrap; }
+    .data-table td:first-child { text-align: left; font-weight: 500; }
+    .data-table tr.proj td { color: var(--gray); }
+    .data-table tr.section-head td { background: #f8f9fa; font-weight: 600; font-size: 11px;
+                                      color: var(--gray); text-transform: uppercase;
+                                      letter-spacing: 0.04em; }
+    .proj-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
+    .data-table tr.grand-total td { font-weight: 700; border-top: 2px solid var(--border);
+                                     background: var(--green-bg); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- State Header -->
+  <div class="state-header">
+    <h1>New Hampshire (NH) — RPS & CES Programs</h1>
+    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-04-24
+      &nbsp;|&nbsp; Last reviewed 2026-04-23
+    </div>
+
+    <div class="state-meta-row">
+      
+      <div class="state-meta-block">
+        <div class="label">Administrative Authority</div>
+        <a href="https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard">NH Department of Energy (DOE)</a>
+      </div>
+      
+
+      
+      <div class="state-meta-block">
+        <div class="label">REC Registry</div>
+        <a href="https://nepoolgis.com/">NEPOOL GIS</a>
+      </div>
+      
+
+      
+      <div class="state-meta-block">
+        <div class="label">Compliance Reports & Regulations</div>
+        <div class="report-links">
+          
+          <a class="report-link" href="https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard">RPS Program (NH DOE)</a>
+          
+          <a class="report-link" href="https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard/renewable-portfolio-standard-compliance">RPS Compliance Information</a>
+          
+          <a class="report-link" href="https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard/historical-rps-obligation-changes">Historical RPS Obligation Changes</a>
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Programs -->
+  <div class="section">
+    <h2>Programs</h2>
+
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard">Renewable Portfolio Standard</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>RPS</span>
+          <span>NH Department of Energy</span>
+          <span class="cite">RSA 362-F</span>
+          <span>Applies to: EDC, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">NH's RPS has four active classes (I, II, III, IV) plus a Class I Thermal sub-class. Class I covers new renewables; Class II is post-2006 solar with a solar-specific ACP; Class III is pre-2006 biomass/methane (≤25 MW); Class IV is pre-2006 small hydro (≤5 MW). Total target is 25.2% by 2025, one of the lower mandates in New England. Administration transferred from PUC to the new NH Department of Energy effective July 1, 2021.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://gc.nh.gov/rsa/html/XXXIV/362-F/362-F-mrg.htm">Electric Renewable Portfolio Standard (Laws of 2007, Chapter 26)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2007</span>
+            </div>
+            <div class="leg-role">Original RPS enactment establishing Class I, II, III, and IV framework</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2012</span>
+                <a href="https://gc.nh.gov/rsa/html/XXXIV/362-F/362-F-mrg.htm">Class I Thermal Amendment (Laws of 2012, Chapter 272)</a>
+                
+                <div class="amend-note">Created Class I Thermal sub-class for useful thermal renewable energy (geothermal, solar thermal, biomass heat, methane heat); effective 2014; first NH-specific thermal REC program</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2013</span>
+                <a href="https://gc.nh.gov/rsa/html/XXXIV/362-F/362-F-mrg.htm">RPS Study Committee Amendments (Laws of 2013, Chapter 279)</a>
+                
+                <div class="amend-note">Modified Class I, I Thermal, and Class III obligations; established RPS study committee</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2017</span>
+                <a href="https://gc.nh.gov/rsa/html/XXXIV/362-F/362-F-mrg.htm">Clean Energy Jobs and Opportunity Act (Laws of 2017, Chapter 226)</a>
+                
+                <div class="amend-note">Increased Class III ACP from $45 to $55/REC; minimum 15% of residential REF funds to low-moderate income customers</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2021</span>
+                <a href="https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard">Administrative Transfer (HB 2, 2021)</a>
+                
+                <div class="amend-note">Transferred RPS administration and Renewable Energy Fund from NH PUC to new NH Department of Energy, effective July 1, 2021</div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+        <div class="req-block">
+          <h4>Generation Requirements</h4>
+          <p>Class I Thermal RECs require metering, verification, and reporting of useful
+thermal energy output per DOE protocols. Maximum credit value of $29/MWh of
+useable thermal energy. All other classes: standard NEPOOL GIS REC issuance.</p>
+        </div>
+        
+
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Post-2006 solar qualifies as Class II with solar-specific Alternative Compliance Payment. Pre-2006 solar is rare but would be Class I.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">All wind qualifies as Class I (new renewables).</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Class I eligible. NH has no offshore water but offshore wind certificates from other New England states are eligible.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">New run-of-river hydro qualifies as Class I. Existing facilities ≤5 MW operational before 2006 qualify as Class IV.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Large hydro not eligible for Class I or Class IV. Only small hydro (≤5 MW, pre-2006) is eligible under Class IV.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">New biomass facilities qualify as Class I. Pre-2006 biomass ≤25 MW qualifies as Class III with its own ACP schedule. Class I Thermal sub-class covers biomass heat systems producing useful thermal output.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">New landfill gas and methane facilities qualify as Class I. Pre-2006 landfill gas ≤10 MW qualifies as Class III.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">MSW combustion not explicitly listed as an eligible resource class under RSA 362-F.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Electric geothermal qualifies as Class I. Geothermal heat (useful thermal output) qualifies under the Class I Thermal sub-class.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Standalone storage does not generate RECs. Paired storage with a Class I source may qualify for the renewable attribute.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Fuel cells using renewable fuel (biogas, methane) qualify as Class I. Natural gas fuel cells do not qualify.</div></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+  </div>
+
+  <!-- Numerical Data -->
+  
+  <div class="section">
+    <h2>RPS & CES Targets (%)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr class="">
+          <td>Class I (Non-Thermal)</td><td>11.9%</td><td>12.8%</td><td>12.8%</td><td>12.8%</td><td>12.8%</td><td>12.8%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class I (Thermal)</td><td>2.2%</td><td>2.2%</td><td>2.2%</td><td>2.2%</td><td>2.2%</td><td>2.2%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class II (Solar Carve-Out)</td><td>0.7%</td><td>0.7%</td><td>0.7%</td><td>0.7%</td><td>0.7%</td><td>0.7%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class III (Existing Biomass/Methane)</td><td>1.0%</td><td>8.0%</td><td>8.0%</td><td>8.0%</td><td>8.0%</td><td>8.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class IV (Existing Small Hydro)</td><td>1.5%</td><td>1.5%</td><td>1.5%</td><td>1.5%</td><td>1.5%</td><td>1.5%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>17.3%</td><td>25.2%</td><td>25.2%</td><td>25.2%</td><td>25.2%</td><td>25.2%</td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
+        
+        <tr><td>Statewide Sales</td><td>10,884</td><td>10,781</td><td>10,735</td><td>10,914</td><td>11,085</td><td>11,293</td></tr>
+        
+        <tr><td>RPS-Applicable Sales</td><td>10,884</td><td>10,781</td><td>10,735</td><td>10,914</td><td>11,085</td><td>11,293</td></tr>
+        
+        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
+        
+        <tr class="">
+          <td>Class I (Non-Thermal)</td><td>1,295</td><td>1,380</td><td>1,374</td><td>1,397</td><td>1,419</td><td>1,446</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class I (Thermal)</td><td>239</td><td>237</td><td>236</td><td>240</td><td>244</td><td>248</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class II (Solar Carve-Out)</td><td>76</td><td>75</td><td>75</td><td>76</td><td>78</td><td>79</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class III (Existing Biomass/Methane)</td><td>109</td><td>862</td><td>859</td><td>873</td><td>887</td><td>903</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class IV (Existing Small Hydro)</td><td>163</td><td>162</td><td>161</td><td>164</td><td>166</td><td>169</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>1,643</td><td>2,480</td><td>2,469</td><td>2,510</td><td>2,550</td><td>2,597</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <p class="proj-note">* 2026+ values are LBNL projections.</p>
+  </div>
+  
+
+</div>
+</body>
+</html>

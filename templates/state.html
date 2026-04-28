@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ state }} — RPS & CES Programs</title>
+  <style>
+    :root {
+      --green: #2d6a4f;
+      --green-light: #52b788;
+      --green-bg: #f0faf4;
+      --gray: #6c757d;
+      --gray-light: #f1f3f5;
+      --border: #dee2e6;
+      --text: #212529;
+      --conditional: #856404;
+      --conditional-bg: #fff3cd;
+      --false-bg: #f8f9fa;
+      --false-text: #adb5bd;
+      --link: #1a6eb5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           font-size: 14px; color: var(--text); background: #fff; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
+
+    /* Header */
+    .state-header { border-bottom: 3px solid var(--green); padding-bottom: 14px; margin-bottom: 24px; }
+    .state-header h1 { font-size: 26px; color: var(--green); }
+    .state-header .meta { font-size: 12px; color: var(--gray); margin-top: 4px; }
+    .state-meta-row { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 12px; }
+    .state-meta-block { font-size: 13px; }
+    .state-meta-block .label { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                                letter-spacing: 0.05em; color: var(--gray); margin-bottom: 3px; }
+    .report-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 3px; }
+    .report-link { font-size: 12px; padding: 2px 8px; border: 1px solid var(--border);
+                   border-radius: 4px; background: var(--gray-light); }
+
+    /* Section */
+    .section { margin-bottom: 40px; }
+    .section > h2 { font-size: 16px; font-weight: 600; color: var(--green);
+                    border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 16px; }
+
+    /* Program card */
+    .program { border: 1px solid var(--border); border-radius: 6px;
+               margin-bottom: 24px; overflow: hidden; }
+    .program-header { background: var(--green-bg); padding: 12px 16px;
+                      border-bottom: 1px solid var(--border); }
+    .program-header h3 { font-size: 15px; color: var(--green); }
+    .program-header h3 a { color: var(--green); }
+    .program-meta { font-size: 12px; color: var(--gray); margin-top: 4px;
+                    display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; }
+    .program-meta .cite { font-style: italic; }
+    .program-body { padding: 16px; display: grid; gap: 14px; }
+
+    .program-note { font-size: 13px; color: #444; padding: 10px 12px;
+                    background: #f8f9fa; border-radius: 4px;
+                    border-left: 3px solid var(--green-light); line-height: 1.6; }
+
+    /* Legislation block */
+    .legislation { font-size: 13px; }
+    .legislation h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                      letter-spacing: 0.05em; color: var(--gray); margin-bottom: 8px; }
+    .leg-item { padding: 8px 10px; border: 1px solid var(--border); border-radius: 4px;
+                margin-bottom: 6px; background: #fff; }
+    .leg-item .leg-bill { font-weight: 500; }
+    .leg-item .leg-role { color: var(--gray); font-size: 12px; margin-top: 2px; }
+    .leg-amendments { margin-top: 6px; padding-left: 16px; border-left: 2px solid var(--border); }
+    .leg-amend { font-size: 12px; color: #444; margin-top: 5px; }
+    .leg-amend .amend-year { font-weight: 600; color: var(--green); margin-right: 4px; }
+    .leg-amend .amend-note { color: var(--gray); margin-top: 1px; }
+
+    /* Req blocks */
+    .req-block h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                    letter-spacing: 0.05em; color: var(--gray); margin-bottom: 5px; }
+    .req-block p { font-size: 13px; line-height: 1.6; }
+
+    /* Eligibility table */
+    .elig-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .elig-table th { text-align: left; padding: 6px 10px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 11px;
+                     text-transform: uppercase; letter-spacing: 0.04em; }
+    .elig-table td { padding: 6px 10px; border: 1px solid var(--border); vertical-align: top; }
+    .elig-table tr.not-eligible td { color: var(--false-text); background: var(--false-bg); }
+    .elig-badge { display: inline-block; padding: 2px 7px; border-radius: 10px;
+                  font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .badge-true        { background: #d1fae5; color: #065f46; }
+    .badge-false       { background: var(--false-bg); color: var(--false-text); }
+    .badge-conditional { background: var(--conditional-bg); color: var(--conditional); }
+    .elig-condition    { font-size: 12px; color: #555; margin-top: 2px; line-height: 1.5; }
+
+    /* Numerical tables */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { text-align: right; padding: 6px 12px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 12px; }
+    .data-table th:first-child { text-align: left; }
+    .data-table td { padding: 6px 12px; border: 1px solid var(--border);
+                     text-align: right; white-space: nowrap; }
+    .data-table td:first-child { text-align: left; font-weight: 500; }
+    .data-table tr.proj td { color: var(--gray); }
+    .data-table tr.section-head td { background: #f8f9fa; font-weight: 600; font-size: 11px;
+                                      color: var(--gray); text-transform: uppercase;
+                                      letter-spacing: 0.04em; }
+    .proj-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
+    .data-table tr.grand-total td { font-weight: 700; border-top: 2px solid var(--border);
+                                     background: var(--green-bg); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- State Header -->
+  <div class="state-header">
+    <h1>{{ state_name }} ({{ state }}) — RPS & CES Programs</h1>
+    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated {{ generated }}
+      {% if last_reviewed %}&nbsp;|&nbsp; Last reviewed {{ last_reviewed }}{% endif %}
+    </div>
+
+    <div class="state-meta-row">
+      {% if admin_authority %}
+      <div class="state-meta-block">
+        <div class="label">Administrative Authority</div>
+        <a href="{{ admin_authority.url }}">{{ admin_authority.name }}</a>
+      </div>
+      {% endif %}
+
+      {% if rec_registry %}
+      <div class="state-meta-block">
+        <div class="label">REC Registry</div>
+        <a href="{{ rec_registry.url }}">{{ rec_registry.name }}</a>
+      </div>
+      {% endif %}
+
+      {% if compliance_reports %}
+      <div class="state-meta-block">
+        <div class="label">Compliance Reports & Regulations</div>
+        <div class="report-links">
+          {% for r in compliance_reports %}
+          <a class="report-link" href="{{ r.url }}">{{ r.label }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Programs -->
+  <div class="section">
+    <h2>Programs</h2>
+
+    {% for prog in programs %}
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          {% if prog.program_url %}<a href="{{ prog.program_url }}">{{ prog.name }}</a>
+          {% else %}{{ prog.name }}{% endif %}
+        </h3>
+        <div class="program-meta">
+          <span>{{ prog.type | upper }}</span>
+          {% if prog.administered_by %}<span>{{ prog.administered_by }}</span>{% endif %}
+          {% if prog.statutory_cite %}<span class="cite">{{ prog.statutory_cite }}</span>{% endif %}
+          {% if prog.applicable_lses %}<span>Applies to: {{ prog.applicable_lses | join(", ") }}</span>{% endif %}
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        {% if prog.note %}
+        <div class="program-note">{{ prog.note }}</div>
+        {% endif %}
+
+        {% if prog.legislation %}
+        <div class="legislation">
+          <h4>Legislation</h4>
+          {% for leg in prog.legislation %}
+          <div class="leg-item">
+            <div class="leg-bill">
+              {% if leg.url %}<a href="{{ leg.url }}">{{ leg.bill }}</a>
+              {% else %}{{ leg.bill }}{% endif %}
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted {{ leg.enacted }}</span>
+            </div>
+            {% if leg.role %}<div class="leg-role">{{ leg.role }}</div>{% endif %}
+            {% if leg.amendments %}
+            <div class="leg-amendments">
+              {% for a in leg.amendments %}
+              <div class="leg-amend">
+                <span class="amend-year">{{ a.year }}</span>
+                {% if a.url %}<a href="{{ a.url }}">{{ a.bill }}</a>
+                {% else %}{{ a.bill }}{% endif %}
+                {% if a.note %}<div class="amend-note">{{ a.note }}</div>{% endif %}
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if prog.generation_requirements %}
+        <div class="req-block">
+          <h4>Generation Requirements</h4>
+          <p>{{ prog.generation_requirements | trim }}</p>
+        </div>
+        {% endif %}
+
+        {% if prog.procurement_requirements %}
+        <div class="req-block">
+          <h4>Procurement Requirements</h4>
+          <p>{{ prog.procurement_requirements | trim }}</p>
+        </div>
+        {% endif %}
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            {% set all_elig = prog.eligibility.items() | list %}
+            {% if prog.aps_specific_eligibility is defined %}
+              {% set all_elig = all_elig + prog.aps_specific_eligibility.items() | list %}
+            {% endif %}
+            {% for tech, info in all_elig %}
+              {% if info is mapping %}
+                {% set elig = info.eligible %}
+                {% set cond = info.condition | default(None) %}
+              {% else %}
+                {% set elig = info %}
+                {% set cond = None %}
+              {% endif %}
+              <tr class="{{ 'not-eligible' if elig == false else ('conditional' if elig == 'conditional' else 'eligible') }}">
+                <td>{{ tech_labels[tech] | default(tech) }}</td>
+                <td>
+                  {% if elig == true %}<span class="elig-badge badge-true">Eligible</span>
+                  {% elif elig == false %}<span class="elig-badge badge-false">Not Eligible</span>
+                  {% else %}<span class="elig-badge badge-conditional">Conditional</span>{% endif %}
+                </td>
+                <td>{% if cond %}<div class="elig-condition">{{ cond }}</div>{% endif %}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    {% endfor %}
+  </div>
+
+  <!-- Numerical Data -->
+  {% if years %}
+  <div class="section">
+    <h2>RPS & CES Targets (%)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Tier</th>{% for y in years %}<th>{{ y }}</th>{% endfor %}</tr>
+      </thead>
+      <tbody>
+        {% for row in targets_rows %}
+        <tr class="{{ 'grand-total' if row.is_grand_total else ('proj' if row.is_proj else '') }}">
+          <td>{{ row.tier }}</td>{% for v in row.vals %}<td>{{ v }}</td>{% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th></th>{% for y in years %}<th>{{ y }}</th>{% endfor %}</tr>
+      </thead>
+      <tbody>
+        <tr class="section-head"><td colspan="{{ years|length + 1 }}">Retail Sales</td></tr>
+        {% for row in sales_rows %}
+        <tr><td>{{ row.label }}</td>{% for v in row.vals %}<td>{{ v }}</td>{% endfor %}</tr>
+        {% endfor %}
+        <tr class="section-head"><td colspan="{{ years|length + 1 }}">RPS / CES Demand Obligation</td></tr>
+        {% for row in demand_rows %}
+        <tr class="{{ 'grand-total' if row.is_grand_total else ('proj' if row.is_proj else '') }}">
+          <td>{{ row.tier }}</td>{% for v in row.vals %}<td>{{ v }}</td>{% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="proj-note">* {{ proj_start }}+ values are LBNL projections.</p>
+  </div>
+  {% endif %}
+
+</div>
+</body>
+</html>

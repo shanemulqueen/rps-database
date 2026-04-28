@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MA — RPS & CES Programs</title>
+  <style>
+    :root {
+      --green: #2d6a4f;
+      --green-light: #52b788;
+      --green-bg: #f0faf4;
+      --gray: #6c757d;
+      --gray-light: #f1f3f5;
+      --border: #dee2e6;
+      --text: #212529;
+      --conditional: #856404;
+      --conditional-bg: #fff3cd;
+      --false-bg: #f8f9fa;
+      --false-text: #adb5bd;
+      --link: #1a6eb5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           font-size: 14px; color: var(--text); background: #fff; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
+
+    /* Header */
+    .state-header { border-bottom: 3px solid var(--green); padding-bottom: 14px; margin-bottom: 24px; }
+    .state-header h1 { font-size: 26px; color: var(--green); }
+    .state-header .meta { font-size: 12px; color: var(--gray); margin-top: 4px; }
+    .state-meta-row { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 12px; }
+    .state-meta-block { font-size: 13px; }
+    .state-meta-block .label { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                                letter-spacing: 0.05em; color: var(--gray); margin-bottom: 3px; }
+    .report-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 3px; }
+    .report-link { font-size: 12px; padding: 2px 8px; border: 1px solid var(--border);
+                   border-radius: 4px; background: var(--gray-light); }
+
+    /* Section */
+    .section { margin-bottom: 40px; }
+    .section > h2 { font-size: 16px; font-weight: 600; color: var(--green);
+                    border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 16px; }
+
+    /* Program card */
+    .program { border: 1px solid var(--border); border-radius: 6px;
+               margin-bottom: 24px; overflow: hidden; }
+    .program-header { background: var(--green-bg); padding: 12px 16px;
+                      border-bottom: 1px solid var(--border); }
+    .program-header h3 { font-size: 15px; color: var(--green); }
+    .program-header h3 a { color: var(--green); }
+    .program-meta { font-size: 12px; color: var(--gray); margin-top: 4px;
+                    display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; }
+    .program-meta .cite { font-style: italic; }
+    .program-body { padding: 16px; display: grid; gap: 14px; }
+
+    .program-note { font-size: 13px; color: #444; padding: 10px 12px;
+                    background: #f8f9fa; border-radius: 4px;
+                    border-left: 3px solid var(--green-light); line-height: 1.6; }
+
+    /* Legislation block */
+    .legislation { font-size: 13px; }
+    .legislation h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                      letter-spacing: 0.05em; color: var(--gray); margin-bottom: 8px; }
+    .leg-item { padding: 8px 10px; border: 1px solid var(--border); border-radius: 4px;
+                margin-bottom: 6px; background: #fff; }
+    .leg-item .leg-bill { font-weight: 500; }
+    .leg-item .leg-role { color: var(--gray); font-size: 12px; margin-top: 2px; }
+    .leg-amendments { margin-top: 6px; padding-left: 16px; border-left: 2px solid var(--border); }
+    .leg-amend { font-size: 12px; color: #444; margin-top: 5px; }
+    .leg-amend .amend-year { font-weight: 600; color: var(--green); margin-right: 4px; }
+    .leg-amend .amend-note { color: var(--gray); margin-top: 1px; }
+
+    /* Req blocks */
+    .req-block h4 { font-size: 11px; font-weight: 600; text-transform: uppercase;
+                    letter-spacing: 0.05em; color: var(--gray); margin-bottom: 5px; }
+    .req-block p { font-size: 13px; line-height: 1.6; }
+
+    /* Eligibility table */
+    .elig-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .elig-table th { text-align: left; padding: 6px 10px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 11px;
+                     text-transform: uppercase; letter-spacing: 0.04em; }
+    .elig-table td { padding: 6px 10px; border: 1px solid var(--border); vertical-align: top; }
+    .elig-table tr.not-eligible td { color: var(--false-text); background: var(--false-bg); }
+    .elig-badge { display: inline-block; padding: 2px 7px; border-radius: 10px;
+                  font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .badge-true        { background: #d1fae5; color: #065f46; }
+    .badge-false       { background: var(--false-bg); color: var(--false-text); }
+    .badge-conditional { background: var(--conditional-bg); color: var(--conditional); }
+    .elig-condition    { font-size: 12px; color: #555; margin-top: 2px; line-height: 1.5; }
+
+    /* Numerical tables */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { text-align: right; padding: 6px 12px; background: var(--gray-light);
+                     border: 1px solid var(--border); font-weight: 600; font-size: 12px; }
+    .data-table th:first-child { text-align: left; }
+    .data-table td { padding: 6px 12px; border: 1px solid var(--border);
+                     text-align: right; white-space: nowrap; }
+    .data-table td:first-child { text-align: left; font-weight: 500; }
+    .data-table tr.proj td { color: var(--gray); }
+    .data-table tr.section-head td { background: #f8f9fa; font-weight: 600; font-size: 11px;
+                                      color: var(--gray); text-transform: uppercase;
+                                      letter-spacing: 0.04em; }
+    .proj-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
+    .data-table tr.grand-total td { font-weight: 700; border-top: 2px solid var(--border);
+                                     background: var(--green-bg); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- State Header -->
+  <div class="state-header">
+    <h1>Massachusetts (MA) — RPS & CES Programs</h1>
+    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-04-24
+      &nbsp;|&nbsp; Last reviewed 2026-04-23
+    </div>
+
+    <div class="state-meta-row">
+      
+      <div class="state-meta-block">
+        <div class="label">Administrative Authority</div>
+        <a href="https://www.mass.gov/orgs/department-of-energy-resources">MA Department of Energy Resources (DOER)</a>
+      </div>
+      
+
+      
+      <div class="state-meta-block">
+        <div class="label">REC Registry</div>
+        <a href="https://nepoolgis.com/">NEPOOL GIS</a>
+      </div>
+      
+
+      
+      <div class="state-meta-block">
+        <div class="label">Compliance Reports & Regulations</div>
+        <div class="report-links">
+          
+          <a class="report-link" href="https://www.mass.gov/info-details/annual-compliance-reports-and-other-publications">Annual RPS/APS Compliance Reports</a>
+          
+          <a class="report-link" href="https://www.mass.gov/info-details/statutes-regulations-and-guidelines">Statutes, Regulations & Guidelines</a>
+          
+          <a class="report-link" href="https://www.mass.gov/info-details/2022-rps-class-i-ii-rulemaking">2022 RPS Class I & II Rulemaking</a>
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Programs -->
+  <div class="section">
+    <h2>Programs</h2>
+
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://www.mass.gov/renewable-energy-portfolio-standard">Class I RPS</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>RPS</span>
+          <span>MA DOER</span>
+          <span class="cite">M.G.L. c. 25A § 11F</span>
+          <span>Applies to: IOU, CCA, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">Municipal utilities are exempt from RPS and CES obligations. Class I solar carve-out is served by SREC I (retired), SREC II (transitioning), and SMART (current). Solar targets are denominated in MW and translated to equivalent % of retail sales.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://malegislature.gov/laws/sessionlaws/acts/1997/chapter164">An Act Relative to Restructuring the Electric Utility Industry (Chapter 164, Acts of 1997)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 1997</span>
+            </div>
+            <div class="leg-role">Original RPS enactment</div>
+            
+          </div>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://malegislature.gov/laws/sessionlaws/acts/2008/chapter169">An Act Relative to Green Communities (Chapter 169, Acts of 2008)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2008</span>
+            </div>
+            <div class="leg-role">Established separate Class I and Class II tiers; replaced unified RPS framework</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2018</span>
+                <a href="https://malegislature.gov/Laws/SessionLaws/Acts/2018/Chapter227">An Act to Advance Clean Energy (Chapter 227, Acts of 2018)</a>
+                
+                <div class="amend-note">Increased Class I annual growth rate from 1% to 2%; targeted 35% by 2030</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2021</span>
+                <a href="https://malegislature.gov/Laws/SessionLaws/Acts/2021/Chapter8">An Act Creating a Next-Generation Roadmap for Massachusetts Climate Policy (Chapter 8, Acts of 2021)</a>
+                
+                <div class="amend-note">Further increased RPS to 40% by 2030; Section 32 amendment to c. 25A § 11F</div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+        <div class="req-block">
+          <h4>Generation Requirements</h4>
+          <p>Hourly matching required starting 2025 for new contracts. RECs must be generated
+in the same clock hour as the load they serve. Pre-2025 contracts may continue
+under legacy annual matching through contract expiration.</p>
+        </div>
+        
+
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Incremental capacity additions or efficiency improvements at existing facilities qualify; baseline generation does not.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Facilities above 30 MW nameplate not eligible unless generation is incremental to a pre-existing baseline.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Must meet 50% net lifecycle GHG reduction standard per 225 CMR 14. Dedicated biomass facilities must also meet efficiency thresholds.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Landfill gas and anaerobic digestion gas eligible. Must meet fuel pathway requirements under DOER regulations.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">MSW combustion not eligible for Class I; eligible under Class II only.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Storage qualifies when charged exclusively from a Class I eligible source. RECs are issued based on discharge, not charge. Co-located and standalone systems both eligible.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Fuel cells using biogas or other Class I eligible fuel qualify. Natural gas fuel cells not eligible.</div></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://www.mass.gov/renewable-energy-portfolio-standard">Class II RPS</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>RPS</span>
+          <span>MA DOER</span>
+          <span class="cite">M.G.L. c. 25A § 11F</span>
+          <span>Applies to: IOU, CCA, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">Class II covers existing (pre-1998) renewable generation and MSW facilities. Targets are set annually by DOER based on historical output.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://malegislature.gov/laws/sessionlaws/acts/2008/chapter169">An Act Relative to Green Communities (Chapter 169, Acts of 2008)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2008</span>
+            </div>
+            <div class="leg-role">Established Class II tier for pre-1998 renewables and MSW</div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Existing facilities that do not qualify for Class I due to vintage or size. Must have operated prior to 1998.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Existing large hydro eligible under Class II Existing RE tier.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Existing biomass facilities operating before 1998.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Municipal solid waste combustion facilities. Eligible under dedicated MSW sub-tier with separate annual target.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://www.mass.gov/guides/clean-energy-standard-310-cmr-775">Clean Energy Standard — New (CES)</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>CES</span>
+          <span>MA DOER / MassDEP</span>
+          <span class="cite">M.G.L. c. 21N (Global Warming Solutions Act); 310 CMR 7.75</span>
+          <span>Applies to: IOU, CCA, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">Requires retail suppliers to procure a percentage of sales from new (post-2018) clean energy resources, including nuclear and large hydro not eligible under RPS. CES obligation is incremental to the RPS. Administered under the Global Warming Solutions Act, not the RPS statute.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://malegislature.gov/Laws/SessionLaws/Acts/2008/Chapter298">An Act Establishing the Global Warming Solutions Act (Chapter 298, Acts of 2008)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2008</span>
+            </div>
+            <div class="leg-role">Statutory authority for CES; established GHG reduction mandates</div>
+            
+          </div>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://www.mass.gov/guides/clean-energy-standard-310-cmr-775">310 CMR 7.75 — Clean Energy Standard (regulatory promulgation)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2017</span>
+            </div>
+            <div class="leg-role">Regulation adopted August 2017 establishing CES requirements; 16% in 2018 rising 2% annually to 80% in 2050</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2021</span>
+                <a href="https://malegislature.gov/Laws/SessionLaws/Acts/2021/Chapter8">An Act Creating a Next-Generation Roadmap for Massachusetts Climate Policy (Chapter 8, Acts of 2021)</a>
+                
+                <div class="amend-note">Section 34 codified CES reference; increased offshore wind procurement to 5,600 MW</div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+        <div class="req-block">
+          <h4>Generation Requirements</h4>
+          <p>Hourly matching applies to CES certificates on the same schedule as Class I RPS.
+Imported clean energy (e.g., from Quebec hydro) eligible if delivered over
+a dedicated transmission line or accompanied by a long-term contract with
+delivery verification.</p>
+        </div>
+        
+
+        
+        <div class="req-block">
+          <h4>Procurement Requirements</h4>
+          <p>Clean Energy Certificates (CECs) must be sourced from generators that began
+commercial operation after January 1, 2018. Long-term contracts (10–20 years)
+encouraged but not required.</p>
+        </div>
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Large hydro eligible under CES regardless of size, provided facility began operation or signed a qualifying contract after January 1, 2018. Primary mechanism for qualifying Quebec imports.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Must meet same GHG and efficiency standards as Class I RPS.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Same conditions as Class I RPS storage eligibility.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">New nuclear or nuclear with a qualifying post-2018 contract eligible. No existing in-state nuclear currently qualifies.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Clean hydrogen fuel cells eligible. Must demonstrate low-carbon fuel supply chain.</div></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://www.mass.gov/guides/clean-energy-standard-310-cmr-775">Clean Energy Standard — Existing (CES-E)</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>CES</span>
+          <span>MA DOER / MassDEP</span>
+          <span class="cite">M.G.L. c. 21N; 310 CMR 7.75</span>
+          <span>Applies to: IOU, CCA, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">CES-E covers existing (pre-2018) clean energy resources, primarily existing nuclear and large hydro. Targets are set to phase down as new CES resources ramp up.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://www.mass.gov/guides/clean-energy-standard-310-cmr-775">310 CMR 7.75 — Clean Energy Standard (regulatory promulgation)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2017</span>
+            </div>
+            <div class="leg-role">Created CES-E tier alongside CES for existing clean energy resources</div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Existing large hydro facilities with commercial operation date before 2018. Primarily captures existing Quebec and Canadian imports.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Existing nuclear facilities. Pilgrim (retired 2019) was eligible through its closure. No active in-state nuclear currently qualifies; provision exists for future nuclear.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+    <div class="program">
+      <div class="program-header">
+        <h3>
+          <a href="https://www.mass.gov/alternative-energy-portfolio-standard">Alternative Portfolio Standard (APS)</a>
+          
+        </h3>
+        <div class="program-meta">
+          <span>APS</span>
+          <span>MA DOER</span>
+          <span class="cite">M.G.L. c. 25A § 11F½</span>
+          <span>Applies to: IOU, CCA, Retail Supplier</span>
+        </div>
+      </div>
+
+      <div class="program-body">
+
+        
+        <div class="program-note">The APS is a parallel standard to the RPS requiring retail suppliers to source a percentage of sales from alternative energy resources — primarily combined heat and power (CHP), flywheel storage, and demand response. Not tracked in LBNL RPS data. Targets are set separately from the RPS.</div>
+        
+
+        
+        <div class="legislation">
+          <h4>Legislation</h4>
+          
+          <div class="leg-item">
+            <div class="leg-bill">
+              <a href="https://malegislature.gov/laws/sessionlaws/acts/2008/chapter169">An Act Relative to Green Communities (Chapter 169, Acts of 2008)</a>
+              
+              &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 2008</span>
+            </div>
+            <div class="leg-role">Created APS as a parallel standard to the RPS; effective January 1, 2009</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2014</span>
+                <a href="https://malegislature.gov/laws/sessionlaws/acts/2014/chapter251">Chapter 251, Acts of 2014</a>
+                
+                <div class="amend-note">Added renewable thermal technologies to APS eligibility</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2016</span>
+                <a href="https://malegislature.gov/laws/sessionlaws/acts/2016/chapter188">An Act to Promote Energy Diversity (Chapter 188, Acts of 2016)</a>
+                
+                <div class="amend-note">Further expanded APS eligibility; added energy storage authorization</div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+
+        
+        <div class="req-block">
+          <h4>Generation Requirements</h4>
+          <p>Alternative Energy Credits (AECs) are issued by NEPOOL GIS. CHP systems must
+meet minimum efficiency thresholds (42.5% for natural gas). Demand response
+resources must be registered with ISO-NE.</p>
+        </div>
+        
+
+        
+
+        <div class="req-block">
+          <h4>Technology Eligibility</h4>
+          <table class="elig-table">
+            <thead>
+              <tr><th>Technology</th><th>Status</th><th>Conditions / Notes</th></tr>
+            </thead>
+            <tbody>
+            
+            
+              
+            
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Solar PV</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Wind (Onshore)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Offshore Wind</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Run of River</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Hydro — Large / Conventional</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biomass (Solid)</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Biogas / Landfill Gas</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Municipal Solid Waste</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Geothermal</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Storage</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">Flywheel energy storage systems qualify. Battery storage not currently eligible under APS.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="not-eligible">
+                <td>Nuclear / Zero-Carbon</td>
+                <td>
+                  <span class="elig-badge badge-false">Not Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="conditional">
+                <td>Fuel Cell</td>
+                <td>
+                  <span class="elig-badge badge-conditional">Conditional</span>
+                </td>
+                <td><div class="elig-condition">CHP fuel cells meeting efficiency threshold qualify. Stand-alone fuel cells do not.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Combined Heat & Power (CHP)</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">Combined heat and power systems with minimum 42.5% efficiency (natural gas) or 40% (other fuels). Both electric and thermal output credited.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Demand Response</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td><div class="elig-condition">ISO-NE registered demand response resources. Credits issued based on verified load reduction.</div></td>
+              </tr>
+            
+              
+                
+                
+              
+              <tr class="eligible">
+                <td>Flywheel Storage</td>
+                <td>
+                  <span class="elig-badge badge-true">Eligible</span>
+                  
+                </td>
+                <td></td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- program-body -->
+    </div><!-- program -->
+    
+  </div>
+
+  <!-- Numerical Data -->
+  
+  <div class="section">
+    <h2>RPS & CES Targets (%)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr class="">
+          <td>APS (Total)</td><td>6.0%</td><td>6.2%</td><td>6.5%</td><td>6.8%</td><td>7.0%</td><td>7.2%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class I (Non-Solar)</td><td>15.5%</td><td>18.3%</td><td>20.8%</td><td>23.5%</td><td>26.2%</td><td>29.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class I (Solar Carve-Out)</td><td>8.5%</td><td>8.7%</td><td>9.2%</td><td>9.5%</td><td>9.8%</td><td>10.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class II Existing RE</td><td>3.6%</td><td>3.4%</td><td>3.6%</td><td>3.6%</td><td>3.6%</td><td>3.6%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class II MSW</td><td>3.7%</td><td>3.7%</td><td>3.5%</td><td>3.5%</td><td>3.5%</td><td>3.5%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Existing (CES-E)</td><td>26.0%</td><td>26.0%</td><td>26.0%</td><td>26.0%</td><td>27.0%</td><td>27.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>New (CES)</td><td>28.0%</td><td>30.0%</td><td>32.0%</td><td>34.0%</td><td>36.0%</td><td>38.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total CES</td><td>54.0%</td><td>56.0%</td><td>58.0%</td><td>60.0%</td><td>63.0%</td><td>65.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>31.3%</td><td>34.1%</td><td>37.1%</td><td>40.1%</td><td>43.1%</td><td>46.1%</td>
+        </tr>
+        
+        <tr class="grand-total">
+          <td>Grand Total</td><td>60.0%</td><td>62.3%</td><td>64.5%</td><td>66.8%</td><td>70.0%</td><td>72.2%</td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
+        
+        <tr><td>Statewide Sales</td><td>48,551</td><td>48,092</td><td>47,887</td><td>48,684</td><td>49,448</td><td>50,377</td></tr>
+        
+        <tr><td>RPS-Applicable Sales</td><td>43,068</td><td>42,661</td><td>42,480</td><td>43,186</td><td>43,864</td><td>44,689</td></tr>
+        
+        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
+        
+        <tr class="">
+          <td>APS (Total)</td><td>2,584</td><td>2,666</td><td>2,761</td><td>2,915</td><td>3,070</td><td>3,240</td>
+        </tr>
+        
+        <tr class="">
+          <td>CES (incremental to RPS)</td><td>12,921</td><td>12,372</td><td>11,894</td><td>11,660</td><td>11,843</td><td>12,066</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class I (Non-Solar)</td><td>6,660</td><td>7,799</td><td>8,834</td><td>10,156</td><td>11,496</td><td>12,942</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class I (Solar)</td><td>3,676</td><td>3,720</td><td>3,910</td><td>4,095</td><td>4,295</td><td>4,487</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class II Existing RE</td><td>1,550</td><td>1,456</td><td>1,517</td><td>1,542</td><td>1,566</td><td>1,595</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class II MSW</td><td>1,594</td><td>1,578</td><td>1,487</td><td>1,512</td><td>1,535</td><td>1,564</td>
+        </tr>
+        
+        <tr class="">
+          <td>Existing, incremental to RPS Class II</td><td>11,198</td><td>11,092</td><td>11,045</td><td>11,228</td><td>11,843</td><td>12,066</td>
+        </tr>
+        
+        <tr class="">
+          <td>New, incremental to RPS Class I</td><td>1,723</td><td>1,280</td><td>850</td><td>432</td><td>0</td><td>0</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>13,480</td><td>14,553</td><td>15,747</td><td>17,305</td><td>18,892</td><td>20,588</td>
+        </tr>
+        
+        <tr class="grand-total">
+          <td>Grand Total</td><td>28,985</td><td>29,591</td><td>30,403</td><td>31,880</td><td>33,806</td><td>35,894</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <p class="proj-note">* 2026+ values are LBNL projections.</p>
+  </div>
+  
+
+</div>
+</body>
+</html>
