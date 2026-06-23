@@ -1,8 +1,16 @@
 # RPS Database — State Review Progress
 
 Goal: Build a DSIRE-like backend for US RPS/CES and state procurement programs, verified
-state by state. LBNL data (August 2025) is the numerical baseline; programs/STATE.yaml
-is the source of truth for program structure, eligibility, and unique requirements.
+state by state. programs/STATE.yaml is the source of truth for program structure,
+eligibility, targets, and unique requirements.
+
+⚠️ SOURCE-OF-AUTHORITY POLICY (set 2026-06-23): LBNL data was only a quick starting point
+to seed the database — it is NOT authoritative and is known to contain errors and omissions
+(e.g. it omits CT Class III entirely). Now that we have a baseline, verify every state
+against primary sources (state PUC/PURA sites, statutes, DSIRE). DO NOT run sanity checks
+against LBNL or treat a mismatch with LBNL as a problem to reconcile. Where LBNL numbers are
+still displayed, they should be replaced/overridden by verified values as each state is
+reviewed.
 
 To pick up a session: read this file, then open the next state marked 🔲 and begin.
 To regenerate a state's HTML after editing its YAML:
@@ -20,7 +28,7 @@ To regenerate a state's HTML after editing its YAML:
 | State | Status | Programs Captured | Notes |
 |---|---|---|---|
 | MA | 🔄 | Class I RPS, Class II RPS, CES, CES-E, APS | Initial build complete. Needs field verification. |
-| CT | ✅ | Class I RPS, Class II RPS, Class III RPS, Zero-Carbon Procurement (Millstone) | Full review + revamp (template state). Class III (4% CHP/C&LM, absent from LBNL) added via supplemental_data and now in numerical tables. Class I note corrected for PA 23-102 (−7 pts 2026–2030). New page layout: targets/sales/demand at top, consolidated tech-eligibility matrix before program detail. OPEN: LBNL Class II=4% vs statutory 3% adder — flagged, not overridden. |
+| CT | ✅ | Class I RPS, Class II RPS, Class III RPS, Zero-Carbon Procurement (Millstone) | Full review + revamp (template state). Class III (4% CHP/C&LM) added via supplemental_data and now in numerical tables. Class I note corrected for PA 23-102 (−7 pts 2026–2030). Class II = 4% confirmed via PURA. New page layout: targets/sales/demand at top, consolidated tech-eligibility matrix before program detail. |
 | RI | 🔄 | RES, Long-Term Contracting Standard, REG Program | Initial build complete. RI calls it RES not RPS; 100% by 2033. Block Island Wind Farm mechanism captured. |
 | NH | 🔄 | RPS (Class I, II, III, IV + Class I Thermal sub-class) | Initial build complete. Admin transferred PUC → NH DOE in 2021. Class I Thermal unique in New England. |
 | ME | 🔄 | Class I/IA RPS, Class II RPS, Offshore Wind Procurement | Initial build complete. LD 1868 (2025) updated to 90% by 2040. DOER launched Sept 2025. NAR registry for northern ME. |

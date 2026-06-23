@@ -9,7 +9,11 @@ A queryable database of US Renewable Portfolio Standard (RPS) and Clean Energy S
 
 ## Data Sources
 
-All source data is from Lawrence Berkeley National Laboratory (LBNL), August 2025 vintage. Do not modify the source Excel files.
+**Authority policy:** The LBNL files below were a quick starting point to seed the database.
+They are **not authoritative** — they contain errors and omissions (e.g. CT Class III is
+absent). Do **not** validate or sanity-check reviewed states against LBNL. Primary sources
+(state PUC/PURA sites, statutes, DSIRE) are the authority; verified values in
+`programs/STATE.yaml` supersede LBNL. Do not modify the source Excel files.
 
 | File | Contents |
 |------|----------|

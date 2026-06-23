@@ -4,11 +4,11 @@ last_reviewed: 2026-06-23
 reviewer_notes: >
   Full review (CT revamp template). Corrected Class I schedule note — Public Act 23-102
   (2023) reduced Class I by 7 points for 2026–2030 (32%→25% in 2026, settling at ~29% by
-  2030), reversing the prior PA 18-50 climb toward 40%. LBNL Class I figures already reflect
-  this. Added Class III (4% CHP + C&LM standard), which is entirely absent from LBNL data,
-  via supplemental_data. Added concise note_short fields for the consolidated eligibility
-  matrix. OPEN ITEM: LBNL encodes Class II at 4%; CT statute frames the "Class I or Class II"
-  adder as 3% — flagged for resolution, not yet overridden.
+  2030), reversing the prior PA 18-50 climb toward 40%. Added Class III (4% CHP + C&LM
+  standard) via supplemental_data. Class II requirement is 4% (confirmed via PURA RPS
+  overview). Added concise note_short fields for the consolidated eligibility matrix.
+  Values verified against CT PURA / statute, not against LBNL (which is only a starting
+  baseline, not authoritative).
 
 admin_authority:
   name: CT Public Utilities Regulatory Authority (PURA)
@@ -127,9 +127,9 @@ programs:
     note: >
       Class II covers older and waste-derived resources — primarily permitted
       trash-to-energy (MSW) facilities, certain existing biomass, and hydro that predates
-      the July 1, 2003 Class I commercial-operation cutoff. Statute frames this as a "Class I
-      or Class II" adder of 3% (suppliers may also meet it with surplus Class I). NOTE: LBNL
-      data encodes the Class II line at 4% — discrepancy flagged for review.
+      the July 1, 2003 Class I commercial-operation cutoff. The Class II requirement is 4%
+      of load (flat), per the CT PURA RPS overview. Suppliers may also satisfy it with
+      surplus Class I generation.
     legislation:
       - bill: "An Act Concerning Electric Restructuring (Public Act 98-28)"
         enacted: 1998
