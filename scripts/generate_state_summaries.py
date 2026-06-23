@@ -49,8 +49,32 @@ TECH_LABELS = {
     "nuclear": "Nuclear / Zero-Carbon",
     "fuel_cell": "Fuel Cell",
     "chp": "Combined Heat & Power (CHP)",
+    "conservation_load_mgmt": "Conservation & Load Mgmt",
+    "waste_heat_recovery": "Waste-Heat Recovery",
     "demand_response": "Demand Response",
     "flywheel_storage": "Flywheel Storage",
+}
+
+# Compact column headers for the consolidated cross-program eligibility matrix,
+# where horizontal space per technology is tight.
+TECH_LABELS_SHORT = {
+    "solar_pv": "Solar PV",
+    "wind": "Wind",
+    "offshore_wind": "Offshore Wind",
+    "hydro_run_of_river": "Hydro (RoR)",
+    "hydro_large": "Hydro (Large)",
+    "biomass_solid": "Biomass",
+    "biogas_lfg": "Biogas / LFG",
+    "msw": "MSW",
+    "geothermal": "Geothermal",
+    "storage": "Storage",
+    "nuclear": "Nuclear",
+    "fuel_cell": "Fuel Cell",
+    "chp": "CHP",
+    "conservation_load_mgmt": "C&LM",
+    "waste_heat_recovery": "Waste Heat",
+    "demand_response": "Demand Resp.",
+    "flywheel_storage": "Flywheel",
 }
 
 
@@ -87,7 +111,18 @@ def grand_total_targets(pivot, available, supp_tiers):
     Class I RPS via overlap), otherwise use Total RPS. Add supplemental tiers on top.
     Only emit a row when there are at least two independent programs.
     """
-    ces = [t for t in pivot.index if t.startswith("Total CES")]
+    def _active(tiers):
+        # A tier is only a usable base if it carries at least one non-zero value;
+        # some states (e.g. CT) include an all-zero "Total CES" placeholder.
+        out = []
+        for t in tiers:
+            vals = [pivot.loc[t, y] for y in available
+                    if y in pivot.columns and not pd.isna(pivot.loc[t, y])]
+            if any(v for v in vals):
+                out.append(t)
+        return out
+
+    ces = _active([t for t in pivot.index if t.startswith("Total CES")])
     rps = [t for t in pivot.index if t.startswith("Total RPS")]
     supp = [t for t in (supp_tiers or []) if t in pivot.index]
 
@@ -184,6 +219,74 @@ def build_supplemental(supp, state, rps_applicable_df):
     return t_df, d_df
 
 
+def program_eligibility(prog):
+    """Merge a program's base `eligibility` with any `*_specific_eligibility` blocks
+    (e.g. class3_specific_eligibility, aps_specific_eligibility) into one ordered dict."""
+    merged = dict(prog.get("eligibility") or {})
+    for key, val in prog.items():
+        if key.endswith("_specific_eligibility") and isinstance(val, dict):
+            merged.update(val)
+    return merged
+
+
+def _elig_status(info):
+    """Normalize an eligibility entry to (status, note_short, condition)."""
+    if isinstance(info, dict):
+        elig = info.get("eligible")
+        return elig, info.get("note_short"), info.get("condition")
+    return info, None, None
+
+
+def build_elig_matrix(programs):
+    """Consolidated cross-program eligibility matrix.
+
+    Rows are programs (portfolio standards), columns are technologies. Only technologies
+    that are eligible or conditional in at least one program are shown, so the grid stays
+    tight. Conditional/eligible cells carry the concise `note_short` (not the verbose
+    `condition`, which is reserved for the per-program detail tables).
+    """
+    elig_by_prog = [(p, program_eligibility(p)) for p in programs]
+
+    # Column order follows TECH_LABELS; keep only techs relevant to >=1 program.
+    seen = list(TECH_LABELS.keys())
+    for _, elig in elig_by_prog:
+        for tech in elig:
+            if tech not in seen:
+                seen.append(tech)
+
+    cols = []
+    for tech in seen:
+        relevant = any(
+            _elig_status(elig.get(tech))[0] in (True, "conditional")
+            for _, elig in elig_by_prog
+            if tech in elig
+        )
+        if relevant:
+            cols.append(tech)
+
+    if not cols:
+        return [], []
+
+    rows = []
+    for prog, elig in elig_by_prog:
+        cells = []
+        for tech in cols:
+            status, note_short, _ = _elig_status(elig.get(tech))
+            if status is True:
+                cls, sym = "true", "✓"          # check
+            elif status == "conditional":
+                cls, sym = "conditional", "◐"   # half circle
+            else:
+                cls, sym = "false", "—"          # em dash
+            cells.append({"cls": cls, "sym": sym,
+                          "note": note_short if status in (True, "conditional") else None})
+        rows.append({"name": prog.get("name", prog.get("id", "")), "cells": cells})
+
+    headers = [{"key": t, "label": TECH_LABELS_SHORT.get(t, TECH_LABELS.get(t, t))}
+               for t in cols]
+    return headers, rows
+
+
 def generate_state(state, dfs, years, env):
     yaml_path = PROGRAMS_DIR / f"{state}.yaml"
     programs = []
@@ -224,6 +327,7 @@ def generate_state(state, dfs, years, env):
     sales_rows = build_sales_rows(ss, sr, avail_years)
     demand_rows = build_demand_rows(sd, avail_years, supp_tier_names)
     proj_start = next((y for y in avail_years if y > 2025), None)
+    matrix_headers, matrix_rows = build_elig_matrix(programs)
 
     template = env.get_template("state.html")
     return template.render(
@@ -241,6 +345,8 @@ def generate_state(state, dfs, years, env):
         sales_rows=sales_rows,
         demand_rows=demand_rows,
         proj_start=proj_start,
+        matrix_headers=matrix_headers,
+        matrix_rows=matrix_rows,
     )
 
 

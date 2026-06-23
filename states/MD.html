@@ -106,6 +106,35 @@
     .proj-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
     .data-table tr.grand-total td { font-weight: 700; border-top: 2px solid var(--border);
                                      background: var(--green-bg); }
+
+    /* Consolidated cross-program eligibility matrix */
+    .matrix-wrap { overflow-x: auto; }
+    .matrix { border-collapse: collapse; font-size: 12px; min-width: 100%; }
+    .matrix th, .matrix td { border: 1px solid var(--border); }
+    .matrix thead th { background: var(--gray-light); vertical-align: bottom; padding: 6px 4px; }
+    .matrix thead th.tech { height: 116px; padding: 6px 2px; }
+    .matrix thead th.tech > span { writing-mode: vertical-rl; transform: rotate(180deg);
+                                    white-space: nowrap; font-size: 11px; font-weight: 600;
+                                    text-align: left; }
+    .matrix th.prog-col { text-align: left; min-width: 150px; vertical-align: bottom;
+                          font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
+                          color: var(--gray); }
+    .matrix td.prog-name { text-align: left; font-weight: 600; padding: 6px 10px;
+                           background: var(--green-bg); white-space: nowrap; }
+    .matrix td.cell { text-align: center; padding: 5px 4px; vertical-align: middle;
+                      min-width: 52px; }
+    .matrix td.cell .sym { font-size: 14px; font-weight: 700; line-height: 1; }
+    .matrix td.cell .cell-note { display: block; font-size: 10px; line-height: 1.2;
+                                 margin-top: 2px; color: #555; }
+    .matrix td.c-true        { background: #f3fbf6; }
+    .matrix td.c-true .sym       { color: #2d6a4f; }
+    .matrix td.c-conditional { background: var(--conditional-bg); }
+    .matrix td.c-conditional .sym{ color: var(--conditional); }
+    .matrix td.c-false       { background: var(--false-bg); }
+    .matrix td.c-false .sym      { color: var(--false-text); }
+    .matrix-legend { font-size: 12px; color: var(--gray); margin-top: 8px;
+                     display: flex; flex-wrap: wrap; gap: 16px; }
+    .matrix-legend .sym { font-weight: 700; }
   </style>
 </head>
 <body>
@@ -114,7 +143,7 @@
   <!-- State Header -->
   <div class="state-header">
     <h1>Maryland (MD) — RPS & CES Programs</h1>
-    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-04-24
+    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-06-23
       &nbsp;|&nbsp; Last reviewed 2026-04-23
     </div>
 
@@ -149,6 +178,362 @@
       
     </div>
   </div>
+
+  <!-- Numerical Data (targets, sales & demand) — top of page -->
+  
+  <div class="section">
+    <h2>RPS &amp; CES Targets (%)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr class="">
+          <td>Cooperatives</td><td>32.6%</td><td>34.4%</td><td>36.2%</td><td>38.0%</td><td>40.5%</td><td>44.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Geothermal Heat Pump Carve-Out</td><td>0.0%</td><td>0.1%</td><td>0.2%</td><td>0.2%</td><td>0.5%</td><td>0.7%</td>
+        </tr>
+        
+        <tr class="">
+          <td>IOUs & competitive retailers</td><td>32.6%</td><td>34.4%</td><td>36.2%</td><td>38.0%</td><td>40.5%</td><td>44.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Municipal utilities</td><td>23.2%</td><td>26.3%</td><td>28.2%</td><td>28.4%</td><td>28.9%</td><td>29.4%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Offshore Wind Carve-Out (Wtd. Avg.)</td><td>0.1%</td><td>1.7%</td><td>2.6%</td><td>12.9%</td><td>12.9%</td><td>12.9%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Solar Carve-Out (Wtd. Avg.)</td><td>6.2%</td><td>6.6%</td><td>7.5%</td><td>8.9%</td><td>10.3%</td><td>11.6%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Tier I Non-Carve-Out (Wtd. Avg.)</td><td>23.7%</td><td>23.5%</td><td>23.3%</td><td>13.3%</td><td>14.2%</td><td>16.1%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Tier II</td><td>2.5%</td><td>2.5%</td><td>2.5%</td><td>2.5%</td><td>2.5%</td><td>2.5%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS (Wtd. Avg.)</td><td>32.5%</td><td>34.3%</td><td>36.1%</td><td>37.9%</td><td>40.4%</td><td>43.9%</td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
+        
+        <tr><td>Statewide Sales</td><td>58,216</td><td>58,903</td><td>59,130</td><td>59,899</td><td>60,474</td><td>61,291</td></tr>
+        
+        <tr><td>RPS-Applicable Sales</td><td>57,034</td><td>57,706</td><td>57,929</td><td>58,683</td><td>59,246</td><td>60,047</td></tr>
+        
+        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
+        
+        <tr class="">
+          <td>Offshore Wind Carve-Out</td><td>80</td><td>958</td><td>1,511</td><td>7,581</td><td>7,654</td><td>7,757</td>
+        </tr>
+        
+        <tr class="">
+          <td>Solar Carve-Out</td><td>3,470</td><td>3,699</td><td>4,168</td><td>4,953</td><td>5,816</td><td>6,721</td>
+        </tr>
+        
+        <tr class="">
+          <td>Tier I Non-Solar/Non-Offshore Wind</td><td>15,360</td><td>15,372</td><td>15,641</td><td>10,877</td><td>10,901</td><td>14,090</td>
+        </tr>
+        
+        <tr class="">
+          <td>Tier II</td><td>1,426</td><td>1,443</td><td>1,448</td><td>1,467</td><td>1,481</td><td>1,501</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>20,336</td><td>21,472</td><td>22,768</td><td>24,878</td><td>25,852</td><td>30,070</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <p class="proj-note">* 2026+ values are LBNL projections. Class III (where shown)
+       is a supplemental series not present in LBNL data — see program detail below.</p>
+  </div>
+  
+
+  <!-- Consolidated technology eligibility matrix -->
+  
+  <div class="section">
+    <h2>Technology Eligibility by Standard</h2>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th class="prog-col">Portfolio Standard</th>
+            <th class="tech"><span>Solar PV</span></th><th class="tech"><span>Wind</span></th><th class="tech"><span>Offshore Wind</span></th><th class="tech"><span>Hydro (RoR)</span></th><th class="tech"><span>Hydro (Large)</span></th><th class="tech"><span>Biomass</span></th><th class="tech"><span>Biogas / LFG</span></th><th class="tech"><span>MSW</span></th><th class="tech"><span>Geothermal</span></th><th class="tech"><span>Storage</span></th><th class="tech"><span>Fuel Cell</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td class="prog-name">Renewable Portfolio Standard — Tier 1</td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+          </tr>
+          
+          <tr>
+            <td class="prog-name">Renewable Portfolio Standard — Tier 2</td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+          </tr>
+          
+          <tr>
+            <td class="prog-name">Solar Carve-Out (SREC Program)</td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+          </tr>
+          
+          <tr>
+            <td class="prog-name">Offshore Wind — OREC Program</td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    <div class="matrix-legend">
+      <span><span class="sym" style="color:#2d6a4f;">✓</span> Eligible</span>
+      <span><span class="sym" style="color:var(--conditional);">◐</span> Conditional</span>
+      <span><span class="sym" style="color:var(--false-text);">—</span> Not eligible</span>
+      <span>Cell notes are summaries; see each program below for full conditions.</span>
+    </div>
+  </div>
+  
 
   <!-- Programs -->
   <div class="section">
@@ -1091,95 +1476,6 @@ EDCs must purchase ORECs from all PSC-approved projects.</p>
     </div><!-- program -->
     
   </div>
-
-  <!-- Numerical Data -->
-  
-  <div class="section">
-    <h2>RPS & CES Targets (%)</h2>
-    <table class="data-table">
-      <thead>
-        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
-      </thead>
-      <tbody>
-        
-        <tr class="">
-          <td>Cooperatives</td><td>32.6%</td><td>34.4%</td><td>36.2%</td><td>38.0%</td><td>40.5%</td><td>44.0%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Geothermal Heat Pump Carve-Out</td><td>0.0%</td><td>0.1%</td><td>0.2%</td><td>0.2%</td><td>0.5%</td><td>0.7%</td>
-        </tr>
-        
-        <tr class="">
-          <td>IOUs & competitive retailers</td><td>32.6%</td><td>34.4%</td><td>36.2%</td><td>38.0%</td><td>40.5%</td><td>44.0%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Municipal utilities</td><td>23.2%</td><td>26.3%</td><td>28.2%</td><td>28.4%</td><td>28.9%</td><td>29.4%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Offshore Wind Carve-Out (Wtd. Avg.)</td><td>0.1%</td><td>1.7%</td><td>2.6%</td><td>12.9%</td><td>12.9%</td><td>12.9%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Solar Carve-Out (Wtd. Avg.)</td><td>6.2%</td><td>6.6%</td><td>7.5%</td><td>8.9%</td><td>10.3%</td><td>11.6%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Tier I Non-Carve-Out (Wtd. Avg.)</td><td>23.7%</td><td>23.5%</td><td>23.3%</td><td>13.3%</td><td>14.2%</td><td>16.1%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Tier II</td><td>2.5%</td><td>2.5%</td><td>2.5%</td><td>2.5%</td><td>2.5%</td><td>2.5%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Total RPS (Wtd. Avg.)</td><td>32.5%</td><td>34.3%</td><td>36.1%</td><td>37.9%</td><td>40.4%</td><td>43.9%</td>
-        </tr>
-        
-      </tbody>
-    </table>
-
-    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
-    <table class="data-table">
-      <thead>
-        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
-      </thead>
-      <tbody>
-        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
-        
-        <tr><td>Statewide Sales</td><td>58,216</td><td>58,903</td><td>59,130</td><td>59,899</td><td>60,474</td><td>61,291</td></tr>
-        
-        <tr><td>RPS-Applicable Sales</td><td>57,034</td><td>57,706</td><td>57,929</td><td>58,683</td><td>59,246</td><td>60,047</td></tr>
-        
-        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
-        
-        <tr class="">
-          <td>Offshore Wind Carve-Out</td><td>80</td><td>958</td><td>1,511</td><td>7,581</td><td>7,654</td><td>7,757</td>
-        </tr>
-        
-        <tr class="">
-          <td>Solar Carve-Out</td><td>3,470</td><td>3,699</td><td>4,168</td><td>4,953</td><td>5,816</td><td>6,721</td>
-        </tr>
-        
-        <tr class="">
-          <td>Tier I Non-Solar/Non-Offshore Wind</td><td>15,360</td><td>15,372</td><td>15,641</td><td>10,877</td><td>10,901</td><td>14,090</td>
-        </tr>
-        
-        <tr class="">
-          <td>Tier II</td><td>1,426</td><td>1,443</td><td>1,448</td><td>1,467</td><td>1,481</td><td>1,501</td>
-        </tr>
-        
-        <tr class="">
-          <td>Total RPS</td><td>20,336</td><td>21,472</td><td>22,768</td><td>24,878</td><td>25,852</td><td>30,070</td>
-        </tr>
-        
-      </tbody>
-    </table>
-    <p class="proj-note">* 2026+ values are LBNL projections.</p>
-  </div>
-  
 
 </div>
 </body>

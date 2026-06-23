@@ -1,7 +1,14 @@
 state: CT
 name: Connecticut
-last_reviewed: 2026-04-23
-reviewer_notes: Initial build. Zero-carbon procurement (Millstone) added beyond LBNL. CT has three RPS classes; Class III covers CHP and efficiency.
+last_reviewed: 2026-06-23
+reviewer_notes: >
+  Full review (CT revamp template). Corrected Class I schedule note — Public Act 23-102
+  (2023) reduced Class I by 7 points for 2026–2030 (32%→25% in 2026, settling at ~29% by
+  2030), reversing the prior PA 18-50 climb toward 40%. LBNL Class I figures already reflect
+  this. Added Class III (4% CHP + C&LM standard), which is entirely absent from LBNL data,
+  via supplemental_data. Added concise note_short fields for the consolidated eligibility
+  matrix. OPEN ITEM: LBNL encodes Class II at 4%; CT statute frames the "Class I or Class II"
+  adder as 3% — flagged for resolution, not yet overridden.
 
 admin_authority:
   name: CT Public Utilities Regulatory Authority (PURA)
@@ -32,9 +39,13 @@ programs:
     program_url: https://portal.ct.gov/pura/rps/renewable-portfolio-standards-overview
     statutory_cite: C.G.S. § 16-245a
     applicable_lses: [EDC, Retail Supplier]
-    note: Class I covers new renewable resources that began commercial operation on or
-      after July 1, 2003. Target escalates to 40% by 2030. Municipal electric utilities
-      are subject to a separate, lower standard under § 16-245a(b).
+    note: >
+      Class I covers new renewable resources that began commercial operation on or after
+      July 1, 2003. Under PA 18-50 the standard had been scheduled to climb toward roughly
+      40% by 2030, but Public Act 23-102 (2023) cut the Class I requirement by 7 percentage
+      points for compliance years 2026 through 2030 to ease ratepayer cost — the requirement
+      drops from 30% (2025) to 25% (2026) and rises to about 29% by 2030. Municipal electric
+      utilities are subject to a separate, lower standard under § 16-245a(b).
     legislation:
       - bill: "An Act Concerning Electric Restructuring (Public Act 98-28)"
         enacted: 1998
@@ -48,7 +59,16 @@ programs:
           - year: 2018
             bill: "An Act Concerning Connecticut's Energy Future (Public Act 18-50)"
             url: https://www.cga.ct.gov/2018/act/pa/2018PA-00050-R00SB-00009-PA.htm
-            note: Increased Class I target to 26% by 2023, escalating to 40% by 2030; replaced net metering with tariff-based programs
+            note: Increased Class I target to 26% by 2023, escalating toward 40% by 2030; replaced net metering with tariff-based programs
+          - year: 2023
+            bill: "An Act Concerning the Disposal of Renewable Energy Credits (Public Act 23-102)"
+            url: https://www.cga.ct.gov/2023/act/pa/pdf/2023PA-00102-R00HB-06850-PA.PDF
+            note: >
+              Reduced the Class I requirement by 7 percentage points for 2026–2030 (e.g.,
+              32%→25% in 2026, ending near 29% in 2030); directed PURA to establish procedures
+              to dispose of RECs purchased under renewable tariffs and procurements; directed
+              the state to procure new zero-carbon Class I resources equal to 7% of load on
+              top of the RPS.
     generation_requirements: null
     procurement_requirements: null
     eligibility:
@@ -60,33 +80,40 @@ programs:
         eligible: true
       hydro_run_of_river:
         eligible: true
+        note_short: Post-2003 / incremental
         condition: Run-of-river and incremental hydro facilities that began operation
           after July 1, 2003, or capacity additions at existing facilities qualify.
       hydro_large:
         eligible: false
+        note_short: Class II only
         condition: Large conventional hydro does not qualify for Class I. Eligible
           under Class II if pre-2004 vintage.
       biomass_solid:
         eligible: conditional
+        note_short: Emissions & fuel limits
         condition: Biomass facilities meeting air emissions and fuel sourcing standards
           under DEEP regulations. Co-firing with fossil fuel permitted up to threshold.
       biogas_lfg:
         eligible: true
+        note_short: Fuel pathway cert.
         condition: Landfill gas, anaerobic digestion, and biogas eligible.
           Fuel pathway certification required.
       msw:
         eligible: false
+        note_short: Class II only
         condition: MSW combustion not eligible for Class I. Eligible under Class II.
       geothermal:
         eligible: true
       storage:
         eligible: conditional
+        note_short: Paired w/ Class I gen
         condition: Paired with a Class I generator; standalone storage not currently
           Class I eligible.
       nuclear:
         eligible: false
       fuel_cell:
         eligible: true
+        note_short: Renewable fuel only
         condition: Fuel cells using hydrogen or renewable fuel (biogas) eligible under
           Class I. Natural gas fuel cells eligible under Class III only.
 
@@ -97,9 +124,12 @@ programs:
     program_url: https://portal.ct.gov/pura/rps/renewable-portfolio-standards-overview
     statutory_cite: C.G.S. § 16-245a
     applicable_lses: [EDC, Retail Supplier]
-    note: Class II covers older renewable and waste resources — primarily MSW, biomass,
-      and hydro that predates the Class I commercial operation cutoff. A 4% Class II
-      (or additional Class I) requirement applies.
+    note: >
+      Class II covers older and waste-derived resources — primarily permitted
+      trash-to-energy (MSW) facilities, certain existing biomass, and hydro that predates
+      the July 1, 2003 Class I commercial-operation cutoff. Statute frames this as a "Class I
+      or Class II" adder of 3% (suppliers may also meet it with surplus Class I). NOTE: LBNL
+      data encodes the Class II line at 4% — discrepancy flagged for review.
     legislation:
       - bill: "An Act Concerning Electric Restructuring (Public Act 98-28)"
         enacted: 1998
@@ -116,20 +146,25 @@ programs:
         eligible: false
       hydro_run_of_river:
         eligible: true
+        note_short: Pre-2003 vintage
         condition: Existing hydro facilities that began operation before July 1, 2003
           and do not qualify for Class I.
       hydro_large:
         eligible: true
+        note_short: Existing facilities
         condition: Existing large hydro eligible under Class II.
       biomass_solid:
         eligible: true
+        note_short: Pre-2004 facilities
         condition: Existing biomass combustion facilities operational before 2004.
       biogas_lfg:
         eligible: true
       msw:
         eligible: true
-        condition: Municipal solid waste combustion is the primary Class II resource.
-          Facilities must meet air quality standards.
+        note_short: Primary Class II resource
+        condition: Permitted municipal solid waste (trash-to-energy) combustion is the
+          primary Class II resource. Facilities must hold a § 22a-208a permit and meet
+          air-quality standards.
       geothermal:
         eligible: false
       storage:
@@ -144,20 +179,33 @@ programs:
     type: rps
     administered_by: CT PURA
     program_url: https://portal.ct.gov/pura/rps/renewable-portfolio-standards-overview
-    statutory_cite: C.G.S. § 16-245a
+    statutory_cite: C.G.S. § 16-245a(a)(2)
     applicable_lses: [EDC, Retail Supplier]
-    note: Class III is a distinct efficiency and CHP standard, separate from the renewable
-      tiers. Covers combined heat and power (non-renewable fuel), electricity savings
-      from CHP, and conservation and load management programs. 4% requirement as of 2010.
+    note: >
+      Class III is a distinct efficiency / combined-heat-and-power standard, separate from
+      the renewable Class I and Class II tiers. The requirement began at 1% in 2008, rose to
+      3% in 2009 and 4% on and after January 1, 2010, and has remained flat at 4% since.
+      It is met with Class III certificates (C3RECs) for: customer-sided CHP (min. 50%
+      operating efficiency) installed on/after Jan 1, 2006; verified electricity savings from
+      conservation & load-management programs begun on/after Jan 1, 2006 (ratepayer-funded
+      program savings are excluded from 2014); and waste-heat / waste-pressure recovery
+      systems installed on/after April 1, 2007.
     legislation:
       - bill: "An Act Concerning Electric Restructuring (Public Act 98-28)"
         enacted: 1998
         url: https://www.cga.ct.gov/ps98/act/pa/1998pa-00028-r00hb-05005-pa.htm
-        role: Established Class III for CHP and efficiency resources
-    generation_requirements: |
-      Class III certificates (C3RECs) are issued by NEPOOL GIS. CHP systems must meet
-      efficiency standards. Conservation and load management savings are verified
-      by PURA-approved measurement and verification protocols.
+        role: RPS framework; Class III for CHP, conservation and load management added by
+          subsequent energy legislation (notably PA 07-242)
+        amendments:
+          - year: 2007
+            bill: "An Act Concerning Electricity and Energy Efficiency (Public Act 07-242)"
+            url: https://www.cga.ct.gov/2007/act/pa/2007PA-00242-R00SB-01368-PA.htm
+            note: Established the Class III standard (1% in 2008 rising to 4% by 2010) for
+              customer CHP, conservation & load management, and waste-heat recovery.
+    generation_requirements: >
+      Class III certificates (C3RECs) are issued by NEPOOL GIS. CHP systems must meet the
+      50% minimum operating-efficiency standard; conservation and load-management savings are
+      verified under PURA-approved measurement and verification protocols.
     procurement_requirements: null
     eligibility:
       solar_pv:
@@ -184,17 +232,27 @@ programs:
         eligible: false
       fuel_cell:
         eligible: true
+        note_short: Natural gas OK
         condition: Natural gas fuel cells eligible under Class III (unlike Class I,
           which requires renewable fuel). Must meet thermal efficiency thresholds.
     class3_specific_eligibility:
       chp:
         eligible: true
-        condition: Combined heat and power systems using any fuel, meeting minimum
-          system efficiency standards established by PURA.
+        note_short: "≥50% eff., post-2006"
+        condition: Customer-sided combined heat and power installed at a CT commercial or
+          industrial facility on or after January 1, 2006, with a minimum operating
+          efficiency of 50%.
       conservation_load_mgmt:
         eligible: true
-        condition: Verified electricity savings from conservation and load management
-          programs operated by EDCs.
+        note_short: Non-ratepayer-funded
+        condition: Verified electricity savings from conservation and load-management
+          programs begun on or after January 1, 2006. Savings from ratepayer-funded
+          programs are excluded on and after January 1, 2014.
+      waste_heat_recovery:
+        eligible: true
+        note_short: Installed post-Apr 2007
+        condition: Systems recovering waste heat or pressure from commercial or industrial
+          processes, installed on or after April 1, 2007.
 
   - id: CT_ZERO_CARBON
     name: Zero-Carbon Procurement (Millstone)
@@ -203,22 +261,24 @@ programs:
     program_url: https://portal.ct.gov/DEEP/Energy/Grid-Scale-Procurements
     statutory_cite: C.G.S. § 16a-3m
     applicable_lses: [Eversource CT, United Illuminating]
-    note: Not a certificate/credit program. DEEP is authorized to solicit long-term
-      power purchase agreements from zero-carbon generators. In 2019, Millstone Nuclear
-      Power Station (Dominion) secured a 10-year PPA for ~9 million MWh/year (approx.
-      50% of output) at $49.99/MWh, running through 2029. Distribution companies
-      are required to enter the resulting PPAs approved by PURA.
+    note: >
+      Not a certificate/credit program. DEEP is authorized to solicit long-term power
+      purchase agreements from zero-carbon generators. In 2019, Millstone Nuclear Power
+      Station (Dominion) secured a 10-year PPA for ~9 million MWh/year (approx. 50% of output)
+      at $49.99/MWh, running through 2029, with distribution companies required to enter the
+      PURA-approved PPAs. Separately, Public Act 23-102 (2023) directs the state to procure
+      new zero-carbon Class I resources equal to 7% of load, in addition to the RPS.
     legislation:
       - bill: "An Act Concerning Zero Carbon Procurement (Public Act 17-3, Special Session)"
         enacted: 2017
         url: https://www.cga.ct.gov/2017/act/pa/2017PA-00003-R00SB-01501SS1-PA.htm
         role: Authorized DEEP to solicit zero-carbon resource contracts; directed study
           of Millstone economic viability; established 12 million MWh annual cap
-    procurement_requirements: |
-      DEEP issues competitive solicitations for zero-carbon electricity. Contracts
-      are long-term PPAs (3–10 years for nuclear/hydro). PURA reviews and approves
-      all selected contracts. Distribution companies take title to the energy under
-      the approved PPAs. Total annual contracted volume capped at 12 million MWh.
+    procurement_requirements: >
+      DEEP issues competitive solicitations for zero-carbon electricity. Contracts are
+      long-term PPAs (3–10 years for nuclear/hydro). PURA reviews and approves all selected
+      contracts. Distribution companies take title to the energy under the approved PPAs.
+      Total annual contracted volume capped at 12 million MWh.
     generation_requirements: null
     eligibility:
       solar_pv:
@@ -229,10 +289,12 @@ programs:
         eligible: false
       hydro_run_of_river:
         eligible: true
+        note_short: Zero-carbon hydro
         condition: Large-scale hydropower with zero-carbon generation profile eligible
           as zero-carbon resource under § 16a-3m solicitations.
       hydro_large:
         eligible: true
+        note_short: In-region or imported
         condition: Primary eligible resource alongside nuclear. In-region and imported
           large hydro both eligible.
       biomass_solid:
@@ -247,8 +309,44 @@ programs:
         eligible: false
       nuclear:
         eligible: true
+        note_short: Millstone (primary)
         condition: Existing in-state nuclear (Millstone) is the primary eligible resource.
           Must demonstrate that zero-carbon attributes are necessary for financial
           viability and that closure would harm ratepayers.
       fuel_cell:
         eligible: false
+
+supplemental_data:
+  targets:
+    - tier: "Class III"
+      source: "C.G.S. § 16-245a(a)(2); PA 07-242"
+      note: "CHP + conservation & load management standard; 1% (2008) → 4% (2010+), flat thereafter. Absent from LBNL data."
+      values:
+        2008: 0.01
+        2009: 0.03
+        2010: 0.04
+        2011: 0.04
+        2012: 0.04
+        2013: 0.04
+        2014: 0.04
+        2015: 0.04
+        2016: 0.04
+        2017: 0.04
+        2018: 0.04
+        2019: 0.04
+        2020: 0.04
+        2021: 0.04
+        2022: 0.04
+        2023: 0.04
+        2024: 0.04
+        2025: 0.04
+        2026: 0.04
+        2027: 0.04
+        2028: 0.04
+        2029: 0.04
+        2030: 0.04
+        2031: 0.04
+        2032: 0.04
+        2033: 0.04
+        2034: 0.04
+        2035: 0.04

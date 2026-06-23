@@ -106,6 +106,35 @@
     .proj-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
     .data-table tr.grand-total td { font-weight: 700; border-top: 2px solid var(--border);
                                      background: var(--green-bg); }
+
+    /* Consolidated cross-program eligibility matrix */
+    .matrix-wrap { overflow-x: auto; }
+    .matrix { border-collapse: collapse; font-size: 12px; min-width: 100%; }
+    .matrix th, .matrix td { border: 1px solid var(--border); }
+    .matrix thead th { background: var(--gray-light); vertical-align: bottom; padding: 6px 4px; }
+    .matrix thead th.tech { height: 116px; padding: 6px 2px; }
+    .matrix thead th.tech > span { writing-mode: vertical-rl; transform: rotate(180deg);
+                                    white-space: nowrap; font-size: 11px; font-weight: 600;
+                                    text-align: left; }
+    .matrix th.prog-col { text-align: left; min-width: 150px; vertical-align: bottom;
+                          font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
+                          color: var(--gray); }
+    .matrix td.prog-name { text-align: left; font-weight: 600; padding: 6px 10px;
+                           background: var(--green-bg); white-space: nowrap; }
+    .matrix td.cell { text-align: center; padding: 5px 4px; vertical-align: middle;
+                      min-width: 52px; }
+    .matrix td.cell .sym { font-size: 14px; font-weight: 700; line-height: 1; }
+    .matrix td.cell .cell-note { display: block; font-size: 10px; line-height: 1.2;
+                                 margin-top: 2px; color: #555; }
+    .matrix td.c-true        { background: #f3fbf6; }
+    .matrix td.c-true .sym       { color: #2d6a4f; }
+    .matrix td.c-conditional { background: var(--conditional-bg); }
+    .matrix td.c-conditional .sym{ color: var(--conditional); }
+    .matrix td.c-false       { background: var(--false-bg); }
+    .matrix td.c-false .sym      { color: var(--false-text); }
+    .matrix-legend { font-size: 12px; color: var(--gray); margin-top: 8px;
+                     display: flex; flex-wrap: wrap; gap: 16px; }
+    .matrix-legend .sym { font-weight: 700; }
   </style>
 </head>
 <body>
@@ -114,7 +143,7 @@
   <!-- State Header -->
   <div class="state-header">
     <h1>Vermont (VT) — RPS & CES Programs</h1>
-    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-04-24
+    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-06-23
       &nbsp;|&nbsp; Last reviewed 2026-04-23
     </div>
 
@@ -149,6 +178,322 @@
       
     </div>
   </div>
+
+  <!-- Numerical Data (targets, sales & demand) — top of page -->
+  
+  <div class="section">
+    <h2>RPS &amp; CES Targets (%)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr class="">
+          <td>DG Carve-Out (Wtd. Avg.)</td><td>5.2%</td><td>5.8%</td><td>7.8%</td><td>9.7%</td><td>11.7%</td><td>13.7%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS (Wtd. Avg.)</td><td>63.0%</td><td>63.0%</td><td>67.0%</td><td>71.0%</td><td>75.0%</td><td>79.0%</td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
+        
+        <tr><td>Statewide Sales</td><td>5,398</td><td>5,347</td><td>5,324</td><td>5,413</td><td>5,497</td><td>5,601</td></tr>
+        
+        <tr><td>RPS-Applicable Sales</td><td>5,398</td><td>5,347</td><td>5,324</td><td>5,413</td><td>5,497</td><td>5,601</td></tr>
+        
+        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
+        
+        <tr class="">
+          <td>DG Carve-Out</td><td>281</td><td>310</td><td>414</td><td>527</td><td>644</td><td>766</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>3,401</td><td>3,368</td><td>3,567</td><td>3,843</td><td>4,123</td><td>4,425</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <p class="proj-note">* 2026+ values are LBNL projections. Class III (where shown)
+       is a supplemental series not present in LBNL data — see program detail below.</p>
+  </div>
+  
+
+  <!-- Consolidated technology eligibility matrix -->
+  
+  <div class="section">
+    <h2>Technology Eligibility by Standard</h2>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th class="prog-col">Portfolio Standard</th>
+            <th class="tech"><span>Solar PV</span></th><th class="tech"><span>Wind</span></th><th class="tech"><span>Offshore Wind</span></th><th class="tech"><span>Hydro (RoR)</span></th><th class="tech"><span>Hydro (Large)</span></th><th class="tech"><span>Biomass</span></th><th class="tech"><span>Biogas / LFG</span></th><th class="tech"><span>MSW</span></th><th class="tech"><span>Geothermal</span></th><th class="tech"><span>Storage</span></th><th class="tech"><span>Fuel Cell</span></th><th class="tech"><span>Demand Resp.</span></th><th class="tech"><span>electric_vehicles</span></th><th class="tech"><span>heat_pumps</span></th><th class="tech"><span>weatherization</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td class="prog-name">Renewable Energy Standard (RES) — Tiers I, II, IV & V</td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+          </tr>
+          
+          <tr>
+            <td class="prog-name">Renewable Energy Standard — Tier III (Energy Transformation)</td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+          </tr>
+          
+          <tr>
+            <td class="prog-name">Standard Offer Program</td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    <div class="matrix-legend">
+      <span><span class="sym" style="color:#2d6a4f;">✓</span> Eligible</span>
+      <span><span class="sym" style="color:var(--conditional);">◐</span> Conditional</span>
+      <span><span class="sym" style="color:var(--false-text);">—</span> Not eligible</span>
+      <span>Cell notes are summaries; see each program below for full conditions.</span>
+    </div>
+  </div>
+  
 
   <!-- Programs -->
   <div class="section">
@@ -849,55 +1194,6 @@ or Burlington Electric. Pricing set through PUC competitive procurement process.
     </div><!-- program -->
     
   </div>
-
-  <!-- Numerical Data -->
-  
-  <div class="section">
-    <h2>RPS & CES Targets (%)</h2>
-    <table class="data-table">
-      <thead>
-        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
-      </thead>
-      <tbody>
-        
-        <tr class="">
-          <td>DG Carve-Out (Wtd. Avg.)</td><td>5.2%</td><td>5.8%</td><td>7.8%</td><td>9.7%</td><td>11.7%</td><td>13.7%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Total RPS (Wtd. Avg.)</td><td>63.0%</td><td>63.0%</td><td>67.0%</td><td>71.0%</td><td>75.0%</td><td>79.0%</td>
-        </tr>
-        
-      </tbody>
-    </table>
-
-    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
-    <table class="data-table">
-      <thead>
-        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
-      </thead>
-      <tbody>
-        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
-        
-        <tr><td>Statewide Sales</td><td>5,398</td><td>5,347</td><td>5,324</td><td>5,413</td><td>5,497</td><td>5,601</td></tr>
-        
-        <tr><td>RPS-Applicable Sales</td><td>5,398</td><td>5,347</td><td>5,324</td><td>5,413</td><td>5,497</td><td>5,601</td></tr>
-        
-        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
-        
-        <tr class="">
-          <td>DG Carve-Out</td><td>281</td><td>310</td><td>414</td><td>527</td><td>644</td><td>766</td>
-        </tr>
-        
-        <tr class="">
-          <td>Total RPS</td><td>3,401</td><td>3,368</td><td>3,567</td><td>3,843</td><td>4,123</td><td>4,425</td>
-        </tr>
-        
-      </tbody>
-    </table>
-    <p class="proj-note">* 2026+ values are LBNL projections.</p>
-  </div>
-  
 
 </div>
 </body>

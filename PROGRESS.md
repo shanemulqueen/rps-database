@@ -20,7 +20,7 @@ To regenerate a state's HTML after editing its YAML:
 | State | Status | Programs Captured | Notes |
 |---|---|---|---|
 | MA | 🔄 | Class I RPS, Class II RPS, CES, CES-E, APS | Initial build complete. Needs field verification. |
-| CT | 🔄 | Class I RPS, Class II RPS, Class III RPS, Zero-Carbon Procurement (Millstone) | Initial build complete. Note: CT uses "procurement" not formal ZEC credits. |
+| CT | ✅ | Class I RPS, Class II RPS, Class III RPS, Zero-Carbon Procurement (Millstone) | Full review + revamp (template state). Class III (4% CHP/C&LM, absent from LBNL) added via supplemental_data and now in numerical tables. Class I note corrected for PA 23-102 (−7 pts 2026–2030). New page layout: targets/sales/demand at top, consolidated tech-eligibility matrix before program detail. OPEN: LBNL Class II=4% vs statutory 3% adder — flagged, not overridden. |
 | RI | 🔄 | RES, Long-Term Contracting Standard, REG Program | Initial build complete. RI calls it RES not RPS; 100% by 2033. Block Island Wind Farm mechanism captured. |
 | NH | 🔄 | RPS (Class I, II, III, IV + Class I Thermal sub-class) | Initial build complete. Admin transferred PUC → NH DOE in 2021. Class I Thermal unique in New England. |
 | ME | 🔄 | Class I/IA RPS, Class II RPS, Offshore Wind Procurement | Initial build complete. LD 1868 (2025) updated to 90% by 2040. DOER launched Sept 2025. NAR registry for northern ME. |

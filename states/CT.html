@@ -106,6 +106,35 @@
     .proj-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
     .data-table tr.grand-total td { font-weight: 700; border-top: 2px solid var(--border);
                                      background: var(--green-bg); }
+
+    /* Consolidated cross-program eligibility matrix */
+    .matrix-wrap { overflow-x: auto; }
+    .matrix { border-collapse: collapse; font-size: 12px; min-width: 100%; }
+    .matrix th, .matrix td { border: 1px solid var(--border); }
+    .matrix thead th { background: var(--gray-light); vertical-align: bottom; padding: 6px 4px; }
+    .matrix thead th.tech { height: 116px; padding: 6px 2px; }
+    .matrix thead th.tech > span { writing-mode: vertical-rl; transform: rotate(180deg);
+                                    white-space: nowrap; font-size: 11px; font-weight: 600;
+                                    text-align: left; }
+    .matrix th.prog-col { text-align: left; min-width: 150px; vertical-align: bottom;
+                          font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
+                          color: var(--gray); }
+    .matrix td.prog-name { text-align: left; font-weight: 600; padding: 6px 10px;
+                           background: var(--green-bg); white-space: nowrap; }
+    .matrix td.cell { text-align: center; padding: 5px 4px; vertical-align: middle;
+                      min-width: 52px; }
+    .matrix td.cell .sym { font-size: 14px; font-weight: 700; line-height: 1; }
+    .matrix td.cell .cell-note { display: block; font-size: 10px; line-height: 1.2;
+                                 margin-top: 2px; color: #555; }
+    .matrix td.c-true        { background: #f3fbf6; }
+    .matrix td.c-true .sym       { color: #2d6a4f; }
+    .matrix td.c-conditional { background: var(--conditional-bg); }
+    .matrix td.c-conditional .sym{ color: var(--conditional); }
+    .matrix td.c-false       { background: var(--false-bg); }
+    .matrix td.c-false .sym      { color: var(--false-text); }
+    .matrix-legend { font-size: 12px; color: var(--gray); margin-top: 8px;
+                     display: flex; flex-wrap: wrap; gap: 16px; }
+    .matrix-legend .sym { font-weight: 700; }
   </style>
 </head>
 <body>
@@ -114,8 +143,8 @@
   <!-- State Header -->
   <div class="state-header">
     <h1>Connecticut (CT) — RPS & CES Programs</h1>
-    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-04-24
-      &nbsp;|&nbsp; Last reviewed 2026-04-23
+    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-06-23
+      &nbsp;|&nbsp; Last reviewed 2026-06-23
     </div>
 
     <div class="state-meta-row">
@@ -150,6 +179,434 @@
     </div>
   </div>
 
+  <!-- Numerical Data (targets, sales & demand) — top of page -->
+  
+  <div class="section">
+    <h2>RPS &amp; CES Targets (%)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr class="">
+          <td>Class I</td><td>28.0%</td><td>30.0%</td><td>25.0%</td><td>26.0%</td><td>27.0%</td><td>28.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class II</td><td>4.0%</td><td>4.0%</td><td>4.0%</td><td>4.0%</td><td>4.0%</td><td>4.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class III</td><td>4.0%</td><td>4.0%</td><td>4.0%</td><td>4.0%</td><td>4.0%</td><td>4.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total CES</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>32.0%</td><td>34.0%</td><td>29.0%</td><td>30.0%</td><td>31.0%</td><td>32.0%</td>
+        </tr>
+        
+        <tr class="grand-total">
+          <td>Grand Total</td><td>36.0%</td><td>38.0%</td><td>33.0%</td><td>34.0%</td><td>35.0%</td><td>36.0%</td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
+        
+        <tr><td>Statewide Sales</td><td>26,791</td><td>26,538</td><td>26,425</td><td>26,865</td><td>27,286</td><td>27,799</td></tr>
+        
+        <tr><td>RPS-Applicable Sales</td><td>26,791</td><td>26,538</td><td>26,425</td><td>26,865</td><td>27,286</td><td>27,799</td></tr>
+        
+        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
+        
+        <tr class="">
+          <td>CES (incremental to RPS)</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class I</td><td>7,502</td><td>7,961</td><td>6,606</td><td>6,985</td><td>7,367</td><td>7,784</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class II</td><td>1,072</td><td>1,062</td><td>1,057</td><td>1,075</td><td>1,091</td><td>1,112</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class III</td><td>1,072</td><td>1,062</td><td>1,057</td><td>1,075</td><td>1,091</td><td>1,112</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>8,573</td><td>9,023</td><td>7,663</td><td>8,059</td><td>8,459</td><td>8,896</td>
+        </tr>
+        
+        <tr class="grand-total">
+          <td>Grand Total</td><td>9,645</td><td>10,084</td><td>8,720</td><td>9,134</td><td>9,550</td><td>10,008</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <p class="proj-note">* 2026+ values are LBNL projections. Class III (where shown)
+       is a supplemental series not present in LBNL data — see program detail below.</p>
+  </div>
+  
+
+  <!-- Consolidated technology eligibility matrix -->
+  
+  <div class="section">
+    <h2>Technology Eligibility by Standard</h2>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th class="prog-col">Portfolio Standard</th>
+            <th class="tech"><span>Solar PV</span></th><th class="tech"><span>Wind</span></th><th class="tech"><span>Offshore Wind</span></th><th class="tech"><span>Hydro (RoR)</span></th><th class="tech"><span>Hydro (Large)</span></th><th class="tech"><span>Biomass</span></th><th class="tech"><span>Biogas / LFG</span></th><th class="tech"><span>MSW</span></th><th class="tech"><span>Geothermal</span></th><th class="tech"><span>Storage</span></th><th class="tech"><span>Nuclear</span></th><th class="tech"><span>Fuel Cell</span></th><th class="tech"><span>CHP</span></th><th class="tech"><span>C&LM</span></th><th class="tech"><span>Waste Heat</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td class="prog-name">Class I RPS</td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">Post-2003 / incremental</span>
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              <span class="cell-note">Emissions & fuel limits</span>
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">Fuel pathway cert.</span>
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              <span class="cell-note">Paired w/ Class I gen</span>
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">Renewable fuel only</span>
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+          </tr>
+          
+          <tr>
+            <td class="prog-name">Class II RPS</td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">Pre-2003 vintage</span>
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">Existing facilities</span>
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">Pre-2004 facilities</span>
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">Primary Class II resource</span>
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+          </tr>
+          
+          <tr>
+            <td class="prog-name">Class III RPS</td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">Natural gas OK</span>
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">≥50% eff., post-2006</span>
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">Non-ratepayer-funded</span>
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">Installed post-Apr 2007</span>
+            </td>
+            
+          </tr>
+          
+          <tr>
+            <td class="prog-name">Zero-Carbon Procurement (Millstone)</td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">Zero-carbon hydro</span>
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">In-region or imported</span>
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              <span class="cell-note">Millstone (primary)</span>
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+            <td class="cell c-false">
+              <span class="sym">—</span>
+              
+            </td>
+            
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    <div class="matrix-legend">
+      <span><span class="sym" style="color:#2d6a4f;">✓</span> Eligible</span>
+      <span><span class="sym" style="color:var(--conditional);">◐</span> Conditional</span>
+      <span><span class="sym" style="color:var(--false-text);">—</span> Not eligible</span>
+      <span>Cell notes are summaries; see each program below for full conditions.</span>
+    </div>
+  </div>
+  
+
   <!-- Programs -->
   <div class="section">
     <h2>Programs</h2>
@@ -172,7 +629,8 @@
       <div class="program-body">
 
         
-        <div class="program-note">Class I covers new renewable resources that began commercial operation on or after July 1, 2003. Target escalates to 40% by 2030. Municipal electric utilities are subject to a separate, lower standard under § 16-245a(b).</div>
+        <div class="program-note">Class I covers new renewable resources that began commercial operation on or after July 1, 2003. Under PA 18-50 the standard had been scheduled to climb toward roughly 40% by 2030, but Public Act 23-102 (2023) cut the Class I requirement by 7 percentage points for compliance years 2026 through 2030 to ease ratepayer cost — the requirement drops from 30% (2025) to 25% (2026) and rises to about 29% by 2030. Municipal electric utilities are subject to a separate, lower standard under § 16-245a(b).
+</div>
         
 
         
@@ -200,7 +658,15 @@
                 <span class="amend-year">2018</span>
                 <a href="https://www.cga.ct.gov/2018/act/pa/2018PA-00050-R00SB-00009-PA.htm">An Act Concerning Connecticut's Energy Future (Public Act 18-50)</a>
                 
-                <div class="amend-note">Increased Class I target to 26% by 2023, escalating to 40% by 2030; replaced net metering with tariff-based programs</div>
+                <div class="amend-note">Increased Class I target to 26% by 2023, escalating toward 40% by 2030; replaced net metering with tariff-based programs</div>
+              </div>
+              
+              <div class="leg-amend">
+                <span class="amend-year">2023</span>
+                <a href="https://www.cga.ct.gov/2023/act/pa/pdf/2023PA-00102-R00HB-06850-PA.PDF">An Act Concerning the Disposal of Renewable Energy Credits (Public Act 23-102)</a>
+                
+                <div class="amend-note">Reduced the Class I requirement by 7 percentage points for 2026–2030 (e.g., 32%→25% in 2026, ending near 29% in 2030); directed PURA to establish procedures to dispose of RECs purchased under renewable tariffs and procurements; directed the state to procure new zero-carbon Class I resources equal to 7% of load on top of the RPS.
+</div>
               </div>
               
             </div>
@@ -402,7 +868,8 @@
       <div class="program-body">
 
         
-        <div class="program-note">Class II covers older renewable and waste resources — primarily MSW, biomass, and hydro that predates the Class I commercial operation cutoff. A 4% Class II (or additional Class I) requirement applies.</div>
+        <div class="program-note">Class II covers older and waste-derived resources — primarily permitted trash-to-energy (MSW) facilities, certain existing biomass, and hydro that predates the July 1, 2003 Class I commercial-operation cutoff. Statute frames this as a "Class I or Class II" adder of 3% (suppliers may also meet it with surplus Class I). NOTE: LBNL data encodes the Class II line at 4% — discrepancy flagged for review.
+</div>
         
 
         
@@ -537,7 +1004,7 @@
                   <span class="elig-badge badge-true">Eligible</span>
                   
                 </td>
-                <td><div class="elig-condition">Municipal solid waste combustion is the primary Class II resource. Facilities must meet air quality standards.</div></td>
+                <td><div class="elig-condition">Permitted municipal solid waste (trash-to-energy) combustion is the primary Class II resource. Facilities must hold a § 22a-208a permit and meet air-quality standards.</div></td>
               </tr>
             
               
@@ -608,7 +1075,7 @@
         <div class="program-meta">
           <span>RPS</span>
           <span>CT PURA</span>
-          <span class="cite">C.G.S. § 16-245a</span>
+          <span class="cite">C.G.S. § 16-245a(a)(2)</span>
           <span>Applies to: EDC, Retail Supplier</span>
         </div>
       </div>
@@ -616,7 +1083,8 @@
       <div class="program-body">
 
         
-        <div class="program-note">Class III is a distinct efficiency and CHP standard, separate from the renewable tiers. Covers combined heat and power (non-renewable fuel), electricity savings from CHP, and conservation and load management programs. 4% requirement as of 2010.</div>
+        <div class="program-note">Class III is a distinct efficiency / combined-heat-and-power standard, separate from the renewable Class I and Class II tiers. The requirement began at 1% in 2008, rose to 3% in 2009 and 4% on and after January 1, 2010, and has remained flat at 4% since. It is met with Class III certificates (C3RECs) for: customer-sided CHP (min. 50% operating efficiency) installed on/after Jan 1, 2006; verified electricity savings from conservation & load-management programs begun on/after Jan 1, 2006 (ratepayer-funded program savings are excluded from 2014); and waste-heat / waste-pressure recovery systems installed on/after April 1, 2007.
+</div>
         
 
         
@@ -629,7 +1097,18 @@
               
               &nbsp;<span style="color:var(--gray);font-weight:400;">enacted 1998</span>
             </div>
-            <div class="leg-role">Established Class III for CHP and efficiency resources</div>
+            <div class="leg-role">RPS framework; Class III for CHP, conservation and load management added by subsequent energy legislation (notably PA 07-242)</div>
+            
+            <div class="leg-amendments">
+              
+              <div class="leg-amend">
+                <span class="amend-year">2007</span>
+                <a href="https://www.cga.ct.gov/2007/act/pa/2007PA-00242-R00SB-01368-PA.htm">An Act Concerning Electricity and Energy Efficiency (Public Act 07-242)</a>
+                
+                <div class="amend-note">Established the Class III standard (1% in 2008 rising to 4% by 2010) for customer CHP, conservation & load management, and waste-heat recovery.</div>
+              </div>
+              
+            </div>
             
           </div>
           
@@ -639,9 +1118,7 @@
         
         <div class="req-block">
           <h4>Generation Requirements</h4>
-          <p>Class III certificates (C3RECs) are issued by NEPOOL GIS. CHP systems must meet
-efficiency standards. Conservation and load management savings are verified
-by PURA-approved measurement and verification protocols.</p>
+          <p>Class III certificates (C3RECs) are issued by NEPOOL GIS. CHP systems must meet the 50% minimum operating-efficiency standard; conservation and load-management savings are verified under PURA-approved measurement and verification protocols.</p>
         </div>
         
 
@@ -837,7 +1314,8 @@ by PURA-approved measurement and verification protocols.</p>
       <div class="program-body">
 
         
-        <div class="program-note">Not a certificate/credit program. DEEP is authorized to solicit long-term power purchase agreements from zero-carbon generators. In 2019, Millstone Nuclear Power Station (Dominion) secured a 10-year PPA for ~9 million MWh/year (approx. 50% of output) at $49.99/MWh, running through 2029. Distribution companies are required to enter the resulting PPAs approved by PURA.</div>
+        <div class="program-note">Not a certificate/credit program. DEEP is authorized to solicit long-term power purchase agreements from zero-carbon generators. In 2019, Millstone Nuclear Power Station (Dominion) secured a 10-year PPA for ~9 million MWh/year (approx. 50% of output) at $49.99/MWh, running through 2029, with distribution companies required to enter the PURA-approved PPAs. Separately, Public Act 23-102 (2023) directs the state to procure new zero-carbon Class I resources equal to 7% of load, in addition to the RPS.
+</div>
         
 
         
@@ -862,10 +1340,7 @@ by PURA-approved measurement and verification protocols.</p>
         
         <div class="req-block">
           <h4>Procurement Requirements</h4>
-          <p>DEEP issues competitive solicitations for zero-carbon electricity. Contracts
-are long-term PPAs (3–10 years for nuclear/hydro). PURA reviews and approves
-all selected contracts. Distribution companies take title to the energy under
-the approved PPAs. Total annual contracted volume capped at 12 million MWh.</p>
+          <p>DEEP issues competitive solicitations for zero-carbon electricity. Contracts are long-term PPAs (3–10 years for nuclear/hydro). PURA reviews and approves all selected contracts. Distribution companies take title to the energy under the approved PPAs. Total annual contracted volume capped at 12 million MWh.</p>
         </div>
         
 
@@ -1043,75 +1518,6 @@ the approved PPAs. Total annual contracted volume capped at 12 million MWh.</p>
     </div><!-- program -->
     
   </div>
-
-  <!-- Numerical Data -->
-  
-  <div class="section">
-    <h2>RPS & CES Targets (%)</h2>
-    <table class="data-table">
-      <thead>
-        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
-      </thead>
-      <tbody>
-        
-        <tr class="">
-          <td>Class I</td><td>28.0%</td><td>30.0%</td><td>25.0%</td><td>26.0%</td><td>27.0%</td><td>28.0%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Class II</td><td>4.0%</td><td>4.0%</td><td>4.0%</td><td>4.0%</td><td>4.0%</td><td>4.0%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Total CES</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Total RPS</td><td>32.0%</td><td>34.0%</td><td>29.0%</td><td>30.0%</td><td>31.0%</td><td>32.0%</td>
-        </tr>
-        
-      </tbody>
-    </table>
-
-    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
-    <table class="data-table">
-      <thead>
-        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
-      </thead>
-      <tbody>
-        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
-        
-        <tr><td>Statewide Sales</td><td>26,791</td><td>26,538</td><td>26,425</td><td>26,865</td><td>27,286</td><td>27,799</td></tr>
-        
-        <tr><td>RPS-Applicable Sales</td><td>26,791</td><td>26,538</td><td>26,425</td><td>26,865</td><td>27,286</td><td>27,799</td></tr>
-        
-        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
-        
-        <tr class="">
-          <td>CES (incremental to RPS)</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
-        </tr>
-        
-        <tr class="">
-          <td>Class I</td><td>7,502</td><td>7,961</td><td>6,606</td><td>6,985</td><td>7,367</td><td>7,784</td>
-        </tr>
-        
-        <tr class="">
-          <td>Class II</td><td>1,072</td><td>1,062</td><td>1,057</td><td>1,075</td><td>1,091</td><td>1,112</td>
-        </tr>
-        
-        <tr class="">
-          <td>Total RPS</td><td>8,573</td><td>9,023</td><td>7,663</td><td>8,059</td><td>8,459</td><td>8,896</td>
-        </tr>
-        
-        <tr class="grand-total">
-          <td>Grand Total</td><td>8,573</td><td>9,023</td><td>7,663</td><td>8,059</td><td>8,459</td><td>8,896</td>
-        </tr>
-        
-      </tbody>
-    </table>
-    <p class="proj-note">* 2026+ values are LBNL projections.</p>
-  </div>
-  
 
 </div>
 </body>

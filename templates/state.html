@@ -106,6 +106,35 @@
     .proj-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
     .data-table tr.grand-total td { font-weight: 700; border-top: 2px solid var(--border);
                                      background: var(--green-bg); }
+
+    /* Consolidated cross-program eligibility matrix */
+    .matrix-wrap { overflow-x: auto; }
+    .matrix { border-collapse: collapse; font-size: 12px; min-width: 100%; }
+    .matrix th, .matrix td { border: 1px solid var(--border); }
+    .matrix thead th { background: var(--gray-light); vertical-align: bottom; padding: 6px 4px; }
+    .matrix thead th.tech { height: 116px; padding: 6px 2px; }
+    .matrix thead th.tech > span { writing-mode: vertical-rl; transform: rotate(180deg);
+                                    white-space: nowrap; font-size: 11px; font-weight: 600;
+                                    text-align: left; }
+    .matrix th.prog-col { text-align: left; min-width: 150px; vertical-align: bottom;
+                          font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
+                          color: var(--gray); }
+    .matrix td.prog-name { text-align: left; font-weight: 600; padding: 6px 10px;
+                           background: var(--green-bg); white-space: nowrap; }
+    .matrix td.cell { text-align: center; padding: 5px 4px; vertical-align: middle;
+                      min-width: 52px; }
+    .matrix td.cell .sym { font-size: 14px; font-weight: 700; line-height: 1; }
+    .matrix td.cell .cell-note { display: block; font-size: 10px; line-height: 1.2;
+                                 margin-top: 2px; color: #555; }
+    .matrix td.c-true        { background: #f3fbf6; }
+    .matrix td.c-true .sym       { color: #2d6a4f; }
+    .matrix td.c-conditional { background: var(--conditional-bg); }
+    .matrix td.c-conditional .sym{ color: var(--conditional); }
+    .matrix td.c-false       { background: var(--false-bg); }
+    .matrix td.c-false .sym      { color: var(--false-text); }
+    .matrix-legend { font-size: 12px; color: var(--gray); margin-top: 8px;
+                     display: flex; flex-wrap: wrap; gap: 16px; }
+    .matrix-legend .sym { font-weight: 700; }
   </style>
 </head>
 <body>
@@ -145,6 +174,82 @@
       {% endif %}
     </div>
   </div>
+
+  <!-- Numerical Data (targets, sales & demand) — top of page -->
+  {% if years %}
+  <div class="section">
+    <h2>RPS &amp; CES Targets (%)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Tier</th>{% for y in years %}<th>{{ y }}</th>{% endfor %}</tr>
+      </thead>
+      <tbody>
+        {% for row in targets_rows %}
+        <tr class="{{ 'grand-total' if row.is_grand_total else ('proj' if row.is_proj else '') }}">
+          <td>{{ row.tier }}</td>{% for v in row.vals %}<td>{{ v }}</td>{% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th></th>{% for y in years %}<th>{{ y }}</th>{% endfor %}</tr>
+      </thead>
+      <tbody>
+        <tr class="section-head"><td colspan="{{ years|length + 1 }}">Retail Sales</td></tr>
+        {% for row in sales_rows %}
+        <tr><td>{{ row.label }}</td>{% for v in row.vals %}<td>{{ v }}</td>{% endfor %}</tr>
+        {% endfor %}
+        <tr class="section-head"><td colspan="{{ years|length + 1 }}">RPS / CES Demand Obligation</td></tr>
+        {% for row in demand_rows %}
+        <tr class="{{ 'grand-total' if row.is_grand_total else ('proj' if row.is_proj else '') }}">
+          <td>{{ row.tier }}</td>{% for v in row.vals %}<td>{{ v }}</td>{% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="proj-note">* {{ proj_start }}+ values are LBNL projections. Class III (where shown)
+       is a supplemental series not present in LBNL data — see program detail below.</p>
+  </div>
+  {% endif %}
+
+  <!-- Consolidated technology eligibility matrix -->
+  {% if matrix_headers %}
+  <div class="section">
+    <h2>Technology Eligibility by Standard</h2>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th class="prog-col">Portfolio Standard</th>
+            {% for h in matrix_headers %}<th class="tech"><span>{{ h.label }}</span></th>{% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in matrix_rows %}
+          <tr>
+            <td class="prog-name">{{ row.name }}</td>
+            {% for cell in row.cells %}
+            <td class="cell c-{{ cell.cls }}">
+              <span class="sym">{{ cell.sym }}</span>
+              {% if cell.note %}<span class="cell-note">{{ cell.note }}</span>{% endif %}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="matrix-legend">
+      <span><span class="sym" style="color:#2d6a4f;">✓</span> Eligible</span>
+      <span><span class="sym" style="color:var(--conditional);">◐</span> Conditional</span>
+      <span><span class="sym" style="color:var(--false-text);">—</span> Not eligible</span>
+      <span>Cell notes are summaries; see each program below for full conditions.</span>
+    </div>
+  </div>
+  {% endif %}
 
   <!-- Programs -->
   <div class="section">
@@ -250,45 +355,6 @@
     </div><!-- program -->
     {% endfor %}
   </div>
-
-  <!-- Numerical Data -->
-  {% if years %}
-  <div class="section">
-    <h2>RPS & CES Targets (%)</h2>
-    <table class="data-table">
-      <thead>
-        <tr><th>Tier</th>{% for y in years %}<th>{{ y }}</th>{% endfor %}</tr>
-      </thead>
-      <tbody>
-        {% for row in targets_rows %}
-        <tr class="{{ 'grand-total' if row.is_grand_total else ('proj' if row.is_proj else '') }}">
-          <td>{{ row.tier }}</td>{% for v in row.vals %}<td>{{ v }}</td>{% endfor %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
-    <table class="data-table">
-      <thead>
-        <tr><th></th>{% for y in years %}<th>{{ y }}</th>{% endfor %}</tr>
-      </thead>
-      <tbody>
-        <tr class="section-head"><td colspan="{{ years|length + 1 }}">Retail Sales</td></tr>
-        {% for row in sales_rows %}
-        <tr><td>{{ row.label }}</td>{% for v in row.vals %}<td>{{ v }}</td>{% endfor %}</tr>
-        {% endfor %}
-        <tr class="section-head"><td colspan="{{ years|length + 1 }}">RPS / CES Demand Obligation</td></tr>
-        {% for row in demand_rows %}
-        <tr class="{{ 'grand-total' if row.is_grand_total else ('proj' if row.is_proj else '') }}">
-          <td>{{ row.tier }}</td>{% for v in row.vals %}<td>{{ v }}</td>{% endfor %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <p class="proj-note">* {{ proj_start }}+ values are LBNL projections.</p>
-  </div>
-  {% endif %}
 
 </div>
 </body>

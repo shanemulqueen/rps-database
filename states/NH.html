@@ -106,6 +106,35 @@
     .proj-note { font-size: 12px; color: var(--gray); margin-top: 6px; }
     .data-table tr.grand-total td { font-weight: 700; border-top: 2px solid var(--border);
                                      background: var(--green-bg); }
+
+    /* Consolidated cross-program eligibility matrix */
+    .matrix-wrap { overflow-x: auto; }
+    .matrix { border-collapse: collapse; font-size: 12px; min-width: 100%; }
+    .matrix th, .matrix td { border: 1px solid var(--border); }
+    .matrix thead th { background: var(--gray-light); vertical-align: bottom; padding: 6px 4px; }
+    .matrix thead th.tech { height: 116px; padding: 6px 2px; }
+    .matrix thead th.tech > span { writing-mode: vertical-rl; transform: rotate(180deg);
+                                    white-space: nowrap; font-size: 11px; font-weight: 600;
+                                    text-align: left; }
+    .matrix th.prog-col { text-align: left; min-width: 150px; vertical-align: bottom;
+                          font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
+                          color: var(--gray); }
+    .matrix td.prog-name { text-align: left; font-weight: 600; padding: 6px 10px;
+                           background: var(--green-bg); white-space: nowrap; }
+    .matrix td.cell { text-align: center; padding: 5px 4px; vertical-align: middle;
+                      min-width: 52px; }
+    .matrix td.cell .sym { font-size: 14px; font-weight: 700; line-height: 1; }
+    .matrix td.cell .cell-note { display: block; font-size: 10px; line-height: 1.2;
+                                 margin-top: 2px; color: #555; }
+    .matrix td.c-true        { background: #f3fbf6; }
+    .matrix td.c-true .sym       { color: #2d6a4f; }
+    .matrix td.c-conditional { background: var(--conditional-bg); }
+    .matrix td.c-conditional .sym{ color: var(--conditional); }
+    .matrix td.c-false       { background: var(--false-bg); }
+    .matrix td.c-false .sym      { color: var(--false-text); }
+    .matrix-legend { font-size: 12px; color: var(--gray); margin-top: 8px;
+                     display: flex; flex-wrap: wrap; gap: 16px; }
+    .matrix-legend .sym { font-weight: 700; }
   </style>
 </head>
 <body>
@@ -114,7 +143,7 @@
   <!-- State Header -->
   <div class="state-header">
     <h1>New Hampshire (NH) — RPS & CES Programs</h1>
-    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-04-24
+    <div class="meta">LBNL RPS Data, August 2025 &nbsp;|&nbsp; Generated 2026-06-23
       &nbsp;|&nbsp; Last reviewed 2026-04-23
     </div>
 
@@ -149,6 +178,164 @@
       
     </div>
   </div>
+
+  <!-- Numerical Data (targets, sales & demand) — top of page -->
+  
+  <div class="section">
+    <h2>RPS &amp; CES Targets (%)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr class="">
+          <td>Class I (Non-Thermal)</td><td>11.9%</td><td>12.8%</td><td>12.8%</td><td>12.8%</td><td>12.8%</td><td>12.8%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class I (Thermal)</td><td>2.2%</td><td>2.2%</td><td>2.2%</td><td>2.2%</td><td>2.2%</td><td>2.2%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class II (Solar Carve-Out)</td><td>0.7%</td><td>0.7%</td><td>0.7%</td><td>0.7%</td><td>0.7%</td><td>0.7%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class III (Existing Biomass/Methane)</td><td>1.0%</td><td>8.0%</td><td>8.0%</td><td>8.0%</td><td>8.0%</td><td>8.0%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class IV (Existing Small Hydro)</td><td>1.5%</td><td>1.5%</td><td>1.5%</td><td>1.5%</td><td>1.5%</td><td>1.5%</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>17.3%</td><td>25.2%</td><td>25.2%</td><td>25.2%</td><td>25.2%</td><td>25.2%</td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
+        
+        <tr><td>Statewide Sales</td><td>10,884</td><td>10,781</td><td>10,735</td><td>10,914</td><td>11,085</td><td>11,293</td></tr>
+        
+        <tr><td>RPS-Applicable Sales</td><td>10,884</td><td>10,781</td><td>10,735</td><td>10,914</td><td>11,085</td><td>11,293</td></tr>
+        
+        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
+        
+        <tr class="">
+          <td>Class I (Non-Thermal)</td><td>1,295</td><td>1,380</td><td>1,374</td><td>1,397</td><td>1,419</td><td>1,446</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class I (Thermal)</td><td>239</td><td>237</td><td>236</td><td>240</td><td>244</td><td>248</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class II (Solar Carve-Out)</td><td>76</td><td>75</td><td>75</td><td>76</td><td>78</td><td>79</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class III (Existing Biomass/Methane)</td><td>109</td><td>862</td><td>859</td><td>873</td><td>887</td><td>903</td>
+        </tr>
+        
+        <tr class="">
+          <td>Class IV (Existing Small Hydro)</td><td>163</td><td>162</td><td>161</td><td>164</td><td>166</td><td>169</td>
+        </tr>
+        
+        <tr class="">
+          <td>Total RPS</td><td>1,643</td><td>2,480</td><td>2,469</td><td>2,510</td><td>2,550</td><td>2,597</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <p class="proj-note">* 2026+ values are LBNL projections. Class III (where shown)
+       is a supplemental series not present in LBNL data — see program detail below.</p>
+  </div>
+  
+
+  <!-- Consolidated technology eligibility matrix -->
+  
+  <div class="section">
+    <h2>Technology Eligibility by Standard</h2>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th class="prog-col">Portfolio Standard</th>
+            <th class="tech"><span>Solar PV</span></th><th class="tech"><span>Wind</span></th><th class="tech"><span>Offshore Wind</span></th><th class="tech"><span>Hydro (RoR)</span></th><th class="tech"><span>Hydro (Large)</span></th><th class="tech"><span>Biomass</span></th><th class="tech"><span>Biogas / LFG</span></th><th class="tech"><span>Geothermal</span></th><th class="tech"><span>Fuel Cell</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td class="prog-name">Renewable Portfolio Standard</td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-true">
+              <span class="sym">✓</span>
+              
+            </td>
+            
+            <td class="cell c-conditional">
+              <span class="sym">◐</span>
+              
+            </td>
+            
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    <div class="matrix-legend">
+      <span><span class="sym" style="color:#2d6a4f;">✓</span> Eligible</span>
+      <span><span class="sym" style="color:var(--conditional);">◐</span> Conditional</span>
+      <span><span class="sym" style="color:var(--false-text);">—</span> Not eligible</span>
+      <span>Cell notes are summaries; see each program below for full conditions.</span>
+    </div>
+  </div>
+  
 
   <!-- Programs -->
   <div class="section">
@@ -407,87 +594,6 @@ useable thermal energy. All other classes: standard NEPOOL GIS REC issuance.</p>
     </div><!-- program -->
     
   </div>
-
-  <!-- Numerical Data -->
-  
-  <div class="section">
-    <h2>RPS & CES Targets (%)</h2>
-    <table class="data-table">
-      <thead>
-        <tr><th>Tier</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
-      </thead>
-      <tbody>
-        
-        <tr class="">
-          <td>Class I (Non-Thermal)</td><td>11.9%</td><td>12.8%</td><td>12.8%</td><td>12.8%</td><td>12.8%</td><td>12.8%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Class I (Thermal)</td><td>2.2%</td><td>2.2%</td><td>2.2%</td><td>2.2%</td><td>2.2%</td><td>2.2%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Class II (Solar Carve-Out)</td><td>0.7%</td><td>0.7%</td><td>0.7%</td><td>0.7%</td><td>0.7%</td><td>0.7%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Class III (Existing Biomass/Methane)</td><td>1.0%</td><td>8.0%</td><td>8.0%</td><td>8.0%</td><td>8.0%</td><td>8.0%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Class IV (Existing Small Hydro)</td><td>1.5%</td><td>1.5%</td><td>1.5%</td><td>1.5%</td><td>1.5%</td><td>1.5%</td>
-        </tr>
-        
-        <tr class="">
-          <td>Total RPS</td><td>17.3%</td><td>25.2%</td><td>25.2%</td><td>25.2%</td><td>25.2%</td><td>25.2%</td>
-        </tr>
-        
-      </tbody>
-    </table>
-
-    <h2 style="margin-top:28px;">Sales &amp; Program Demand (GWh)</h2>
-    <table class="data-table">
-      <thead>
-        <tr><th></th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th></tr>
-      </thead>
-      <tbody>
-        <tr class="section-head"><td colspan="7">Retail Sales</td></tr>
-        
-        <tr><td>Statewide Sales</td><td>10,884</td><td>10,781</td><td>10,735</td><td>10,914</td><td>11,085</td><td>11,293</td></tr>
-        
-        <tr><td>RPS-Applicable Sales</td><td>10,884</td><td>10,781</td><td>10,735</td><td>10,914</td><td>11,085</td><td>11,293</td></tr>
-        
-        <tr class="section-head"><td colspan="7">RPS / CES Demand Obligation</td></tr>
-        
-        <tr class="">
-          <td>Class I (Non-Thermal)</td><td>1,295</td><td>1,380</td><td>1,374</td><td>1,397</td><td>1,419</td><td>1,446</td>
-        </tr>
-        
-        <tr class="">
-          <td>Class I (Thermal)</td><td>239</td><td>237</td><td>236</td><td>240</td><td>244</td><td>248</td>
-        </tr>
-        
-        <tr class="">
-          <td>Class II (Solar Carve-Out)</td><td>76</td><td>75</td><td>75</td><td>76</td><td>78</td><td>79</td>
-        </tr>
-        
-        <tr class="">
-          <td>Class III (Existing Biomass/Methane)</td><td>109</td><td>862</td><td>859</td><td>873</td><td>887</td><td>903</td>
-        </tr>
-        
-        <tr class="">
-          <td>Class IV (Existing Small Hydro)</td><td>163</td><td>162</td><td>161</td><td>164</td><td>166</td><td>169</td>
-        </tr>
-        
-        <tr class="">
-          <td>Total RPS</td><td>1,643</td><td>2,480</td><td>2,469</td><td>2,510</td><td>2,550</td><td>2,597</td>
-        </tr>
-        
-      </tbody>
-    </table>
-    <p class="proj-note">* 2026+ values are LBNL projections.</p>
-  </div>
-  
 
 </div>
 </body>
