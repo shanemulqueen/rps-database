@@ -1,10 +1,15 @@
 state: NH
 name: New Hampshire
-last_reviewed: 2026-04-23
-reviewer_notes: Initial build. NH has four active RPS classes plus a Class I Thermal
-  sub-class for useful thermal energy (unique among New England states). Administration
-  transferred from PUC to new NH Department of Energy in 2021. Target is 25.2% by
-  2025 and thereafter — one of the lower New England targets.
+last_reviewed: 2026-06-23
+reviewer_notes: >
+  Full review. Split the single collapsed RPS program into New Hampshire's four statutory
+  classes (RSA 362-F): Class I (new renewables, incl. a Class I Thermal carve-out), Class II
+  (new solar), Class III (existing biomass/methane ≤25 MW), and Class IV (existing small hydro
+  ≤5 MW). Numerical targets are now driven by verified statutory schedules via targets_override
+  (LBNL had Class III at 1.0% for 2024 — it is statutorily 8.0%, which also corrected the 2024
+  total to 24.3%). Total RPS is 24.3% in 2024 and 25.2% in 2025 and each year thereafter (flat;
+  NH does not escalate after 2025). Administration transferred from the PUC to the NH Department
+  of Energy effective July 1, 2021.
 
 admin_authority:
   name: NH Department of Energy (DOE)
@@ -23,95 +28,269 @@ compliance_reports:
     url: https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard
   - label: RPS Compliance Information
     url: https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard/renewable-portfolio-standard-compliance
-  - label: Historical RPS Obligation Changes
-    url: https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard/historical-rps-obligation-changes
+  - label: Class III Obligation Reviews
+    url: https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard/renewable-portfolio-standard-proceedings
 
 programs:
 
-  - id: NH_RPS
-    name: Renewable Portfolio Standard
+  - id: NH_RPS_CLASS1
+    name: Class I RPS (New Renewables)
     type: rps
     administered_by: NH Department of Energy
     program_url: https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard
-    statutory_cite: RSA 362-F
+    statutory_cite: RSA 362-F:3, :4
     applicable_lses: [EDC, Retail Supplier]
-    note: NH's RPS has four active classes (I, II, III, IV) plus a Class I Thermal
-      sub-class. Class I covers new renewables; Class II is post-2006 solar with a
-      solar-specific ACP; Class III is pre-2006 biomass/methane (≤25 MW); Class IV
-      is pre-2006 small hydro (≤5 MW). Total target is 25.2% by 2025, one of the
-      lower mandates in New England. Administration transferred from PUC to the new
-      NH Department of Energy effective July 1, 2021.
+    note: >
+      Class I covers new renewable generation from facilities that began operation on or after
+      January 1, 2006 — wind, eligible biomass, methane/landfill gas, geothermal, ocean energy,
+      hydrogen from renewable sources, and new small hydro. The Class I requirement rises to
+      15.0% of load by 2025 (14.1% in 2024) and holds flat thereafter. Within Class I, a
+      Class I Thermal carve-out (RSA 362-F:3) must be met with useful thermal energy — solar
+      thermal, geothermal heat, eligible biomass thermal, and renewable-methane thermal — and
+      reaches 2.2% of load. Class I Thermal RECs are unique among the New England states.
     legislation:
       - bill: "Electric Renewable Portfolio Standard (Laws of 2007, Chapter 26)"
         enacted: 2007
         url: https://gc.nh.gov/rsa/html/XXXIV/362-F/362-F-mrg.htm
-        role: Original RPS enactment establishing Class I, II, III, and IV framework
+        role: Original RPS enactment establishing the Class I–IV framework
         amendments:
           - year: 2012
             bill: "Class I Thermal Amendment (Laws of 2012, Chapter 272)"
             url: https://gc.nh.gov/rsa/html/XXXIV/362-F/362-F-mrg.htm
-            note: Created Class I Thermal sub-class for useful thermal renewable energy (geothermal, solar thermal, biomass heat, methane heat); effective 2014; first NH-specific thermal REC program
-          - year: 2013
-            bill: "RPS Study Committee Amendments (Laws of 2013, Chapter 279)"
-            url: https://gc.nh.gov/rsa/html/XXXIV/362-F/362-F-mrg.htm
-            note: Modified Class I, I Thermal, and Class III obligations; established RPS study committee
-          - year: 2017
-            bill: "Clean Energy Jobs and Opportunity Act (Laws of 2017, Chapter 226)"
-            url: https://gc.nh.gov/rsa/html/XXXIV/362-F/362-F-mrg.htm
-            note: Increased Class III ACP from $45 to $55/REC; minimum 15% of residential REF funds to low-moderate income customers
+            note: Created the Class I Thermal carve-out for useful thermal renewable energy; effective 2013–2014
           - year: 2021
             bill: "Administrative Transfer (HB 2, 2021)"
             url: https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard
-            note: Transferred RPS administration and Renewable Energy Fund from NH PUC to new NH Department of Energy, effective July 1, 2021
-    generation_requirements: |
-      Class I Thermal RECs require metering, verification, and reporting of useful
-      thermal energy output per DOE protocols. Maximum credit value of $29/MWh of
-      useable thermal energy. All other classes: standard NEPOOL GIS REC issuance.
+            note: Transferred RPS administration and the Renewable Energy Fund from the PUC to the new NH Department of Energy, effective July 1, 2021
+    generation_requirements: >
+      Class I Thermal RECs require metering, verification, and reporting of useful thermal
+      output under DOE protocols. All classes settle through NEPOOL GIS; suppliers short of
+      RECs make an Alternative Compliance Payment (ACP) into the Renewable Energy Fund, with
+      the Class I ACP adjusted annually for inflation.
     procurement_requirements: null
     eligibility:
       solar_pv:
-        eligible: true
-        condition: Post-2006 solar qualifies as Class II with solar-specific Alternative
-          Compliance Payment. Pre-2006 solar is rare but would be Class I.
+        eligible: conditional
+        note_short: New solar → Class II
+        condition: New solar PV is generally certified under the solar-specific Class II
+          rather than Class I.
       wind:
         eligible: true
-        condition: All wind qualifies as Class I (new renewables).
       offshore_wind:
         eligible: true
-        condition: Class I eligible. NH has no offshore water but offshore wind
-          certificates from other New England states are eligible.
+        note_short: Out-of-state OSW RECs
+        condition: NH has no offshore waters, but qualifying offshore wind RECs from other
+          New England states are Class I eligible.
       hydro_run_of_river:
-        eligible: true
-        condition: New run-of-river hydro qualifies as Class I. Existing facilities
-          ≤5 MW operational before 2006 qualify as Class IV.
-      hydro_large:
         eligible: conditional
-        condition: Large hydro not eligible for Class I or Class IV. Only small hydro
-          (≤5 MW, pre-2006) is eligible under Class IV.
+        note_short: New small hydro only
+        condition: New run-of-river / small hydro that began operation on or after Jan 1, 2006
+          and meets environmental conditions. Existing small hydro is Class IV.
+      hydro_large:
+        eligible: false
+        note_short: Size-ineligible
+        condition: Large conventional hydro does not qualify for Class I.
       biomass_solid:
-        eligible: true
-        condition: New biomass facilities qualify as Class I. Pre-2006 biomass ≤25 MW
-          qualifies as Class III with its own ACP schedule. Class I Thermal sub-class
-          covers biomass heat systems producing useful thermal output.
+        eligible: conditional
+        note_short: Efficiency & air limits
+        condition: Eligible biomass meeting DOE efficiency and air-emission standards; new
+          biomass thermal output may count toward the Class I Thermal carve-out.
       biogas_lfg:
         eligible: true
-        condition: New landfill gas and methane facilities qualify as Class I. Pre-2006
-          landfill gas ≤10 MW qualifies as Class III.
+        note_short: Methane / LFG
+        condition: Landfill gas, anaerobic digester gas, and other methane sources eligible.
       msw:
         eligible: false
-        condition: MSW combustion not explicitly listed as an eligible resource class
-          under RSA 362-F.
       geothermal:
         eligible: true
-        condition: Electric geothermal qualifies as Class I. Geothermal heat (useful
-          thermal output) qualifies under the Class I Thermal sub-class.
+        note_short: Electric or thermal
+        condition: Geothermal electric qualifies as Class I; geothermal useful heat counts
+          toward the Class I Thermal carve-out.
       storage:
         eligible: false
-        condition: Standalone storage does not generate RECs. Paired storage with
-          a Class I source may qualify for the renewable attribute.
+        note_short: RECs on source gen
+        condition: Standalone storage does not generate RECs; renewable attributes attach to
+          the qualifying source generation.
       nuclear:
         eligible: false
       fuel_cell:
         eligible: conditional
-        condition: Fuel cells using renewable fuel (biogas, methane) qualify as Class I.
-          Natural gas fuel cells do not qualify.
+        note_short: Renewable fuel only
+        condition: Fuel cells running on biogas/renewable methane qualify; natural-gas fuel
+          cells do not.
+
+  - id: NH_RPS_CLASS2
+    name: Class II RPS (New Solar)
+    type: rps
+    administered_by: NH Department of Energy
+    program_url: https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard
+    statutory_cite: RSA 362-F:3, :4
+    applicable_lses: [EDC, Retail Supplier]
+    note: >
+      Class II is the solar-specific tier covering new solar electric facilities that began
+      operation on or after January 1, 2006. The requirement reaches 0.7% of load by 2025 and
+      holds flat thereafter. Class II carries the highest Alternative Compliance Payment of the
+      NH classes, reflecting the higher cost of distributed solar.
+    legislation:
+      - bill: "Electric Renewable Portfolio Standard (Laws of 2007, Chapter 26)"
+        enacted: 2007
+        url: https://gc.nh.gov/rsa/html/XXXIV/362-F/362-F-mrg.htm
+        role: Established the Class II solar tier
+    generation_requirements: null
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: true
+        note_short: Online ≥ Jan 1 2006
+        condition: New solar electric facilities that began commercial operation on or after
+          January 1, 2006.
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: false
+      hydro_run_of_river:
+        eligible: false
+      hydro_large:
+        eligible: false
+      biomass_solid:
+        eligible: false
+      biogas_lfg:
+        eligible: false
+      msw:
+        eligible: false
+      geothermal:
+        eligible: false
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false
+
+  - id: NH_RPS_CLASS3
+    name: Class III RPS (Existing Biomass / Methane)
+    type: rps
+    administered_by: NH Department of Energy
+    program_url: https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard
+    statutory_cite: RSA 362-F:3, :4
+    applicable_lses: [EDC, Retail Supplier]
+    note: >
+      Class III covers existing (pre-January 1, 2006) eligible biomass facilities of 25 MW or
+      less and existing methane sources. The statutory requirement is 8.0% of load and has held
+      at 8.0% through 2024. RSA 362-F:3 lets the Department adjust the Class III obligation
+      downward in some years based on market conditions; the figures shown are the statutory
+      8.0%. Class III RECs have historically traded heavily into Connecticut's Class I market.
+    legislation:
+      - bill: "Electric Renewable Portfolio Standard (Laws of 2007, Chapter 26)"
+        enacted: 2007
+        url: https://gc.nh.gov/rsa/html/XXXIV/362-F/362-F-mrg.htm
+        role: Established the Class III existing-biomass/methane tier
+        amendments:
+          - year: 2017
+            bill: "Clean Energy Jobs and Opportunity Act (Laws of 2017, Chapter 226)"
+            url: https://gc.nh.gov/rsa/html/XXXIV/362-F/362-F-mrg.htm
+            note: Raised the Class III Alternative Compliance Payment and directed Renewable Energy Fund support to low- and moderate-income customers
+    generation_requirements: null
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: false
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: false
+      hydro_run_of_river:
+        eligible: false
+      hydro_large:
+        eligible: false
+      biomass_solid:
+        eligible: true
+        note_short: "≤25 MW, pre-2006"
+        condition: Eligible biomass facilities of 25 MW or less that began operation before
+          January 1, 2006.
+      biogas_lfg:
+        eligible: true
+        note_short: Methane, pre-2006
+        condition: Existing methane (landfill gas / digester) sources that began operation
+          before January 1, 2006.
+      msw:
+        eligible: false
+      geothermal:
+        eligible: false
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false
+
+  - id: NH_RPS_CLASS4
+    name: Class IV RPS (Existing Small Hydro)
+    type: rps
+    administered_by: NH Department of Energy
+    program_url: https://www.energy.nh.gov/renewable-energy/renewable-portfolio-standard
+    statutory_cite: RSA 362-F:3, :4
+    applicable_lses: [EDC, Retail Supplier]
+    note: >
+      Class IV covers existing small hydroelectric facilities of 5 MW or less that began
+      operation before January 1, 2006 and that have installed required fish passage / meet
+      applicable environmental conditions. The requirement is 1.5% of load and holds flat.
+    legislation:
+      - bill: "Electric Renewable Portfolio Standard (Laws of 2007, Chapter 26)"
+        enacted: 2007
+        url: https://gc.nh.gov/rsa/html/XXXIV/362-F/362-F-mrg.htm
+        role: Established the Class IV existing-small-hydro tier
+    generation_requirements: null
+    procurement_requirements: null
+    eligibility:
+      solar_pv:
+        eligible: false
+      wind:
+        eligible: false
+      offshore_wind:
+        eligible: false
+      hydro_run_of_river:
+        eligible: true
+        note_short: "≤5 MW, pre-2006"
+        condition: Existing small hydro of 5 MW or less that began operation before January 1,
+          2006 and meets fish-passage / environmental conditions.
+      hydro_large:
+        eligible: false
+        note_short: Size-ineligible
+        condition: Facilities above 5 MW do not qualify for Class IV.
+      biomass_solid:
+        eligible: false
+      biogas_lfg:
+        eligible: false
+      msw:
+        eligible: false
+      geothermal:
+        eligible: false
+      storage:
+        eligible: false
+      nuclear:
+        eligible: false
+      fuel_cell:
+        eligible: false
+
+# Verified statutory schedule (RSA 362-F:3). Replaces LBNL target/demand figures for NH.
+# Totals: 24.3% (2024); 25.2% (2025 and each year thereafter). Flat after 2025.
+targets_override:
+  - tier: "Class I (Non-Thermal)"
+    source: "RSA 362-F:3"
+    values: {2024: 0.119, 2025: 0.128, 2026: 0.128, 2027: 0.128, 2028: 0.128, 2029: 0.128, 2030: 0.128, 2031: 0.128, 2032: 0.128, 2033: 0.128, 2034: 0.128, 2035: 0.128}
+  - tier: "Class I (Thermal)"
+    source: "RSA 362-F:3 thermal carve-out"
+    values: {2024: 0.022, 2025: 0.022, 2026: 0.022, 2027: 0.022, 2028: 0.022, 2029: 0.022, 2030: 0.022, 2031: 0.022, 2032: 0.022, 2033: 0.022, 2034: 0.022, 2035: 0.022}
+  - tier: "Class II (Solar)"
+    source: "RSA 362-F:3"
+    values: {2024: 0.007, 2025: 0.007, 2026: 0.007, 2027: 0.007, 2028: 0.007, 2029: 0.007, 2030: 0.007, 2031: 0.007, 2032: 0.007, 2033: 0.007, 2034: 0.007, 2035: 0.007}
+  - tier: "Class III (Existing Biomass/Methane)"
+    source: "RSA 362-F:3"
+    values: {2024: 0.08, 2025: 0.08, 2026: 0.08, 2027: 0.08, 2028: 0.08, 2029: 0.08, 2030: 0.08, 2031: 0.08, 2032: 0.08, 2033: 0.08, 2034: 0.08, 2035: 0.08}
+  - tier: "Class IV (Existing Small Hydro)"
+    source: "RSA 362-F:3"
+    values: {2024: 0.015, 2025: 0.015, 2026: 0.015, 2027: 0.015, 2028: 0.015, 2029: 0.015, 2030: 0.015, 2031: 0.015, 2032: 0.015, 2033: 0.015, 2034: 0.015, 2035: 0.015}
+  - tier: "Total RPS"
+    source: "RSA 362-F:3"
+    values: {2024: 0.243, 2025: 0.252, 2026: 0.252, 2027: 0.252, 2028: 0.252, 2029: 0.252, 2030: 0.252, 2031: 0.252, 2032: 0.252, 2033: 0.252, 2034: 0.252, 2035: 0.252}

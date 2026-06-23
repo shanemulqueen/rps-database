@@ -1,7 +1,12 @@
 state: MA
 name: Massachusetts
-last_reviewed: 2026-04-23
-reviewer_notes: Initial build. APS added beyond LBNL. Legislative history researched from malegislature.gov and mass.gov.
+last_reviewed: 2026-06-23
+reviewer_notes: >
+  Full review. Verified Class I schedule against statute/DSIRE: +2%/yr 2020–2024, +3%/yr
+  2025–2029, reaching 40% by 2030, then +1%/yr (LBNL figures match and are retained). CES
+  rises 2%/yr from 16% (2018) to 80% (2050); CES-E (existing nuclear/large hydro) at 26%. APS
+  is a separate standard (CHP, flywheel, demand response) carried via supplemental_data. Added
+  concise note_short fields for the consolidated eligibility matrix.
 
 admin_authority:
   name: MA Department of Energy Resources (DOER)
@@ -81,27 +86,33 @@ programs:
         eligible: true
       hydro_run_of_river:
         eligible: true
+        note_short: Incremental only
         condition: Incremental capacity additions or efficiency improvements at existing
           facilities qualify; baseline generation does not.
       hydro_large:
         eligible: false
+        note_short: ">30 MW ineligible"
         condition: Facilities above 30 MW nameplate not eligible unless generation is
           incremental to a pre-existing baseline.
       biomass_solid:
         eligible: conditional
+        note_short: GHG & efficiency std
         condition: Must meet 50% net lifecycle GHG reduction standard per 225 CMR 14.
           Dedicated biomass facilities must also meet efficiency thresholds.
       biogas_lfg:
         eligible: true
+        note_short: Fuel pathway req.
         condition: Landfill gas and anaerobic digestion gas eligible. Must meet fuel
           pathway requirements under DOER regulations.
       msw:
         eligible: false
+        note_short: Class II only
         condition: MSW combustion not eligible for Class I; eligible under Class II only.
       geothermal:
         eligible: true
       storage:
         eligible: conditional
+        note_short: Charged from Class I
         condition: Storage qualifies when charged exclusively from a Class I eligible
           source. RECs are issued based on discharge, not charge. Co-located and
           standalone systems both eligible.
@@ -109,6 +120,7 @@ programs:
         eligible: false
       fuel_cell:
         eligible: conditional
+        note_short: Renewable fuel only
         condition: Fuel cells using biogas or other Class I eligible fuel qualify.
           Natural gas fuel cells not eligible.
 
@@ -137,18 +149,22 @@ programs:
         eligible: false
       hydro_run_of_river:
         eligible: true
+        note_short: Pre-1998 existing
         condition: Existing facilities that do not qualify for Class I due to vintage
           or size. Must have operated prior to 1998.
       hydro_large:
         eligible: true
+        note_short: Existing RE tier
         condition: Existing large hydro eligible under Class II Existing RE tier.
       biomass_solid:
         eligible: true
+        note_short: Pre-1998 existing
         condition: Existing biomass facilities operating before 1998.
       biogas_lfg:
         eligible: true
       msw:
         eligible: true
+        note_short: MSW sub-tier
         condition: Municipal solid waste combustion facilities. Eligible under dedicated
           MSW sub-tier with separate annual target.
       geothermal:
@@ -206,11 +222,13 @@ programs:
         eligible: true
       hydro_large:
         eligible: true
+        note_short: Post-2018 / Quebec
         condition: Large hydro eligible under CES regardless of size, provided facility
           began operation or signed a qualifying contract after January 1, 2018. Primary
           mechanism for qualifying Quebec imports.
       biomass_solid:
         eligible: conditional
+        note_short: RPS GHG std
         condition: Must meet same GHG and efficiency standards as Class I RPS.
       biogas_lfg:
         eligible: true
@@ -220,13 +238,16 @@ programs:
         eligible: true
       storage:
         eligible: conditional
+        note_short: As Class I RPS
         condition: Same conditions as Class I RPS storage eligibility.
       nuclear:
         eligible: true
+        note_short: New / post-2018
         condition: New nuclear or nuclear with a qualifying post-2018 contract eligible.
           No existing in-state nuclear currently qualifies.
       fuel_cell:
         eligible: conditional
+        note_short: Clean hydrogen
         condition: Clean hydrogen fuel cells eligible. Must demonstrate low-carbon
           fuel supply chain.
 
@@ -257,6 +278,7 @@ programs:
         eligible: false
       hydro_large:
         eligible: true
+        note_short: Existing, pre-2018
         condition: Existing large hydro facilities with commercial operation date before
           2018. Primarily captures existing Quebec and Canadian imports.
       biomass_solid:
@@ -271,6 +293,7 @@ programs:
         eligible: false
       nuclear:
         eligible: true
+        note_short: Existing units
         condition: Existing nuclear facilities. Pilgrim (retired 2019) was eligible
           through its closure. No active in-state nuclear currently qualifies;
           provision exists for future nuclear.
@@ -328,21 +351,25 @@ programs:
         eligible: false
       storage:
         eligible: conditional
+        note_short: Flywheel only
         condition: Flywheel energy storage systems qualify. Battery storage not currently
           eligible under APS.
       nuclear:
         eligible: false
       fuel_cell:
         eligible: conditional
+        note_short: CHP fuel cells
         condition: CHP fuel cells meeting efficiency threshold qualify. Stand-alone
           fuel cells do not.
     aps_specific_eligibility:
       chp:
         eligible: true
+        note_short: "≥42.5% efficiency"
         condition: Combined heat and power systems with minimum 42.5% efficiency
           (natural gas) or 40% (other fuels). Both electric and thermal output credited.
       demand_response:
         eligible: true
+        note_short: ISO-NE registered
         condition: ISO-NE registered demand response resources. Credits issued based
           on verified load reduction.
       flywheel_storage:

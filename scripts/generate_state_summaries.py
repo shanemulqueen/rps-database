@@ -297,6 +297,8 @@ def generate_state(state, dfs, years, env):
     compliance_reports = []
     supp_targets = pd.DataFrame()
     supp_demand = pd.DataFrame()
+    ov_targets = pd.DataFrame()
+    ov_demand = pd.DataFrame()
 
     if yaml_path.exists():
         with open(yaml_path) as f:
@@ -306,13 +308,23 @@ def generate_state(state, dfs, years, env):
         admin_authority = data.get("admin_authority")
         rec_registry = data.get("rec_registry")
         compliance_reports = data.get("compliance_reports", [])
+        sr_all = dfs["rps_applicable"][dfs["rps_applicable"]["state"] == state]
         if "supplemental_data" in data:
-            sr_all = dfs["rps_applicable"][dfs["rps_applicable"]["state"] == state]
             supp_targets, supp_demand = build_supplemental(
                 data["supplemental_data"], state, sr_all)
+        # targets_override: verified per-tier schedules that fully replace LBNL's
+        # target and demand figures for this state (LBNL is a seed, not authoritative).
+        if "targets_override" in data:
+            ov_targets, ov_demand = build_supplemental(
+                {"targets": data["targets_override"]}, state, sr_all)
 
-    st = dfs["targets"][dfs["targets"]["state"] == state]
-    sd = dfs["demand"][dfs["demand"]["state"] == state]
+    overriding = not ov_targets.empty
+    if overriding:
+        st = ov_targets
+        sd = ov_demand
+    else:
+        st = dfs["targets"][dfs["targets"]["state"] == state]
+        sd = dfs["demand"][dfs["demand"]["state"] == state]
     ss = dfs["statewide"][dfs["statewide"]["state"] == state]
     sr = dfs["rps_applicable"][dfs["rps_applicable"]["state"] == state]
 
@@ -345,6 +357,7 @@ def generate_state(state, dfs, years, env):
         sales_rows=sales_rows,
         demand_rows=demand_rows,
         proj_start=proj_start,
+        overriding=overriding,
         matrix_headers=matrix_headers,
         matrix_rows=matrix_rows,
     )

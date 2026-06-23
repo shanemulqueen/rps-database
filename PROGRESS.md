@@ -16,6 +16,16 @@ To pick up a session: read this file, then open the next state marked 🔲 and b
 To regenerate a state's HTML after editing its YAML:
   `python scripts/generate_state_summaries.py <STATE>`
 
+YAML mechanisms for the numerical tables (per state):
+- `targets_override:` — list of `{tier, source, values:{year:pct}}`. When present, these verified
+  per-tier schedules FULLY REPLACE LBNL's target & demand figures for the state (demand = pct ×
+  RPS-applicable sales). Include a `Total RPS` (and/or `Total CES`) tier for the totals row.
+  Use this to make a reviewed state authoritative and independent of LBNL.
+- `supplemental_data.targets:` — same shape; ADDITIVE tiers layered on top of LBNL (use for a
+  standard LBNL omits entirely, e.g. CT Class III, MA APS). A Grand Total row is auto-added.
+Page layout (CT template): targets + sales/demand at top, consolidated technology-eligibility
+matrix (standards × techs, using concise `note_short` per eligibility entry) before program detail.
+
 ## Status Key
 - ✅ Complete — YAML written, HTML generated, reviewed
 - 🔄 In Progress — started but not finalized
@@ -27,10 +37,10 @@ To regenerate a state's HTML after editing its YAML:
 
 | State | Status | Programs Captured | Notes |
 |---|---|---|---|
-| MA | 🔄 | Class I RPS, Class II RPS, CES, CES-E, APS | Initial build complete. Needs field verification. |
+| MA | ✅ | Class I RPS, Class II RPS, CES, CES-E, APS | Full review. Class I schedule verified (+2%/yr→2024, +3%/yr 2025–29, 40% by 2030); LBNL figures accurate and retained. Added note_short fields. APS via supplemental_data. |
 | CT | ✅ | Class I RPS, Class II RPS, Class III RPS, Zero-Carbon Procurement (Millstone) | Full review + revamp (template state). Class III (4% CHP/C&LM) added via supplemental_data and now in numerical tables. Class I note corrected for PA 23-102 (−7 pts 2026–2030). Class II = 4% confirmed via PURA. New page layout: targets/sales/demand at top, consolidated tech-eligibility matrix before program detail. |
 | RI | 🔄 | RES, Long-Term Contracting Standard, REG Program | Initial build complete. RI calls it RES not RPS; 100% by 2033. Block Island Wind Farm mechanism captured. |
-| NH | 🔄 | RPS (Class I, II, III, IV + Class I Thermal sub-class) | Initial build complete. Admin transferred PUC → NH DOE in 2021. Class I Thermal unique in New England. |
+| NH | ✅ | Class I RPS, Class II RPS, Class III RPS, Class IV RPS | Full review. Split single collapsed program into 4 statutory classes (RSA 362-F); Class I notes the Thermal carve-out (2.2%). Targets driven by verified statutory schedule via targets_override — corrected LBNL Class III (1.0%→8.0% for 2024; total 24.3% 2024 / 25.2% 2025+). Admin PUC→DOE (2021). |
 | ME | 🔄 | Class I/IA RPS, Class II RPS, Offshore Wind Procurement | Initial build complete. LD 1868 (2025) updated to 90% by 2040. DOER launched Sept 2025. NAR registry for northern ME. |
 | VT | 🔄 | RES Tiers I/II/IV/V, RES Tier III (Energy Transformation), Standard Offer | Initial build complete. Five-tier structure post-Act 179 (2024). Tier III is demand-side/fossil-fuel savings, not generation. |
 | NY | 🔲 | — | RPS + Tier 1/2 + offshore wind + ZEC (nuclear) |

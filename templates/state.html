@@ -210,8 +210,12 @@
         {% endfor %}
       </tbody>
     </table>
-    <p class="proj-note">* {{ proj_start }}+ values are LBNL projections. Class III (where shown)
-       is a supplemental series not present in LBNL data — see program detail below.</p>
+    <p class="proj-note">
+      {% if overriding %}Targets and demand reflect verified state sources (statute / PUC schedules);
+      load figures use LBNL sales data.{% else %}Figures derive from LBNL data; supplemental tiers
+      (where shown) are sourced from state statute/regulation — see program detail below.{% endif %}
+      {% if proj_start %} Values for {{ proj_start }}+ are projections.{% endif %}
+    </p>
   </div>
   {% endif %}
 
